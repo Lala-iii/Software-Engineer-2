@@ -12,6 +12,8 @@ import android.widget.EditText;
 
 import java.util.HashSet;
 
+import at.ac.univie.sketchup.model.Sketch;
+
 public class NoteEditorActivity extends AppCompatActivity {
 
     int noteID;
@@ -21,40 +23,40 @@ public class NoteEditorActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_note_editor);
 
-        EditText editText = (EditText)findViewById(R.id.editText);
-        Intent intent = getIntent();
-        noteID = intent.getIntExtra("noteID", -1);
-
-        if(noteID != -1)
-        {
-            editText.setText(MainActivity.notes.get(noteID));
-        } else {
-            MainActivity.notes.add("");                // as initially, the note is empty
-            noteID = MainActivity.notes.size() - 1;
-            MainActivity.arrayAdapter.notifyDataSetChanged();
-        }
-
-        editText.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                MainActivity.notes.set(noteID, String.valueOf(s));
-                MainActivity.arrayAdapter.notifyDataSetChanged();
-
-                SharedPreferences sharedPreferences = getApplicationContext().getSharedPreferences("com.tanay.thunderbird.notes", Context.MODE_PRIVATE);
-                HashSet<String> set = new HashSet<>(MainActivity.notes);
-                sharedPreferences.edit().putStringSet("notes", set).apply();
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-
-            }
-        });
+//        EditText editText = (EditText)findViewById(R.id.editText);
+//        Intent intent = getIntent();
+//        noteID = intent.getIntExtra("noteID", -1);
+//
+//        if(noteID != -1)
+//        {
+//            editText.setText(MainActivity.sketches.get(noteID).getText());
+//        } else {
+//            MainActivity.sketches.add(new Sketch());                // as initially, the note is empty
+//            noteID = MainActivity.sketches.size() - 1;
+//            MainActivity.arrayAdapter.notifyDataSetChanged();
+//        }
+//
+//        editText.addTextChangedListener(new TextWatcher() {
+//            @Override
+//            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+//
+//            }
+//
+//            @Override
+//            public void onTextChanged(CharSequence s, int start, int before, int count) {
+//                MainActivity.sketches.get(noteID).setText(String.valueOf(s));
+//                MainActivity.arrayAdapter.notifyDataSetChanged();
+//
+////                SharedPreferences sharedPreferences = getApplicationContext().getSharedPreferences("com.tanay.thunderbird.notes", Context.MODE_PRIVATE);
+////                HashSet<Sketch> set = new HashSet<>(MainActivity.sketches);
+////                sharedPreferences.edit().putStringSet("notes", set).apply();
+//            }
+//
+//            @Override
+//            public void afterTextChanged(Editable s) {
+//
+//            }
+//        });
 
 
     }
