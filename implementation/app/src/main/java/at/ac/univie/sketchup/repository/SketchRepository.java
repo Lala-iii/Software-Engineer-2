@@ -28,6 +28,17 @@ public class SketchRepository {
         return data;
     }
 
+    public MutableLiveData<Sketch> findOneById(int id){
+        MutableLiveData<Sketch> data = new MutableLiveData<>();
+        data.setValue(dataSet.get(id-1));
+
+        return data;
+    }
+
+    public void createSketch(Sketch sketch) {
+        dataSet.add(sketch);
+    }
+
     /**
      * Create seed data for test. TODO Remove and create separate service that can be reused for test
      */

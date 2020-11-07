@@ -1,19 +1,11 @@
 package at.ac.univie.sketchup;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
-import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -21,8 +13,6 @@ import android.widget.ListView;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
-import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
 
 import at.ac.univie.sketchup.model.Sketch;
@@ -60,22 +50,23 @@ public class MainActivity extends AppCompatActivity {
         arrayAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, mainActivityViewModel.getSketches().getValue());
         listView.setAdapter(arrayAdapter);
 
-//        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-//            @Override
-//            public void onItemClick(AdapterView<?> parent, View view, int position, long id)
-//            {
-//                Intent intent = new Intent(getApplicationContext(), NoteEditorActivity.class);
-//                intent.putExtra("noteID", position);            //to tell us which row of listView was tapped
-//                startActivity(intent);
-//            }
-//        });
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id)
+            {
+                Intent intent = new Intent(getApplicationContext(), SketchEditActivity.class);
+                intent.putExtra("sketchId", position+1);           //to tell us which row of listView was tapped
+                startActivity(intent);
+            }
+        });
 
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                mainActivityViewModel.createNewSketch();
-
-                // todo intent to new activity with sketch id
+                int sketchId = mainActivityViewModel.createNewSketch();
+                Intent intent = new Intent(getApplicationContext(), SketchEditActivity.class);
+                intent.putExtra("sketchId", sketchId);
+                startActivity(intent);
             }
         });
 

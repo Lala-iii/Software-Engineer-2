@@ -23,6 +23,7 @@ public class MainActivityViewModel extends ViewModel {
     }
 
     public LiveData<List<Sketch>> getSketches(){
+        // todo create custom error if repo is not init
         return sketches;
     }
 
@@ -32,9 +33,8 @@ public class MainActivityViewModel extends ViewModel {
          currentSketches.add(newSketch);
          sketches.postValue(currentSketches);
 
-         // todo update repo to update storage
-
-        return newSketch.getId();
+         // todo write in storage(?)
+         return newSketch.getId();
     }
 
     private Sketch createSketch(){
