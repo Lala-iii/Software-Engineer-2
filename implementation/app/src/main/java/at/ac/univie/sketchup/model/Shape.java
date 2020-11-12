@@ -1,4 +1,4 @@
-package at.ac.univie.sketchup.Model;
+package at.ac.univie.sketchup.model;
 
 import java.util.List;
 
