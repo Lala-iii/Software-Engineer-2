@@ -25,7 +25,7 @@ public class MainActivity extends AppCompatActivity {
     private FloatingActionButton fab;
 
     private ArrayAdapter<Sketch> arrayAdapter;
-    private MainActivityViewModel mainActivityViewModel;
+    private MainActivityViewModel mainViewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,11 +35,11 @@ public class MainActivity extends AppCompatActivity {
         listView = (ListView)findViewById(R.id.listView);
         fab = findViewById(R.id.floatingActionButton);
 
-        mainActivityViewModel = new ViewModelProvider(this).get(MainActivityViewModel.class);
+        mainViewModel = new ViewModelProvider(this).get(MainActivityViewModel.class);
 
-        mainActivityViewModel.init();
+        mainViewModel.init();
 
-        mainActivityViewModel.getSketches().observe(this, new Observer<List<Sketch>>() {
+        mainViewModel.getSketches().observe(this, new Observer<List<Sketch>>() {
             @Override
             public void onChanged(List<Sketch> sketches) {
                 arrayAdapter.notifyDataSetChanged();
@@ -47,7 +47,7 @@ public class MainActivity extends AppCompatActivity {
         });
 
 
-        arrayAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, mainActivityViewModel.getSketches().getValue());
+        arrayAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, mainViewModel.getSketches().getValue());
         listView.setAdapter(arrayAdapter);
 
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -63,43 +63,12 @@ public class MainActivity extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                int sketchId = mainActivityViewModel.createNewSketch();
+                int sketchId = mainViewModel.createNewSketch();
                 Intent intent = new Intent(getApplicationContext(), SketchEditActivity.class);
                 intent.putExtra("sketchId", sketchId);
                 startActivity(intent);
             }
         });
-
-
-
-        // delete item
-//        listView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
-//            @Override
-//            public boolean onItemLongClick(AdapterView<?> parent, View view, final int position, long id)
-//            {
-//                new AlertDialog.Builder(MainActivity.this)
-//                        .setIcon(android.R.drawable.ic_dialog_alert)
-//                        .setTitle("Delete?")
-//                        .setMessage("Are you sure you want to delete this note?")
-//                        .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-//                            @Override
-//                            public void onClick(DialogInterface dialog, int which)
-//                            {
-//                                notes.remove(position);
-//                                arrayAdapter.notifyDataSetChanged();
-//                                SharedPreferences sharedPreferences = getApplicationContext().getSharedPreferences("com.tanay.thunderbird.notes", Context.MODE_PRIVATE);
-//                                HashSet<String> set = new HashSet<>(MainActivity.notes);
-//                                sharedPreferences.edit().putStringSet("notes", set).apply();
-//                            }
-//                        })
-//
-//                        .setNegativeButton("No", null)
-//                        .show();
-//
-//                return true;
-//            }
-//
-//        });
     }
 
 //    @Override

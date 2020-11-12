@@ -3,9 +3,7 @@ package at.ac.univie.sketchup.viewmodel;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
-
 import java.util.List;
-
 import at.ac.univie.sketchup.model.Sketch;
 import at.ac.univie.sketchup.repository.SketchRepository;
 
@@ -26,10 +24,10 @@ public class SketchEditActivityViewModel extends ViewModel {
         return sketch;
     }
 
-    public void updateSketch(String newText) {
-        Sketch currentSketch = sketch.getValue();
-        currentSketch.setText(newText);
-        sketch.postValue(currentSketch);
+    public void updateSketch() {
+//        Sketch currentSketch = sketch.getValue();
+//        currentSketch.setText(newText);
+//        sketch.postValue(currentSketch);
 
         // todo write in storage(?)
     }

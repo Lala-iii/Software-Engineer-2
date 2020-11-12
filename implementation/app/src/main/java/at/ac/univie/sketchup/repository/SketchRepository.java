@@ -46,13 +46,11 @@ public class SketchRepository {
         Sketch s1 = new Sketch();
         s1.setId(1);
         s1.setTitle("Sketch 1");
-        s1.setText("Text from s1");
         dataSet.add(s1);
 
         Sketch s2 = new Sketch();
         s2.setId(2);
         s2.setTitle("Sketch 2");
-        s2.setText("This is text s2");
         dataSet.add(s2);
     }
 }
