@@ -12,6 +12,7 @@ import android.util.DisplayMetrics;
 import android.view.MotionEvent;
 import android.view.View;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import at.ac.univie.sketchup.model.Circle;
@@ -54,6 +55,7 @@ public class PaintView extends View {
         mPaint.setStyle(Paint.Style.FILL);
         mPaint.setTextSize(70);
         type = ElementType.NONE;
+        elements = new ArrayList<>();
     }
 
     public void updateSketch(Sketch s){
