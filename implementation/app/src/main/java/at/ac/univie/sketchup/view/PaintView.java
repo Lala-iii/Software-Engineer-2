@@ -219,4 +219,8 @@ public class PaintView extends View {
     public void setText(String t) {
         sketch.setCurrentText(t);
     }
+
+    public void setMode(ElementType type) {
+        this.type = type;
+    }
 }
