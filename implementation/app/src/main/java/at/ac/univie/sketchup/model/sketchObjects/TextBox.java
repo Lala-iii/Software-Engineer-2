@@ -1,10 +1,17 @@
 package at.ac.univie.sketchup.model.sketchObjects;
 
+import android.graphics.Point;
+
 public class TextBox extends Text {
 
     private int color; //todo to enum
-    private float x;
-    private float y;
+    private double x;
+    private double y;
+    private Point anchor;
+
+    public TextBox(Point anchor) {
+        this.anchor = anchor;
+    }
 
     public int getColor() {
         return color;
@@ -14,19 +21,19 @@ public class TextBox extends Text {
         this.color = color;
     }
 
-    public float getX() {
+    public double getX() {
         return x;
     }
 
-    public void setX(float x) {
+    public void setX(double x) {
         this.x = x;
     }
 
-    public float getY() {
+    public double getY() {
         return y;
     }
 
-    public void setY(float y) {
+    public void setY(double y) {
         this.y = y;
     }
 }

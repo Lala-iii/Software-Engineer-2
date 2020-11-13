@@ -9,9 +9,9 @@ public abstract class Shape {
     private int stroke_width;
     private Color color;
     private Point anchor;
-    private ShapeType type;
+    private ElementType type;
 
-    public Shape(ShapeType type, String name, int stroke_width, Color color, Point anchor) {
+    public Shape(ElementType type, String name, int stroke_width, Color color, Point anchor) {
         this.type = type;
         this.name = name;
         this.stroke_width = stroke_width;
@@ -23,7 +23,7 @@ public abstract class Shape {
         return this.anchor;
     }
 
-    public ShapeType getType() {
+    public ElementType getType() {
         return this.type;
     }
 }

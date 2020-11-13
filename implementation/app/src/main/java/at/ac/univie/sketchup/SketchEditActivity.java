@@ -49,9 +49,11 @@ public class SketchEditActivity extends AppCompatActivity {
             }
         });
 
-        DisplayMetrics metrics = new DisplayMetrics();
-        getDisplay().getRealMetrics(metrics);
-        paintView.init(metrics, sketchViewModel.getSketch().getValue());
+//        DisplayMetrics metrics = new DisplayMetrics();
+//        getDisplay().getRealMetrics(metrics);
+//        paintView.init(metrics, sketchViewModel.getSketch().getValue());
+
+        paintView.setSketch(sketchViewModel.getSketch().getValue());
 
         fab.setOnClickListener(new View.OnClickListener() {
             @Override

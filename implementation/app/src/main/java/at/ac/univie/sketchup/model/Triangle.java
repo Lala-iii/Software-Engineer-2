@@ -6,7 +6,7 @@ import android.graphics.Point;
 public class Triangle extends Shape {
     private double width;
 
-    public Triangle(ShapeType type, String name, int stroke_width, Color color, Point anchor, double width) {
+    public Triangle(ElementType type, String name, int stroke_width, Color color, Point anchor, double width) {
         super(type, name, stroke_width, color, anchor);
         this.width=width;
     }

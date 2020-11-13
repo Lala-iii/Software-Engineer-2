@@ -6,7 +6,7 @@ import android.graphics.Point;
 public class Circle extends Shape {
     private double radius;
 
-    public Circle(ShapeType type, String name, int stroke_width, Color color, Point anchor, double radius) {
+    public Circle(ElementType type, String name, int stroke_width, Color color, Point anchor, double radius) {
         super(type, name, stroke_width, color, anchor);
         this.radius = radius;
     }
