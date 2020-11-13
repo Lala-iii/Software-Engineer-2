@@ -1,21 +1,29 @@
 package at.ac.univie.sketchup.model;
 
+import android.graphics.Color;
 import android.graphics.Point;
 
-import java.util.List;
 
 public abstract class Shape {
     private String name;
     private int stroke_width;
     private Color color;
     private Point anchor;
-    //private List<Coordinate> path;
+    private ShapeType type;
 
-    public Shape(String name, int stroke_width, Color color, Point anchor) {
+    public Shape(ShapeType type, String name, int stroke_width, Color color, Point anchor) {
+        this.type = type;
         this.name = name;
         this.stroke_width = stroke_width;
         this.color = color;
         this.anchor = anchor;
     }
-  public Point getAnchor() { return anchor; }
+
+    public Point getAnchor() {
+        return this.anchor;
+    }
+
+    public ShapeType getType() {
+        return this.type;
+    }
 }
