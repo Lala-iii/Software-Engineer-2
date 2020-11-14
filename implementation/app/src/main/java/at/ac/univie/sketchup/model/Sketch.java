@@ -2,29 +2,20 @@ package at.ac.univie.sketchup.model;
 
 import java.util.ArrayList;
 
-import at.ac.univie.sketchup.model.sketchObjects.TextBox;
-
 public class Sketch {
 
     private int id;
     private String title;
-    private ArrayList<TextBox> textBoxes = new ArrayList<>();
-    private String currentText = "";
+    private ArrayList<DrawableObject> drawableObjects = new ArrayList<>();
 
-    public ArrayList<TextBox> getTextBoxes() {
-        return textBoxes;
+    // todo constructor
+
+    public ArrayList<DrawableObject> getDrawableObjects() {
+        return drawableObjects;
     }
 
-    public void setTextBoxes(ArrayList<TextBox> textBoxes) {
-        this.textBoxes = textBoxes;
-    }
-
-    public String getCurrentText() {
-        return currentText;
-    }
-
-    public void setCurrentText(String currentText) {
-        this.currentText = currentText;
+    public void setDrawableObjects(ArrayList<DrawableObject> drawableObjects) {
+        this.drawableObjects = drawableObjects;
     }
 
     public int getId() {
@@ -48,7 +39,7 @@ public class Sketch {
         return title;
     }
 
-    public void addTextBox(TextBox textBox) {
-        textBoxes.add(textBox);
+    public void addDrawableObject(DrawableObject object) {
+        drawableObjects.add(object);
     }
 }

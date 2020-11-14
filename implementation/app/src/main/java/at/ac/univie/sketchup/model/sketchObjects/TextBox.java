@@ -1,32 +1,22 @@
 package at.ac.univie.sketchup.model.sketchObjects;
 
-public class TextBox extends Text {
+import at.ac.univie.sketchup.model.Color;
+import at.ac.univie.sketchup.model.DrawableObject;
 
-    private int color; //todo to enum
-    private float x;
-    private float y;
+public class TextBox extends DrawableObject {
 
-    public int getColor() {
-        return color;
+    private String text;
+
+    public TextBox() {
+        super(Color.BLACK,70);
+        text = "";
     }
 
-    public void setColor(int color) {
-        this.color = color;
+    public String getText() {
+        return text;
     }
 
-    public float getX() {
-        return x;
-    }
-
-    public void setX(float x) {
-        this.x = x;
-    }
-
-    public float getY() {
-        return y;
-    }
-
-    public void setY(float y) {
-        this.y = y;
+    public void setText(String text) {
+        this.text = text;
     }
 }

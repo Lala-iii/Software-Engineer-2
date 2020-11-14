@@ -1,49 +1,28 @@
 package at.ac.univie.sketchup.view;
 
 import android.content.Context;
-import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.util.AttributeSet;
-import android.util.DisplayMetrics;
 import android.view.MotionEvent;
 import android.view.View;
 
-import at.ac.univie.sketchup.model.Sketch;
+import at.ac.univie.sketchup.model.DrawableObject;
 import at.ac.univie.sketchup.model.sketchObjects.TextBox;
+import at.ac.univie.sketchup.viewmodel.SketchEditActivityViewModel;
 
 public class PaintView extends View {
 
-    private float mX, mY;
-    private Paint mPaint;
-
-    private Sketch sketch;
-
-//    private Bitmap mBitmap;
-//    private Canvas mCanvas;
+    private SketchEditActivityViewModel sketchViewModel;
+    private DrawableObject selected;
 
     public PaintView(Context context, AttributeSet attrs) {
         super(context, attrs);
-        mPaint = new Paint();
-        mPaint.setColor(Color.BLACK);
-        mPaint.setAntiAlias(true);
-        mPaint.setStyle(Paint.Style.FILL);
-        mPaint.setTextSize(70);
     }
 
-    public void updateSketch(Sketch s){
-        sketch = s;
-    }
-
-    public void init(DisplayMetrics metrics,Sketch s) {
-        sketch = s;
-
-//        int height = metrics.heightPixels;
-//        int width = metrics.widthPixels;
-//        mBitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
-//        mCanvas = new Canvas(mBitmap);
-//        mCanvas.drawPaint(mPaint);
+    public void init(SketchEditActivityViewModel vm) {
+        sketchViewModel = vm;
     }
 
     @Override
@@ -51,30 +30,50 @@ public class PaintView extends View {
         super.onDraw(canvas);
         canvas.save();
 
-        for(TextBox textBox : sketch.getTextBoxes()) {
-            canvas.drawText(textBox.getText(), textBox.getX(), textBox.getY(), mPaint);
+        for (DrawableObject objectToDraw : sketchViewModel.getObjectsToDraw()) {
+            if (objectToDraw instanceof TextBox) {
+                canvas.drawText(
+                        ((TextBox) objectToDraw).getText(),
+                        objectToDraw.getPosition().getX(),
+                        objectToDraw.getPosition().getY(),
+                        setUpPaint(objectToDraw)
+                );
+            }
         }
 
-//        canvas.drawBitmap(mBitmap, 0, 0, mBitmapPaint);
         canvas.restore();
     }
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
-        mX = event.getX();
-        mY = event.getY();
-
-        TextBox textBox = new TextBox();
-        textBox.setText(sketch.getCurrentText());
-        textBox.setX(mX);
-        textBox.setY(mY);
-        sketch.addTextBox(textBox);
-        invalidate();
+        switch (event.getAction()) {
+            case MotionEvent.ACTION_DOWN:
+                if (null != selected) {
+                    sketchViewModel.addDrawableObject(selected, event.getX(), event.getY());
+                }
+        }
 
         return true;
     }
 
-    public void setText(String t) {
-        sketch.setCurrentText(t);
+    private Paint setUpPaint(DrawableObject objectToDraw) {
+        Paint mPaint = new Paint();
+        mPaint.setColor(objectToDraw.getColor().getAndroidColor());
+        mPaint.setAntiAlias(true);
+        mPaint.setStyle(Paint.Style.FILL);
+        mPaint.setTextSize(objectToDraw.getInputSize());
+        return mPaint;
+    }
+
+    public void setSelected(DrawableObject s) {
+        selected = s;
+    }
+
+    public void setTextForSelected(String text) {
+        if (selected instanceof TextBox) {
+            ((TextBox) selected).setText(text);
+        } else {
+            // todo through a error
+        }
     }
 }

@@ -1,9 +1,15 @@
 package at.ac.univie.sketchup.viewmodel;
 
+import android.util.Log;
+
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
-import java.util.List;
+
+import java.util.ArrayList;
+
+import at.ac.univie.sketchup.model.Coordinate;
+import at.ac.univie.sketchup.model.DrawableObject;
 import at.ac.univie.sketchup.model.Sketch;
 import at.ac.univie.sketchup.repository.SketchRepository;
 
@@ -24,10 +30,26 @@ public class SketchEditActivityViewModel extends ViewModel {
         return sketch;
     }
 
-    public void updateSketch() {
-//        Sketch currentSketch = sketch.getValue();
-//        currentSketch.setText(newText);
-//        sketch.postValue(currentSketch);
+    public ArrayList<DrawableObject> getObjectsToDraw() {
+        return sketch.getValue().getDrawableObjects();
+    }
+
+    public void addDrawableObject(DrawableObject object, float x, float y) {
+
+        // Create copy(!) of selected object and set coordinate from touch
+        DrawableObject objectToSet = null;
+        try {
+            objectToSet = (DrawableObject) object.clone(); // May be an issue with with cloning Color. Monitor and make deep clone in case
+            objectToSet.setPosition(new Coordinate(x, y));
+        } catch (CloneNotSupportedException e) {
+            e.printStackTrace();
+            return;
+        }
+
+        // Add obj to sketch and thought event for observer
+        Sketch currentSketch = sketch.getValue();
+        currentSketch.addDrawableObject(objectToSet);
+        sketch.postValue(currentSketch);
 
         // todo write in storage(?)
     }

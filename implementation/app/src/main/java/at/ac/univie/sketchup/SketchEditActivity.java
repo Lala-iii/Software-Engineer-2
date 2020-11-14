@@ -7,7 +7,6 @@ import androidx.lifecycle.ViewModelProvider;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
@@ -15,47 +14,44 @@ import android.widget.EditText;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
+import at.ac.univie.sketchup.model.DrawableObject;
 import at.ac.univie.sketchup.model.Sketch;
+import at.ac.univie.sketchup.model.sketchObjects.TextBox;
 import at.ac.univie.sketchup.view.PaintView;
 import at.ac.univie.sketchup.viewmodel.SketchEditActivityViewModel;
 
 public class SketchEditActivity extends AppCompatActivity {
 
     private int sketchId;
-    private FloatingActionButton fab;
+
+    private FloatingActionButton fabText;
+    private PaintView paintView;
 
     private SketchEditActivityViewModel sketchViewModel;
-    private PaintView paintView;
+    private Intent intent;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_sketch_editor);
 
-        paintView = findViewById(R.id.paintView);
-        fab = findViewById(R.id.floatingActionButton);
+        setUpViewElements();
 
-        Intent intent = getIntent();
-        sketchId = intent.getIntExtra("sketchId", -1);
+        intent = getIntent();
+        setUpViewModel();
 
-        sketchViewModel = new ViewModelProvider(this).get(SketchEditActivityViewModel.class);
-
-        sketchViewModel.init(sketchId);
+        paintView.init(sketchViewModel);
 
         sketchViewModel.getSketch().observe(this, new Observer<Sketch>() {
             @Override
             public void onChanged(Sketch sketch) {
-//                editText.setText(sketch.getText());
+                paintView.postInvalidate();
             }
         });
 
-        DisplayMetrics metrics = new DisplayMetrics();
-        getDisplay().getRealMetrics(metrics);
-        paintView.init(metrics, sketchViewModel.getSketch().getValue());
-
-        fab.setOnClickListener(new View.OnClickListener() {
+        fabText.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                setUpSelected(new TextBox());
                 createDialogForText();
             }
         });
@@ -68,17 +64,35 @@ public class SketchEditActivity extends AppCompatActivity {
         dialogBuilder.setView(dialogView);
 
         final EditText editText = (EditText) dialogView.findViewById(R.id.edt_comment);
-        Button button1 = (Button) dialogView.findViewById(R.id.buttonSubmit);
+        Button buttonSubmit = (Button) dialogView.findViewById(R.id.buttonSubmit);
 
-        button1.setOnClickListener(new View.OnClickListener() {
+        buttonSubmit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                paintView.setText(editText.getText().toString());
+                paintView.setTextForSelected(editText.getText().toString());
                 dialogBuilder.dismiss();
             }
         });
 
+        //todo button Cancel
+
         dialogBuilder.show();
+    }
+
+    private void setUpViewElements(){
+        setContentView(R.layout.activity_sketch_editor);
+        paintView = findViewById(R.id.paintView);
+        fabText = findViewById(R.id.floatingActionButton);
+    }
+
+    private void setUpViewModel() {
+        sketchId = intent.getIntExtra("sketchId", -1);
+        sketchViewModel = new ViewModelProvider(this).get(SketchEditActivityViewModel.class);
+        sketchViewModel.init(sketchId);
+    }
+
+    private void setUpSelected(DrawableObject selected) {
+        paintView.setSelected(selected);
     }
 
 

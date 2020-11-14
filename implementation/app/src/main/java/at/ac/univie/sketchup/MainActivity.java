@@ -30,22 +30,10 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
 
-        listView = (ListView)findViewById(R.id.listView);
-        fab = findViewById(R.id.floatingActionButton);
-
-        mainViewModel = new ViewModelProvider(this).get(MainActivityViewModel.class);
-
-        mainViewModel.init();
-
-        mainViewModel.getSketches().observe(this, new Observer<List<Sketch>>() {
-            @Override
-            public void onChanged(List<Sketch> sketches) {
-                arrayAdapter.notifyDataSetChanged();
-            }
-        });
-
+        setUpViewElements();
+        setUpViewModel();
+        setUpObserver();
 
         arrayAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, mainViewModel.getSketches().getValue());
         listView.setAdapter(arrayAdapter);
@@ -54,9 +42,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id)
             {
-                Intent intent = new Intent(getApplicationContext(), SketchEditActivity.class);
-                intent.putExtra("sketchId", position+1);           //to tell us which row of listView was tapped
-                startActivity(intent);
+                startEditActivity(position+1);
             }
         });
 
@@ -64,12 +50,11 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 int sketchId = mainViewModel.createNewSketch();
-                Intent intent = new Intent(getApplicationContext(), SketchEditActivity.class);
-                intent.putExtra("sketchId", sketchId);
-                startActivity(intent);
+                startEditActivity(sketchId);
             }
         });
     }
+
 
 //    @Override
 //    public boolean onCreateOptionsMenu(Menu menu)
@@ -95,4 +80,30 @@ public class MainActivity extends AppCompatActivity {
 //        return false;
 //    }
 
+    private void setUpViewElements() {
+        setContentView(R.layout.activity_main);
+
+        listView = (ListView)findViewById(R.id.listView);
+        fab = findViewById(R.id.floatingActionButton);
+    }
+
+    private void setUpViewModel() {
+        mainViewModel = new ViewModelProvider(this).get(MainActivityViewModel.class);
+        mainViewModel.init();
+    }
+
+    private void setUpObserver() {
+        mainViewModel.getSketches().observe(this, new Observer<List<Sketch>>() {
+            @Override
+            public void onChanged(List<Sketch> sketches) {
+                arrayAdapter.notifyDataSetChanged();
+            }
+        });
+    }
+
+    private void startEditActivity(int sketchId) {
+        Intent intent = new Intent(getApplicationContext(), SketchEditActivity.class);
+        intent.putExtra("sketchId", sketchId);
+        startActivity(intent);
+    }
 }
