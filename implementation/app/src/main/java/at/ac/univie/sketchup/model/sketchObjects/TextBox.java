@@ -25,6 +25,10 @@ public class TextBox extends Text {
         return x;
     }
 
+    public Point getAnchor() {
+        return anchor;
+    }
+
     public void setX(double x) {
         this.x = x;
     }

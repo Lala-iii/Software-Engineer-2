@@ -81,7 +81,7 @@ public class PaintView extends View {
         canvas.save();
 
         for(TextBox textBox : sketch.getTextBoxes()) {
-            canvas.drawText(textBox.getText(), (float) textBox.getX(), (float) textBox.getY(), mPaint);
+            canvas.drawText(textBox.getText(), textBox.getAnchor().x, textBox.getAnchor().y, mPaint);
         }
 
         for (Shape s : elements) {
@@ -103,7 +103,7 @@ public class PaintView extends View {
         canvas.restore();
 
         if (textBox != null)
-            canvas.drawText(textBox.getText(), (float) textBox.getX(), (float) textBox.getY(), mPaint);
+            canvas.drawText(textBox.getText(), textBox.getAnchor().x, textBox.getAnchor().y, mPaint);
 
         if (currentLine != null && currentLine.getEnd() != null)
             canvas.drawLine(currentLine.getAnchor().x, currentLine.getAnchor().y, currentLine.getEnd().x, currentLine.getEnd().y, mPaint);
@@ -136,8 +136,7 @@ public class PaintView extends View {
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
-        xBegin = event.getX();
-        yBegin = event.getY();
+
 
 //        textBox = new TextBox(new Point((int) event.getX(), (int) event.getY()));
 //        textBox.setText(sketch.getCurrentText());
@@ -203,7 +202,7 @@ public class PaintView extends View {
                 if (type == ElementType.TRIANGLE) elements.add(currentTriangle);
                 if (type == ElementType.TEXT) sketch.addTextBox(textBox);
 
-                type = ElementType.NONE;
+//                type = ElementType.NONE;
 
                 break;
         }
@@ -220,7 +219,7 @@ public class PaintView extends View {
         sketch.setCurrentText(t);
     }
 
-    public void setMode(ElementType type) {
+    public void setType(ElementType type) {
         this.type = type;
     }
 }
