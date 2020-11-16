@@ -16,7 +16,6 @@ import at.ac.univie.sketchup.viewmodel.SketchEditActivityViewModel;
 public class PaintView extends View {
 
     private SketchEditActivityViewModel sketchViewModel;
-    private DrawableObject selected;
 
     public PaintView(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -42,30 +41,9 @@ public class PaintView extends View {
     public boolean onTouchEvent(MotionEvent event) {
         switch (event.getAction()) {
             case MotionEvent.ACTION_DOWN:
-                if (null != selected) {
-                    sketchViewModel.addDrawableObject(selected, event.getX(), event.getY());
-                }
+                    sketchViewModel.addSelectedToSketch(event.getX(), event.getY());
         }
         return true;
     }
 
-    public void setSelected(DrawableObject s) {
-        selected = s;
-    }
-
-    public void setTextForSelected(String text) {
-        if (selected instanceof TextBox) {
-            ((TextBox) selected).setText(text);
-        } else {
-            // todo through a error
-        }
-    }
-
-    public void setSize(int s) {
-        selected.setInputSize(s);
-    }
-
-    public void setColor(Color c) {
-        selected.setColor(c);
-    }
 }

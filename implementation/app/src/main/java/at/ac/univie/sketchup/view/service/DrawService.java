@@ -3,12 +3,14 @@ package at.ac.univie.sketchup.view.service;
 import android.annotation.SuppressLint;
 import android.graphics.Canvas;
 import android.graphics.Paint;
+import android.graphics.Path;
 import android.graphics.Rect;
 
 import at.ac.univie.sketchup.model.drawable.DrawableObject;
 import at.ac.univie.sketchup.model.drawable.shape.Circle;
 import at.ac.univie.sketchup.model.drawable.shape.Line;
 import at.ac.univie.sketchup.model.drawable.shape.Quadrangle;
+import at.ac.univie.sketchup.model.drawable.shape.Triangle;
 import at.ac.univie.sketchup.model.drawable.textbox.TextBox;
 
 public class DrawService {
@@ -51,6 +53,18 @@ public class DrawService {
                     rect,
                     setUpPaint(objectToDraw)
             );
+        }
+        if (objectToDraw instanceof Triangle) {
+            float width = ((Triangle) objectToDraw).getWidth();
+
+            Path path = new Path();
+            path.moveTo(objectToDraw.getPosition().getX(), objectToDraw.getPosition().getY() - width); // Top
+            path.lineTo(objectToDraw.getPosition().getX() - width, objectToDraw.getPosition().getY() + width); // Bottom left
+            path.lineTo(objectToDraw.getPosition().getX() + width, objectToDraw.getPosition().getY() + width); // Bottom right
+            path.lineTo(objectToDraw.getPosition().getX(), objectToDraw.getPosition().getY() - width); // Back to top
+            path.close();
+
+            canvas.drawPath(path, setUpPaint(objectToDraw));
         }
     }
 

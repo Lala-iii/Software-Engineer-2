@@ -7,15 +7,17 @@ import androidx.lifecycle.ViewModel;
 
 import java.util.ArrayList;
 
+import at.ac.univie.sketchup.model.drawable.parameters.Color;
 import at.ac.univie.sketchup.model.drawable.parameters.Coordinate;
 import at.ac.univie.sketchup.model.drawable.DrawableObject;
 import at.ac.univie.sketchup.model.Sketch;
+import at.ac.univie.sketchup.model.drawable.textbox.TextBox;
 import at.ac.univie.sketchup.repository.SketchRepository;
 
 public class SketchEditActivityViewModel extends ViewModel {
 
     private MutableLiveData<Sketch> sketch;
-
+    private DrawableObject selected;
     private SketchRepository sketchRepository;
 
     public void init(int id){
@@ -34,12 +36,14 @@ public class SketchEditActivityViewModel extends ViewModel {
         return sketch.getValue().getDrawableObjects();
     }
 
-    public void addDrawableObject(DrawableObject object, float x, float y) {
+    public void addSelectedToSketch(float x, float y) {
+        if (selected == null) return;
+
 
         // Create copy(!) of selected object and set coordinate from touch
         DrawableObject objectToSet = null;
         try {
-            objectToSet = (DrawableObject) object.clone(); // May be an issue with with cloning Color. Monitor and make deep clone in case
+            objectToSet = (DrawableObject) selected.clone(); // May be an issue with with cloning Color. Monitor and make deep clone in case
             objectToSet.setPosition(new Coordinate(x, y));
         } catch (CloneNotSupportedException e) {
             e.printStackTrace();
@@ -53,12 +57,24 @@ public class SketchEditActivityViewModel extends ViewModel {
 
         // todo write in storage(?)
     }
-//
-//    private Sketch createSketch(){
-//        Sketch s = new Sketch();
-//        s.setId(sketches.getValue().size() + 1);
-//        s.setTitle("Sketch " + s.getId());
-//
-//        return s;
-//    }
+
+    public void setSelected(DrawableObject s) {
+        selected = s;
+    }
+
+    public void setTextForSelected(String text) {
+        if (selected instanceof TextBox) {
+            ((TextBox) selected).setText(text);
+        } else {
+            // todo through a error
+        }
+    }
+
+    public void setSizeForSelected(int s) {
+        selected.setInputSize(s);
+    }
+
+    public void setColorForSelected(Color c) {
+        selected.setColor(c);
+    }
 }

@@ -8,7 +8,7 @@ public class Line extends Shape{
     private Coordinate endPoint;
 
     public Line(){
-        super(Color.BLACK,2);
+        super(Color.BLACK,6);
     }
 
     public Coordinate getEndPoint() {

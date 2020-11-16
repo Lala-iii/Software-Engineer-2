@@ -7,7 +7,7 @@ public class Circle extends Shape {
     private float radius;
 
     public Circle(){
-        super(Color.BLACK,2);
+        super(Color.BLACK,5);
         radius = 70;
     }
 

@@ -7,7 +7,7 @@ public class Quadrangle extends Shape {
     private Coordinate endPoint;
 
     public Quadrangle(){
-        super(Color.BLACK,2);
+        super(Color.BLACK,5);
     }
 
     public Coordinate getEndPoint() {
