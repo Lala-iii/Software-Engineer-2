@@ -1,6 +1,9 @@
-package at.ac.univie.sketchup.model;
+package at.ac.univie.sketchup.model.drawable;
 
 import androidx.annotation.NonNull;
+
+import at.ac.univie.sketchup.model.drawable.parameters.Color;
+import at.ac.univie.sketchup.model.drawable.parameters.Coordinate;
 
 public abstract class DrawableObject implements Cloneable {
 

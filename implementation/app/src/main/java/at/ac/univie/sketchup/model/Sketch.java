@@ -2,6 +2,8 @@ package at.ac.univie.sketchup.model;
 
 import java.util.ArrayList;
 
+import at.ac.univie.sketchup.model.drawable.DrawableObject;
+
 public class Sketch {
 
     private int id;

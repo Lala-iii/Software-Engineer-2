@@ -1,7 +1,7 @@
-package at.ac.univie.sketchup.model.sketchObjects;
+package at.ac.univie.sketchup.model.drawable.textbox;
 
-import at.ac.univie.sketchup.model.Color;
-import at.ac.univie.sketchup.model.DrawableObject;
+import at.ac.univie.sketchup.model.drawable.parameters.Color;
+import at.ac.univie.sketchup.model.drawable.DrawableObject;
 
 public class TextBox extends DrawableObject {
 

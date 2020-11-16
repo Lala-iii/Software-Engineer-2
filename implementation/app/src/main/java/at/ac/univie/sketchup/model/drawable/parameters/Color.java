@@ -1,4 +1,4 @@
-package at.ac.univie.sketchup.model;
+package at.ac.univie.sketchup.model.drawable.parameters;
 
 public enum Color {
     BLUE,

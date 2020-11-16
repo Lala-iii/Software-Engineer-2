@@ -1,21 +1,21 @@
 package at.ac.univie.sketchup.viewmodel;
 
-import android.util.Log;
-
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
+
 import java.util.ArrayList;
 
-import at.ac.univie.sketchup.model.Coordinate;
-import at.ac.univie.sketchup.model.DrawableObject;
+import at.ac.univie.sketchup.model.drawable.parameters.Coordinate;
+import at.ac.univie.sketchup.model.drawable.DrawableObject;
 import at.ac.univie.sketchup.model.Sketch;
 import at.ac.univie.sketchup.repository.SketchRepository;
 
 public class SketchEditActivityViewModel extends ViewModel {
 
     private MutableLiveData<Sketch> sketch;
+
     private SketchRepository sketchRepository;
 
     public void init(int id){

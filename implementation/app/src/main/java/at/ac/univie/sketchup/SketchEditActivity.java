@@ -16,17 +16,19 @@ import android.widget.Spinner;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
-import at.ac.univie.sketchup.model.Color;
-import at.ac.univie.sketchup.model.DrawableObject;
+import at.ac.univie.sketchup.model.drawable.parameters.Color;
+import at.ac.univie.sketchup.model.drawable.DrawableObject;
 import at.ac.univie.sketchup.model.Sketch;
-import at.ac.univie.sketchup.model.sketchObjects.Circle;
-import at.ac.univie.sketchup.model.sketchObjects.TextBox;
+import at.ac.univie.sketchup.model.drawable.shape.Circle;
+import at.ac.univie.sketchup.model.drawable.shape.Line;
+import at.ac.univie.sketchup.model.drawable.shape.Quadrangle;
+import at.ac.univie.sketchup.model.drawable.textbox.TextBox;
 import at.ac.univie.sketchup.view.PaintView;
 import at.ac.univie.sketchup.viewmodel.SketchEditActivityViewModel;
 
 public class SketchEditActivity extends AppCompatActivity {
 
-    private FloatingActionButton fabParam, fabText, fabPlus, fabCircle, fab3, fab4, fab5;
+    private FloatingActionButton fabParam, fabText, fabPlus, fabCircle, fab3, fabQuad, fabLine;
     private PaintView paintView;
     private boolean isButtonsHide = true;
 
@@ -37,14 +39,14 @@ public class SketchEditActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        setUpViewElements();
+        setViewElements();
 
         intent = getIntent();
-        setUpViewModel();
+        setViewModel();
 
         paintView.init(sketchViewModel);
 
-        setUpObserver();
+        setObserver();
 
         fabPlus.setOnClickListener(view -> {
             showHideAction();
@@ -98,7 +100,7 @@ public class SketchEditActivity extends AppCompatActivity {
         dialogBuilder.show();
     }
 
-    private void setUpViewElements(){
+    private void setViewElements(){
         setContentView(R.layout.activity_sketch_editor);
         paintView = findViewById(R.id.paintView);
 
@@ -106,23 +108,23 @@ public class SketchEditActivity extends AppCompatActivity {
         fabPlus = findViewById(R.id.fab1);
         fabCircle = findViewById(R.id.fab2);
         fab3 = findViewById(R.id.fab3);
-        fab4 = findViewById(R.id.fab4);
-        fab5 = findViewById(R.id.fab5);
+        fabQuad = findViewById(R.id.fab4);
+        fabLine = findViewById(R.id.fab5);
         fabParam = findViewById(R.id.fabParam);
     }
 
-    private void setUpViewModel() {
+    private void setViewModel() {
         int sketchId = intent.getIntExtra("sketchId", -1);
         sketchViewModel = new ViewModelProvider(this).get(SketchEditActivityViewModel.class);
         sketchViewModel.init(sketchId);
     }
 
-    private void setUpSelected(DrawableObject selected) {
+    private void setSelected(DrawableObject selected) {
         paintView.setSelected(selected);
     }
 
     // Observer through an event to redraw all object if sketch was changed.
-    private void setUpObserver() {
+    private void setObserver() {
         sketchViewModel.getSketch().observe(this, new Observer<Sketch>() {
             @Override
             public void onChanged(Sketch sketch) {
@@ -135,15 +137,15 @@ public class SketchEditActivity extends AppCompatActivity {
         fabText.hide();
         fabCircle.hide();
         fab3.hide();
-        fab4.hide();
-        fab5.hide();
+        fabQuad.hide();
+        fabLine.hide();
         fabParam.hide();
 
         fabText.animate().translationY(0);
         fabCircle.animate().translationY(0);
         fab3.animate().translationY(0);
-        fab4.animate().translationY(0);
-        fab5.animate().translationY(0);
+        fabQuad.animate().translationY(0);
+        fabLine.animate().translationY(0);
         fabParam.animate().translationY(0);
 
         fabPlus.setImageResource(R.drawable.ic_baseline_add_circle_outline_24);
@@ -155,16 +157,16 @@ public class SketchEditActivity extends AppCompatActivity {
         fabText.show();
         fabCircle.show();
         fab3.show();
-        fab4.show();
-        fab5.show();
+        fabQuad.show();
+        fabLine.show();
         fabParam.show();
 
-        fabText.animate().translationY(-(fabText.getCustomSize() + 5 + fabCircle.getCustomSize()+ 5 +fab3.getCustomSize()+ 5 +fab4.getCustomSize()+ 5 + fab5.getCustomSize() + 50));
-        fabCircle.animate().translationY(-(fabCircle.getCustomSize()+ 5 +fab3.getCustomSize()+ 5 +fab4.getCustomSize()+ 5 + fab5.getCustomSize() + 50));
-        fab3.animate().translationY(-(fab3.getCustomSize()+ 5 +fab4.getCustomSize()+ 5 +fab5.getCustomSize() + 50));
-        fab4.animate().translationY(-(fab4.getCustomSize()+ 5 +fab5.getCustomSize() + 50));
-        fab5.animate().translationY(-(fab5.getCustomSize() + 50));
-        fabParam.animate().translationY(-(fabParam.getCustomSize() + 5 + fabText.getCustomSize() + 5 + fabCircle.getCustomSize()+ 5 +fab3.getCustomSize()+ 5 +fab4.getCustomSize()+ 5 + fab5.getCustomSize() + 50));
+        fabText.animate().translationY(-(fabText.getCustomSize() + 5 + fabCircle.getCustomSize()+ 5 +fab3.getCustomSize()+ 5 + fabQuad.getCustomSize()+ 5 + fabLine.getCustomSize() + 50));
+        fabCircle.animate().translationY(-(fabCircle.getCustomSize()+ 5 +fab3.getCustomSize()+ 5 + fabQuad.getCustomSize()+ 5 + fabLine.getCustomSize() + 50));
+        fab3.animate().translationY(-(fab3.getCustomSize()+ 5 + fabQuad.getCustomSize()+ 5 + fabLine.getCustomSize() + 50));
+        fabQuad.animate().translationY(-(fabQuad.getCustomSize()+ 5 + fabLine.getCustomSize() + 50));
+        fabLine.animate().translationY(-(fabLine.getCustomSize() + 50));
+        fabParam.animate().translationY(-(fabParam.getCustomSize() + 5 + fabText.getCustomSize() + 5 + fabCircle.getCustomSize()+ 5 +fab3.getCustomSize()+ 5 + fabQuad.getCustomSize()+ 5 + fabLine.getCustomSize() + 50));
 
         fabPlus.setImageResource(R.drawable.ic_baseline_remove_circle_outline_24);
         isButtonsHide = false;
@@ -179,13 +181,13 @@ public class SketchEditActivity extends AppCompatActivity {
     }
 
     private void buttonsLister() {
-        fabCircle.setOnClickListener(view -> setUpSelected(new Circle()));
+        fabCircle.setOnClickListener(view -> setSelected(new Circle()));
 //       fab3.setOnClickListener(view -> setAction(ElementType.TRIANGLE));
-//       fab4.setOnClickListener(view -> setAction(ElementType.QUADRANGLE));
-//       fab5.setOnClickListener(view -> setAction(ElementType.LINE));
+        fabQuad.setOnClickListener(view -> setSelected(new Quadrangle()));
+        fabLine.setOnClickListener(view -> setSelected(new Line()));
         fabParam.setOnClickListener(view -> createDialogForParam());
         fabText.setOnClickListener(view -> {
-            setUpSelected(new TextBox());
+            setSelected(new TextBox());
             createDialogForText();
         });
     }
