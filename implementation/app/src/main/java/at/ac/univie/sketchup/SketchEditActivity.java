@@ -16,6 +16,10 @@ import android.widget.Spinner;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 import at.ac.univie.sketchup.model.drawable.parameters.Color;
 import at.ac.univie.sketchup.model.drawable.DrawableObject;
 import at.ac.univie.sketchup.model.Sketch;
@@ -135,19 +139,9 @@ public class SketchEditActivity extends AppCompatActivity {
     }
 
     private void hideAction() {
-        fabParam.hide();
-        fabText.hide();
-        fabCircle.hide();
-        fabTriangle.hide();
-        fabQuad.hide();
-        fabLine.hide();
-
-        fabParam.animate().translationY(0);
-        fabText.animate().translationY(0);
-        fabCircle.animate().translationY(0);
-        fabTriangle.animate().translationY(0);
-        fabQuad.animate().translationY(0);
-        fabLine.animate().translationY(0);
+        List<FloatingActionButton> fabButtons = new ArrayList<>(Arrays.asList(fabParam, fabText, fabCircle, fabTriangle, fabQuad, fabLine));
+        fabButtons.forEach(fab -> fab.hide());
+        fabButtons.forEach(fab -> fab.animate().translationY(0));
 
         fabPlus.setImageResource(R.drawable.ic_baseline_add_circle_outline_24);
         //mode = ShapeType.NONE;
@@ -155,12 +149,8 @@ public class SketchEditActivity extends AppCompatActivity {
     }
 
     private void showAction() {
-        fabParam.show();
-        fabText.show();
-        fabCircle.show();
-        fabTriangle.show();
-        fabQuad.show();
-        fabLine.show();
+        List<FloatingActionButton> fabButtons = new ArrayList<>(Arrays.asList(fabParam, fabText, fabCircle, fabTriangle, fabQuad, fabLine));
+        fabButtons.forEach(fab -> fab.show());
 
         fabParam.animate().translationY(-(fabParam.getCustomSize() + 5 + fabText.getCustomSize() + 5 + fabCircle.getCustomSize()+ 5 + fabTriangle.getCustomSize()+ 5 + fabQuad.getCustomSize()+ 5 + fabLine.getCustomSize() + 50));
         fabText.animate().translationY(-(fabText.getCustomSize() + 5 + fabCircle.getCustomSize()+ 5 + fabTriangle.getCustomSize()+ 5 + fabQuad.getCustomSize()+ 5 + fabLine.getCustomSize() + 50));

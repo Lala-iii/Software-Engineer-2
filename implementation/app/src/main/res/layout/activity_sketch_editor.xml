@@ -19,7 +19,7 @@
         android:layout_gravity="bottom|right"
         android:layout_margin="12dp"
         app:fabCustomSize="50dp"
-        app:srcCompat="@drawable/ic_plus24"
+        app:srcCompat="@drawable/ic_text_icon"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"/>
 
@@ -96,12 +96,12 @@
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|right"
         android:layout_margin="12dp"
-        android:src="@drawable/ic_text_icon"
+        android:src="@android:drawable/ic_menu_manage"
         android:visibility="gone"
         app:fabCustomSize="50dp"
         app:fabSize="auto"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent" />
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintRight_toRightOf="parent" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

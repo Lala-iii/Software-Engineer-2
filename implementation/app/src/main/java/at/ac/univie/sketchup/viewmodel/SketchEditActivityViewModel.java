@@ -39,7 +39,6 @@ public class SketchEditActivityViewModel extends ViewModel {
     public void addSelectedToSketch(float x, float y) {
         if (selected == null) return;
 
-
         // Create copy(!) of selected object and set coordinate from touch
         DrawableObject objectToSet = null;
         try {
@@ -65,16 +64,24 @@ public class SketchEditActivityViewModel extends ViewModel {
     public void setTextForSelected(String text) {
         if (selected instanceof TextBox) {
             ((TextBox) selected).setText(text);
-        } else {
-            // todo through a error
         }
     }
 
     public void setSizeForSelected(int s) {
-        selected.setInputSize(s);
+        if (null != selected) {
+            selected.setInputSize(s);
+        } else {
+            // todo through a error
+
+        }
     }
 
     public void setColorForSelected(Color c) {
-        selected.setColor(c);
+        if (null != selected) {
+            selected.setColor(c);
+        } else {
+            // todo through a error
+
+        }
     }
 }
