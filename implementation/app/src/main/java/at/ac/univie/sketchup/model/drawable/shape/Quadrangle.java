@@ -1,5 +1,9 @@
 package at.ac.univie.sketchup.model.drawable.shape;
 
+import android.graphics.Canvas;
+import android.graphics.Paint;
+import android.graphics.Rect;
+
 import at.ac.univie.sketchup.model.drawable.parameters.Color;
 import at.ac.univie.sketchup.model.drawable.parameters.Coordinate;
 
@@ -17,7 +21,19 @@ public class Quadrangle extends Shape {
         );
         return endPoint;
     }
-
+    public void draw(Canvas canvas, Paint paint) {
+        System.out.println("Drawing the Quadramgle");
+        Rect rect = new Rect(
+                (int) ((Quadrangle) this).getPosition().getX(),
+                (int) ((Quadrangle) this).getPosition().getY(),
+                (int) ((Quadrangle) this).getEndPoint().getX(),
+                (int) ((Quadrangle) this).getEndPoint().getY()
+        );
+        canvas.drawRect(
+                rect,
+                paint
+        );
+    }
     public void setEndPoint(Coordinate endPoint) {
         this.endPoint = endPoint;
     }

@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
+
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -16,6 +17,7 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import java.util.List;
 
 import at.ac.univie.sketchup.model.Sketch;
+import at.ac.univie.sketchup.model.drawable.shape.Shape;
 import at.ac.univie.sketchup.viewmodel.MainActivityViewModel;
 
 public class MainActivity extends AppCompatActivity {
@@ -26,6 +28,7 @@ public class MainActivity extends AppCompatActivity {
 
     private ArrayAdapter<Sketch> arrayAdapter;
     private MainActivityViewModel mainViewModel;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,6 +56,8 @@ public class MainActivity extends AppCompatActivity {
                 startEditActivity(sketchId);
             }
         });
+
+
     }
 
 
@@ -106,4 +111,6 @@ public class MainActivity extends AppCompatActivity {
         intent.putExtra("sketchId", sketchId);
         startActivity(intent);
     }
+
+
 }

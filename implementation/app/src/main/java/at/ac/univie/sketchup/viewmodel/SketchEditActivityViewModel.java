@@ -42,7 +42,7 @@ public class SketchEditActivityViewModel extends ViewModel {
         // Create copy(!) of selected object and set coordinate from touch
         DrawableObject objectToSet = null;
         try {
-            objectToSet = (DrawableObject) selected.clone(); // May be an issue with with cloning Color. Monitor and make deep clone in case
+            objectToSet = (DrawableObject) selected.clone(); // May be an issue with cloning Color. Monitor and make deep clone in case
             objectToSet.setPosition(new Coordinate(x, y));
         } catch (CloneNotSupportedException e) {
             e.printStackTrace();

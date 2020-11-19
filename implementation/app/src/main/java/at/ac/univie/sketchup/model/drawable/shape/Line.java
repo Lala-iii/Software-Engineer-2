@@ -1,5 +1,8 @@
 package at.ac.univie.sketchup.model.drawable.shape;
 
+import android.graphics.Canvas;
+import android.graphics.Paint;
+
 import at.ac.univie.sketchup.model.drawable.parameters.Color;
 import at.ac.univie.sketchup.model.drawable.parameters.Coordinate;
 
@@ -18,7 +21,16 @@ public class Line extends Shape{
         );
         return endPoint;
     }
-
+    public void draw(Canvas canvas, Paint paint) {
+        System.out.println("Drawing the Line");
+        canvas.drawLine(
+                this.getPosition().getX(),
+                this.getPosition().getY(),
+                this.getEndPoint().getX(),
+                this.getEndPoint().getY(),
+                paint
+        );
+    }
     public void setEndPoint(Coordinate endPoint) {
         this.endPoint = endPoint;
     }
