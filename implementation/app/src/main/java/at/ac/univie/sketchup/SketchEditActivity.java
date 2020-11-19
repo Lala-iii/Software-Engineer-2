@@ -13,6 +13,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.TextView;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
@@ -82,7 +83,7 @@ public class SketchEditActivity extends AppCompatActivity {
         dialogBuilder.show();
     }
 
-    private void createDialogForParam(){
+    private void createDialogForParam() {
         final AlertDialog dialogBuilder = new AlertDialog.Builder(this).create();
         LayoutInflater inflater = this.getLayoutInflater();
         View dialogView = inflater.inflate(R.layout.input_dialog, null);
@@ -95,15 +96,41 @@ public class SketchEditActivity extends AppCompatActivity {
 
         Button btn_confirm = (Button) dialogView.findViewById(R.id.btn_confirm);
 
+        dialogBuilder.show();
+
         btn_confirm.setOnClickListener(view -> {
-            if (et_strokeWidth.getText().toString().matches("^[0-9]+$"))
-                sketchViewModel.setSizeForSelected(Integer.valueOf(et_strokeWidth.getText().toString()));
-            sketchViewModel.setColorForSelected(((Color)sp_color.getSelectedItem()));
+
+            try {
+                if (et_strokeWidth.getText().toString().matches("^[0-9]+$"))
+                    sketchViewModel.setSizeForSelected(Integer.valueOf(et_strokeWidth.getText().toString()));
+                sketchViewModel.setColorForSelected(((Color) sp_color.getSelectedItem()));
+            } catch (IncorrectAttributesException e) {
+                final AlertDialog dialogBuilder2 = new AlertDialog.Builder(this).create();
+                LayoutInflater inflater2 = this.getLayoutInflater();
+                View dialogView2 = inflater2.inflate(R.layout.error_allert_dialog, null);
+                dialogBuilder2.setView(dialogView2);
+
+                TextView error_txt = (TextView) dialogView2.findViewById(R.id.error_message);
+
+                error_txt.setText(e.getMessage());
+
+                dialogBuilder2.show();
+
+                Button btn_close = (Button) dialogView2.findViewById(R.id.btn_close);
+
+                btn_close.setOnClickListener(new View.OnClickListener() {
+                    public void onClick(View v) {
+                        dialogBuilder2.dismiss();
+                    }
+                });
+
+                e.printStackTrace();
+            }
             dialogBuilder.dismiss();
         });
 
-        dialogBuilder.show();
     }
+
 
     private void setViewElements(){
         setContentView(R.layout.activity_sketch_editor);

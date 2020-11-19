@@ -7,6 +7,7 @@ import androidx.lifecycle.ViewModel;
 
 import java.util.ArrayList;
 
+import at.ac.univie.sketchup.IncorrectAttributesException;
 import at.ac.univie.sketchup.model.drawable.parameters.Color;
 import at.ac.univie.sketchup.model.drawable.parameters.Coordinate;
 import at.ac.univie.sketchup.model.drawable.DrawableObject;
@@ -67,20 +68,22 @@ public class SketchEditActivityViewModel extends ViewModel {
         }
     }
 
-    public void setSizeForSelected(int s) {
+    public void setSizeForSelected(int s) throws IncorrectAttributesException {
         if (null != selected) {
             selected.setInputSize(s);
         } else {
-            // todo through a error
-
+            // Custom ExceptionClass Usage
+            throw new IncorrectAttributesException("Select the element first to which size changes should be applied!");
         }
     }
 
-    public void setColorForSelected(Color c) {
+    public void setColorForSelected(Color c) throws IncorrectAttributesException {
         if (null != selected) {
             selected.setColor(c);
         } else {
-            // todo through a error
+         //Custom ExceptionClass Usage
+            throw new IncorrectAttributesException("Select the element first to which color changes should be applied!");
+
 
         }
     }
