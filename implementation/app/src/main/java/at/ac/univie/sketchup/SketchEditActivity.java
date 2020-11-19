@@ -103,7 +103,7 @@ public class SketchEditActivity extends AppCompatActivity {
 
             try {
                 if (et_strokeWidth.getText().toString().matches("^[0-9]+$"))
-                    sketchViewModel.setSizeForSelected(Integer.valueOf(et_strokeWidth.getText().toString()));
+                    sketchViewModel.setSizeForSelected(Integer.parseInt(et_strokeWidth.getText().toString()));
                 sketchViewModel.setColorForSelected(((Color) sp_color.getSelectedItem()));
             } catch (IncorrectAttributesException e) {
                 final AlertDialog dialogBuilder2 = new AlertDialog.Builder(this).create();
@@ -180,7 +180,9 @@ public class SketchEditActivity extends AppCompatActivity {
         List<FloatingActionButton> fabButtons = new ArrayList<>(Arrays.asList(fabParam, fabText, fabCircle, fabTriangle, fabQuad, fabLine));
         fabButtons.forEach(fab -> fab.show());
 
-        fabParam.animate().translationY(-(fabParam.getCustomSize() + 5 + fabText.getCustomSize() + 5 + fabCircle.getCustomSize() + 5 + fabTriangle.getCustomSize() + 5 + fabQuad.getCustomSize() + 5 + fabLine.getCustomSize() + 50));
+        fabParam.animate().translationX(-(fabParam.getCustomSize() + 50));
+        fabParam.animate().translationY(-5);
+        //fabParam.animate().translationY(-(fabParam.getCustomSize() + 5 + fabText.getCustomSize() + 5 + fabCircle.getCustomSize() + 5 + fabTriangle.getCustomSize() + 5 + fabQuad.getCustomSize() + 5 + fabLine.getCustomSize() + 50));
         fabText.animate().translationY(-(fabText.getCustomSize() + 5 + fabCircle.getCustomSize() + 5 + fabTriangle.getCustomSize() + 5 + fabQuad.getCustomSize() + 5 + fabLine.getCustomSize() + 50));
         fabCircle.animate().translationY(-(fabCircle.getCustomSize() + 5 + fabTriangle.getCustomSize() + 5 + fabQuad.getCustomSize() + 5 + fabLine.getCustomSize() + 50));
         fabTriangle.animate().translationY(-(fabTriangle.getCustomSize() + 5 + fabQuad.getCustomSize() + 5 + fabLine.getCustomSize() + 50));
