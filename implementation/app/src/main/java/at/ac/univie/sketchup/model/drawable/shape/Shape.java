@@ -8,4 +8,5 @@ public abstract class Shape extends DrawableObject {
     public Shape(Color c, int size) {
         super(c, size);
     }
+    //public abstract void draw();
 }

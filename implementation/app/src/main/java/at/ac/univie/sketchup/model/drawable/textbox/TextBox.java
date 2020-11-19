@@ -1,5 +1,8 @@
 package at.ac.univie.sketchup.model.drawable.textbox;
 
+import android.graphics.Canvas;
+import android.graphics.Paint;
+
 import at.ac.univie.sketchup.model.drawable.parameters.Color;
 import at.ac.univie.sketchup.model.drawable.DrawableObject;
 
@@ -18,5 +21,15 @@ public class TextBox extends DrawableObject {
 
     public void setText(String text) {
         this.text = text;
+    }
+
+    @Override
+    public void draw(Canvas canvas, Paint paint) {
+        canvas.drawText(
+                this.getText(),
+                this.getPosition().getX(),
+                this.getPosition().getY(),
+                paint
+        );
     }
 }

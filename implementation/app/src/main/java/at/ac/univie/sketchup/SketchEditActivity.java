@@ -21,6 +21,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import at.ac.univie.sketchup.model.drawable.DrawableObjectFactory;
 import at.ac.univie.sketchup.model.drawable.parameters.Color;
 import at.ac.univie.sketchup.model.drawable.DrawableObject;
 import at.ac.univie.sketchup.model.Sketch;
@@ -199,20 +200,18 @@ public class SketchEditActivity extends AppCompatActivity {
     }
 
     private void buttonsLister() {
+        DrawableObjectFactory drawableObjectFactory = new DrawableObjectFactory();
+
         fabParam.setOnClickListener(view -> createDialogForParam());
         fabText.setOnClickListener(view -> {
-            setSelected(new TextBox());
+            setSelected(drawableObjectFactory.getDrawableObject(TextBox.class));
             createDialogForText();
         });
-        fabCircle.setOnClickListener(view -> setSelected(new Circle()));
-        fabTriangle.setOnClickListener(view -> setSelected(new Triangle()));
-        fabQuad.setOnClickListener(view -> setSelected(new Quadrangle()));
-        fabLine.setOnClickListener(view -> setSelected(new Line()));
+        fabCircle.setOnClickListener(view -> setSelected( drawableObjectFactory.getDrawableObject(Circle.class)));
+        fabTriangle.setOnClickListener(view -> setSelected(drawableObjectFactory.getDrawableObject(Triangle.class)));
+        fabQuad.setOnClickListener(view -> setSelected(drawableObjectFactory.getDrawableObject(Quadrangle.class)));
+        fabLine.setOnClickListener(view -> setSelected(drawableObjectFactory.getDrawableObject(Line.class)));
     }
-
-
-
-
 
 
 }

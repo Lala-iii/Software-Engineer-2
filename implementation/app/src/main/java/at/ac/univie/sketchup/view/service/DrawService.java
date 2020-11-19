@@ -16,7 +16,10 @@ import at.ac.univie.sketchup.model.drawable.textbox.TextBox;
 public class DrawService {
 
     public static void handle(Canvas canvas, DrawableObject objectToDraw) {
-        if (objectToDraw instanceof TextBox) {
+        objectToDraw.draw(canvas,setUpPaint(objectToDraw));
+
+       /* if (objectToDraw instanceof TextBox)
+        {
             canvas.drawText(
                     ((TextBox) objectToDraw).getText(),
                     objectToDraw.getPosition().getX(),
@@ -65,14 +68,14 @@ public class DrawService {
             path.close();
 
             canvas.drawPath(path, setUpPaint(objectToDraw));
-        }
+        }*/
     }
 
     private static Paint setUpPaint(DrawableObject objectToDraw) {
         Paint mPaint = new Paint();
         mPaint.setColor(objectToDraw.getColor().getAndroidColor());
         mPaint.setAntiAlias(true);
-        mPaint.setStyle(Paint.Style.STROKE);
+        mPaint.setStyle(Paint.Style.FILL);
         mPaint.setTextSize(objectToDraw.getInputSize());
         mPaint.setStrokeWidth(objectToDraw.getInputSize());
         return mPaint;
