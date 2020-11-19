@@ -62,7 +62,7 @@ public class SketchEditActivity extends AppCompatActivity {
 
     }
 
-    private void createDialogForText(){
+    private void createDialogForText() {
         final AlertDialog dialogBuilder = new AlertDialog.Builder(this).create();
         LayoutInflater inflater = this.getLayoutInflater();
         View dialogView = inflater.inflate(R.layout.type_text_alert_dialog, null);
@@ -108,7 +108,7 @@ public class SketchEditActivity extends AppCompatActivity {
             } catch (IncorrectAttributesException e) {
                 final AlertDialog dialogBuilder2 = new AlertDialog.Builder(this).create();
                 LayoutInflater inflater2 = this.getLayoutInflater();
-                View dialogView2 = inflater2.inflate(R.layout.error_allert_dialog, null);
+                View dialogView2 = inflater2.inflate(R.layout.error_alert_dialog, null);
                 dialogBuilder2.setView(dialogView2);
 
                 TextView error_txt = (TextView) dialogView2.findViewById(R.id.error_message);
@@ -133,7 +133,7 @@ public class SketchEditActivity extends AppCompatActivity {
     }
 
 
-    private void setViewElements(){
+    private void setViewElements() {
         setContentView(R.layout.activity_sketch_editor);
         paintView = findViewById(R.id.paintView);
 
@@ -172,7 +172,7 @@ public class SketchEditActivity extends AppCompatActivity {
         fabButtons.forEach(fab -> fab.animate().translationY(0));
 
         fabPlus.setImageResource(R.drawable.ic_baseline_add_circle_outline_24);
-        //mode = ShapeType.NONE;
+
         isButtonsHide = true;
     }
 
@@ -180,11 +180,11 @@ public class SketchEditActivity extends AppCompatActivity {
         List<FloatingActionButton> fabButtons = new ArrayList<>(Arrays.asList(fabParam, fabText, fabCircle, fabTriangle, fabQuad, fabLine));
         fabButtons.forEach(fab -> fab.show());
 
-        fabParam.animate().translationY(-(fabParam.getCustomSize() + 5 + fabText.getCustomSize() + 5 + fabCircle.getCustomSize()+ 5 + fabTriangle.getCustomSize()+ 5 + fabQuad.getCustomSize()+ 5 + fabLine.getCustomSize() + 50));
-        fabText.animate().translationY(-(fabText.getCustomSize() + 5 + fabCircle.getCustomSize()+ 5 + fabTriangle.getCustomSize()+ 5 + fabQuad.getCustomSize()+ 5 + fabLine.getCustomSize() + 50));
-        fabCircle.animate().translationY(-(fabCircle.getCustomSize()+ 5 + fabTriangle.getCustomSize()+ 5 + fabQuad.getCustomSize()+ 5 + fabLine.getCustomSize() + 50));
-        fabTriangle.animate().translationY(-(fabTriangle.getCustomSize()+ 5 + fabQuad.getCustomSize()+ 5 + fabLine.getCustomSize() + 50));
-        fabQuad.animate().translationY(-(fabQuad.getCustomSize()+ 5 + fabLine.getCustomSize() + 50));
+        fabParam.animate().translationY(-(fabParam.getCustomSize() + 5 + fabText.getCustomSize() + 5 + fabCircle.getCustomSize() + 5 + fabTriangle.getCustomSize() + 5 + fabQuad.getCustomSize() + 5 + fabLine.getCustomSize() + 50));
+        fabText.animate().translationY(-(fabText.getCustomSize() + 5 + fabCircle.getCustomSize() + 5 + fabTriangle.getCustomSize() + 5 + fabQuad.getCustomSize() + 5 + fabLine.getCustomSize() + 50));
+        fabCircle.animate().translationY(-(fabCircle.getCustomSize() + 5 + fabTriangle.getCustomSize() + 5 + fabQuad.getCustomSize() + 5 + fabLine.getCustomSize() + 50));
+        fabTriangle.animate().translationY(-(fabTriangle.getCustomSize() + 5 + fabQuad.getCustomSize() + 5 + fabLine.getCustomSize() + 50));
+        fabQuad.animate().translationY(-(fabQuad.getCustomSize() + 5 + fabLine.getCustomSize() + 50));
         fabLine.animate().translationY(-(fabLine.getCustomSize() + 50));
 
         fabPlus.setImageResource(R.drawable.ic_baseline_remove_circle_outline_24);
@@ -207,7 +207,7 @@ public class SketchEditActivity extends AppCompatActivity {
             setSelected(drawableObjectFactory.getDrawableObject(TextBox.class));
             createDialogForText();
         });
-        fabCircle.setOnClickListener(view -> setSelected( drawableObjectFactory.getDrawableObject(Circle.class)));
+        fabCircle.setOnClickListener(view -> setSelected(drawableObjectFactory.getDrawableObject(Circle.class)));
         fabTriangle.setOnClickListener(view -> setSelected(drawableObjectFactory.getDrawableObject(Triangle.class)));
         fabQuad.setOnClickListener(view -> setSelected(drawableObjectFactory.getDrawableObject(Quadrangle.class)));
         fabLine.setOnClickListener(view -> setSelected(drawableObjectFactory.getDrawableObject(Line.class)));

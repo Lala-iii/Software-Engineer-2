@@ -21,8 +21,9 @@ public class Quadrangle extends Shape {
         );
         return endPoint;
     }
+
+    @Override
     public void draw(Canvas canvas, Paint paint) {
-        System.out.println("Drawing the Quadramgle");
         Rect rect = new Rect(
                 (int) ((Quadrangle) this).getPosition().getX(),
                 (int) ((Quadrangle) this).getPosition().getY(),

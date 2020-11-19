@@ -18,8 +18,8 @@ public class Triangle extends Shape {
         return this.width;
     }
 
+    @Override
     public void draw(Canvas canvas, Paint paint) {
-        System.out.println("Drawing the Triangle");
         float width =  this.getWidth();
 
         Path path = new Path();

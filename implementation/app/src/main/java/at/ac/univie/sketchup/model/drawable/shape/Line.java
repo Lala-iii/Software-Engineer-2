@@ -21,8 +21,8 @@ public class Line extends Shape{
         );
         return endPoint;
     }
+    @Override
     public void draw(Canvas canvas, Paint paint) {
-        System.out.println("Drawing the Line");
         canvas.drawLine(
                 this.getPosition().getX(),
                 this.getPosition().getY(),
