@@ -18,7 +18,6 @@ public class Line extends Shape{
         );
         return endPoint;
     }
-
     public void setEndPoint(Coordinate endPoint) {
         this.endPoint = endPoint;
     }

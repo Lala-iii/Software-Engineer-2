@@ -7,10 +7,7 @@ import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
 
-import at.ac.univie.sketchup.model.drawable.parameters.Color;
 import at.ac.univie.sketchup.model.drawable.DrawableObject;
-import at.ac.univie.sketchup.model.drawable.textbox.TextBox;
-import at.ac.univie.sketchup.view.service.DrawService;
 import at.ac.univie.sketchup.viewmodel.SketchEditActivityViewModel;
 
 public class PaintView extends View {
@@ -33,17 +30,26 @@ public class PaintView extends View {
         canvas.save();
 
         for (DrawableObject objectToDraw : sketchViewModel.getObjectsToDraw()) {
-            drawService.handle(canvas, objectToDraw);
+
         }
 
         canvas.restore();
     }
 
+    private Paint setUpPaint(DrawableObject objectToDraw) {
+        Paint mPaint = new Paint();
+        mPaint.setColor(objectToDraw.getColor().getAndroidColor());
+        mPaint.setAntiAlias(true);
+        mPaint.setStyle(Paint.Style.FILL);
+        mPaint.setTextSize(objectToDraw.getInputSize());
+        mPaint.setStrokeWidth(objectToDraw.getInputSize());
+        return mPaint;
+    }
+
     @Override
     public boolean onTouchEvent(MotionEvent event) {
-        switch (event.getAction()) {
-            case MotionEvent.ACTION_DOWN:
-                    sketchViewModel.addSelectedToSketch(event.getX(), event.getY());
+        if (event.getAction() == MotionEvent.ACTION_DOWN) {
+            sketchViewModel.addSelectedToSketch(event.getX(), event.getY());
         }
         return true;
     }

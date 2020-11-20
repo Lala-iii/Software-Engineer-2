@@ -13,6 +13,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.TextView;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
@@ -20,6 +21,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import at.ac.univie.sketchup.exception.IncorrectAttributesException;
+import at.ac.univie.sketchup.model.drawable.DrawableObjectFactory;
 import at.ac.univie.sketchup.model.drawable.parameters.Color;
 import at.ac.univie.sketchup.model.drawable.DrawableObject;
 import at.ac.univie.sketchup.model.Sketch;
@@ -40,6 +43,8 @@ public class SketchEditActivity extends AppCompatActivity {
     private SketchEditActivityViewModel sketchViewModel;
     private Intent intent;
 
+    private DrawableObjectFactory drawableObjectFactory;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -47,6 +52,7 @@ public class SketchEditActivity extends AppCompatActivity {
         setViewElements();
 
         intent = getIntent();
+        drawableObjectFactory = new DrawableObjectFactory();
         setViewModel();
 
         paintView.init(sketchViewModel);
@@ -60,14 +66,14 @@ public class SketchEditActivity extends AppCompatActivity {
 
     }
 
-    private void createDialogForText(){
+    private void createDialogForText() {
         final AlertDialog dialogBuilder = new AlertDialog.Builder(this).create();
         LayoutInflater inflater = this.getLayoutInflater();
         View dialogView = inflater.inflate(R.layout.type_text_alert_dialog, null);
         dialogBuilder.setView(dialogView);
 
-        final EditText editText = (EditText) dialogView.findViewById(R.id.edt_comment);
-        Button buttonSubmit = (Button) dialogView.findViewById(R.id.buttonSubmit);
+        final EditText editText = dialogView.findViewById(R.id.edt_comment);
+        Button buttonSubmit = dialogView.findViewById(R.id.buttonSubmit);
 
         buttonSubmit.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -82,30 +88,56 @@ public class SketchEditActivity extends AppCompatActivity {
         dialogBuilder.show();
     }
 
-    private void createDialogForParam(){
+    private void createDialogForParam() {
         final AlertDialog dialogBuilder = new AlertDialog.Builder(this).create();
         LayoutInflater inflater = this.getLayoutInflater();
         View dialogView = inflater.inflate(R.layout.input_dialog, null);
         dialogBuilder.setView(dialogView);
 
-        Spinner sp_color = (Spinner) dialogView.findViewById(R.id.sp_color);
+        Spinner sp_color = dialogView.findViewById(R.id.sp_color);
         sp_color.setAdapter(new ArrayAdapter<Color>(this, android.R.layout.simple_spinner_item, Color.values()));
 
-        final EditText et_strokeWidth = (EditText) dialogView.findViewById(R.id.et_strokeWidth);
+        final EditText et_strokeWidth = dialogView.findViewById(R.id.et_strokeWidth);
 
-        Button btn_confirm = (Button) dialogView.findViewById(R.id.btn_confirm);
+        Button btn_confirm = dialogView.findViewById(R.id.btn_confirm);
+
+        dialogBuilder.show();
 
         btn_confirm.setOnClickListener(view -> {
-            if (et_strokeWidth.getText().toString().matches("^[0-9]+$"))
-                sketchViewModel.setSizeForSelected(Integer.valueOf(et_strokeWidth.getText().toString()));
-            sketchViewModel.setColorForSelected(((Color)sp_color.getSelectedItem()));
+
+            try {
+                if (et_strokeWidth.getText().toString().matches("^[0-9]+$"))
+                    sketchViewModel.setSizeForSelected(Integer.parseInt(et_strokeWidth.getText().toString()));
+                sketchViewModel.setColorForSelected(((Color) sp_color.getSelectedItem()));
+            } catch (IncorrectAttributesException e) {
+                final AlertDialog dialogBuilder2 = new AlertDialog.Builder(this).create();
+                LayoutInflater inflater2 = this.getLayoutInflater();
+                View dialogView2 = inflater2.inflate(R.layout.error_alert_dialog, null);
+                dialogBuilder2.setView(dialogView2);
+
+                TextView error_txt = dialogView2.findViewById(R.id.error_message);
+
+                error_txt.setText(e.getMessage());
+
+                dialogBuilder2.show();
+
+                Button btn_close = dialogView2.findViewById(R.id.btn_close);
+
+                btn_close.setOnClickListener(new View.OnClickListener() {
+                    public void onClick(View v) {
+                        dialogBuilder2.dismiss();
+                    }
+                });
+
+                e.printStackTrace();
+            }
             dialogBuilder.dismiss();
         });
 
-        dialogBuilder.show();
     }
 
-    private void setViewElements(){
+
+    private void setViewElements() {
         setContentView(R.layout.activity_sketch_editor);
         paintView = findViewById(R.id.paintView);
 
@@ -144,7 +176,7 @@ public class SketchEditActivity extends AppCompatActivity {
         fabButtons.forEach(fab -> fab.animate().translationY(0));
 
         fabPlus.setImageResource(R.drawable.ic_baseline_add_circle_outline_24);
-        //mode = ShapeType.NONE;
+
         isButtonsHide = true;
     }
 
@@ -152,11 +184,13 @@ public class SketchEditActivity extends AppCompatActivity {
         List<FloatingActionButton> fabButtons = new ArrayList<>(Arrays.asList(fabParam, fabText, fabCircle, fabTriangle, fabQuad, fabLine));
         fabButtons.forEach(fab -> fab.show());
 
-        fabParam.animate().translationY(-(fabParam.getCustomSize() + 5 + fabText.getCustomSize() + 5 + fabCircle.getCustomSize()+ 5 + fabTriangle.getCustomSize()+ 5 + fabQuad.getCustomSize()+ 5 + fabLine.getCustomSize() + 50));
-        fabText.animate().translationY(-(fabText.getCustomSize() + 5 + fabCircle.getCustomSize()+ 5 + fabTriangle.getCustomSize()+ 5 + fabQuad.getCustomSize()+ 5 + fabLine.getCustomSize() + 50));
-        fabCircle.animate().translationY(-(fabCircle.getCustomSize()+ 5 + fabTriangle.getCustomSize()+ 5 + fabQuad.getCustomSize()+ 5 + fabLine.getCustomSize() + 50));
-        fabTriangle.animate().translationY(-(fabTriangle.getCustomSize()+ 5 + fabQuad.getCustomSize()+ 5 + fabLine.getCustomSize() + 50));
-        fabQuad.animate().translationY(-(fabQuad.getCustomSize()+ 5 + fabLine.getCustomSize() + 50));
+        fabParam.animate().translationX(-(fabParam.getCustomSize() + 50));
+        fabParam.animate().translationY(-5);
+        //fabParam.animate().translationY(-(fabParam.getCustomSize() + 5 + fabText.getCustomSize() + 5 + fabCircle.getCustomSize() + 5 + fabTriangle.getCustomSize() + 5 + fabQuad.getCustomSize() + 5 + fabLine.getCustomSize() + 50));
+        fabText.animate().translationY(-(fabText.getCustomSize() + 5 + fabCircle.getCustomSize() + 5 + fabTriangle.getCustomSize() + 5 + fabQuad.getCustomSize() + 5 + fabLine.getCustomSize() + 50));
+        fabCircle.animate().translationY(-(fabCircle.getCustomSize() + 5 + fabTriangle.getCustomSize() + 5 + fabQuad.getCustomSize() + 5 + fabLine.getCustomSize() + 50));
+        fabTriangle.animate().translationY(-(fabTriangle.getCustomSize() + 5 + fabQuad.getCustomSize() + 5 + fabLine.getCustomSize() + 50));
+        fabQuad.animate().translationY(-(fabQuad.getCustomSize() + 5 + fabLine.getCustomSize() + 50));
         fabLine.animate().translationY(-(fabLine.getCustomSize() + 50));
 
         fabPlus.setImageResource(R.drawable.ic_baseline_remove_circle_outline_24);
@@ -174,18 +208,14 @@ public class SketchEditActivity extends AppCompatActivity {
     private void buttonsLister() {
         fabParam.setOnClickListener(view -> createDialogForParam());
         fabText.setOnClickListener(view -> {
-            setSelected(new TextBox());
+            setSelected(drawableObjectFactory.getDrawableObject(TextBox.class));
             createDialogForText();
         });
-        fabCircle.setOnClickListener(view -> setSelected(new Circle()));
-        fabTriangle.setOnClickListener(view -> setSelected(new Triangle()));
-        fabQuad.setOnClickListener(view -> setSelected(new Quadrangle()));
-        fabLine.setOnClickListener(view -> setSelected(new Line()));
+        fabCircle.setOnClickListener(view -> setSelected(drawableObjectFactory.getDrawableObject(Circle.class)));
+        fabTriangle.setOnClickListener(view -> setSelected(drawableObjectFactory.getDrawableObject(Triangle.class)));
+        fabQuad.setOnClickListener(view -> setSelected(drawableObjectFactory.getDrawableObject(Quadrangle.class)));
+        fabLine.setOnClickListener(view -> setSelected(drawableObjectFactory.getDrawableObject(Line.class)));
     }
-
-
-
-
 
 
 }

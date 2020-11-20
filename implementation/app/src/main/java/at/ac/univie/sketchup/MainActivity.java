@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
+
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -26,6 +27,7 @@ public class MainActivity extends AppCompatActivity {
 
     private ArrayAdapter<Sketch> arrayAdapter;
     private MainActivityViewModel mainViewModel;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,6 +55,8 @@ public class MainActivity extends AppCompatActivity {
                 startEditActivity(sketchId);
             }
         });
+
+
     }
 
 
@@ -83,7 +87,7 @@ public class MainActivity extends AppCompatActivity {
     private void setUpViewElements() {
         setContentView(R.layout.activity_main);
 
-        listView = (ListView)findViewById(R.id.listView);
+        listView = findViewById(R.id.listView);
         fab = findViewById(R.id.floatingActionButton);
     }
 
@@ -106,4 +110,6 @@ public class MainActivity extends AppCompatActivity {
         intent.putExtra("sketchId", sketchId);
         startActivity(intent);
     }
+
+
 }
