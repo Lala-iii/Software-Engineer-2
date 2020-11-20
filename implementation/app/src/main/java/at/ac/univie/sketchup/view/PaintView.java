@@ -8,6 +8,7 @@ import android.view.MotionEvent;
 import android.view.View;
 
 import at.ac.univie.sketchup.model.drawable.DrawableObject;
+import at.ac.univie.sketchup.view.service.DrawService;
 import at.ac.univie.sketchup.viewmodel.SketchEditActivityViewModel;
 
 public class PaintView extends View {
@@ -30,7 +31,7 @@ public class PaintView extends View {
         canvas.save();
 
         for (DrawableObject objectToDraw : sketchViewModel.getObjectsToDraw()) {
-
+            drawService.handle(canvas, objectToDraw);
         }
 
         canvas.restore();

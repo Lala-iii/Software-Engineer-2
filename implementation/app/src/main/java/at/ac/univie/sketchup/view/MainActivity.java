@@ -1,4 +1,4 @@
-package at.ac.univie.sketchup;
+package at.ac.univie.sketchup.view;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.Observer;
@@ -16,6 +16,7 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.List;
 
+import at.ac.univie.sketchup.R;
 import at.ac.univie.sketchup.model.Sketch;
 import at.ac.univie.sketchup.viewmodel.MainActivityViewModel;
 
