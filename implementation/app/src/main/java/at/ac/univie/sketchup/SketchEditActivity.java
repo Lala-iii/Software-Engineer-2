@@ -21,6 +21,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import at.ac.univie.sketchup.exception.IncorrectAttributesException;
 import at.ac.univie.sketchup.model.drawable.DrawableObjectFactory;
 import at.ac.univie.sketchup.model.drawable.parameters.Color;
 import at.ac.univie.sketchup.model.drawable.DrawableObject;
@@ -42,6 +43,8 @@ public class SketchEditActivity extends AppCompatActivity {
     private SketchEditActivityViewModel sketchViewModel;
     private Intent intent;
 
+    private DrawableObjectFactory drawableObjectFactory;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -49,6 +52,7 @@ public class SketchEditActivity extends AppCompatActivity {
         setViewElements();
 
         intent = getIntent();
+        drawableObjectFactory = new DrawableObjectFactory();
         setViewModel();
 
         paintView.init(sketchViewModel);
@@ -202,8 +206,6 @@ public class SketchEditActivity extends AppCompatActivity {
     }
 
     private void buttonsLister() {
-        DrawableObjectFactory drawableObjectFactory = new DrawableObjectFactory();
-
         fabParam.setOnClickListener(view -> createDialogForParam());
         fabText.setOnClickListener(view -> {
             setSelected(drawableObjectFactory.getDrawableObject(TextBox.class));

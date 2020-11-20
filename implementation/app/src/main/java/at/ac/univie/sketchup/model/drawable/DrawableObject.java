@@ -5,7 +5,7 @@ import androidx.annotation.NonNull;
 import at.ac.univie.sketchup.model.drawable.parameters.Color;
 import at.ac.univie.sketchup.model.drawable.parameters.Coordinate;
 
-public abstract class DrawableObject implements Cloneable, IDrawableObject {
+public abstract class DrawableObject implements Cloneable {
 
     private Color color;
     private Coordinate position;

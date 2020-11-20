@@ -23,13 +23,4 @@ public class TextBox extends DrawableObject {
         this.text = text;
     }
 
-    @Override
-    public void draw(Canvas canvas, Paint paint) {
-        canvas.drawText(
-                this.getText(),
-                this.getPosition().getX(),
-                this.getPosition().getY(),
-                paint
-        );
-    }
 }

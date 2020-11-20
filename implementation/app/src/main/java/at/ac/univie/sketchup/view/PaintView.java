@@ -28,7 +28,7 @@ public class PaintView extends View {
         canvas.save();
 
         for (DrawableObject objectToDraw : sketchViewModel.getObjectsToDraw()) {
-            objectToDraw.draw(canvas, setUpPaint(objectToDraw));
+
         }
 
         canvas.restore();

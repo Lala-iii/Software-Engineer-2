@@ -8,7 +8,7 @@ import androidx.lifecycle.ViewModel;
 import java.util.ArrayList;
 import java.util.Objects;
 
-import at.ac.univie.sketchup.IncorrectAttributesException;
+import at.ac.univie.sketchup.exception.IncorrectAttributesException;
 import at.ac.univie.sketchup.model.drawable.parameters.Color;
 import at.ac.univie.sketchup.model.drawable.parameters.Coordinate;
 import at.ac.univie.sketchup.model.drawable.DrawableObject;
