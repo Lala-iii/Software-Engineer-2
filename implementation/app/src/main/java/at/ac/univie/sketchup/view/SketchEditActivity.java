@@ -76,12 +76,9 @@ public class SketchEditActivity extends AppCompatActivity {
         final EditText editText = dialogView.findViewById(R.id.edt_comment);
         Button buttonSubmit = dialogView.findViewById(R.id.buttonSubmit);
 
-        buttonSubmit.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                sketchViewModel.setTextForSelected(editText.getText().toString());
-                dialogBuilder.dismiss();
-            }
+        buttonSubmit.setOnClickListener(view -> {
+            sketchViewModel.setTextForSelected(editText.getText().toString());
+            dialogBuilder.dismiss();
         });
 
         //todo button Cancel
@@ -96,7 +93,7 @@ public class SketchEditActivity extends AppCompatActivity {
         dialogBuilder.setView(dialogView);
 
         Spinner sp_color = dialogView.findViewById(R.id.sp_color);
-        sp_color.setAdapter(new ArrayAdapter<Color>(this, android.R.layout.simple_spinner_item, Color.values()));
+        sp_color.setAdapter(new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, Color.values()));
 
         final EditText et_strokeWidth = dialogView.findViewById(R.id.et_strokeWidth);
 
@@ -124,11 +121,7 @@ public class SketchEditActivity extends AppCompatActivity {
 
                 Button btn_close = dialogView2.findViewById(R.id.btn_close);
 
-                btn_close.setOnClickListener(new View.OnClickListener() {
-                    public void onClick(View v) {
-                        dialogBuilder2.dismiss();
-                    }
-                });
+                btn_close.setOnClickListener(v -> dialogBuilder2.dismiss());
 
                 e.printStackTrace();
             }
@@ -163,17 +156,12 @@ public class SketchEditActivity extends AppCompatActivity {
 
     // Observer through an event to redraw all object if sketch was changed.
     private void setObserver() {
-        sketchViewModel.getSketch().observe(this, new Observer<Sketch>() {
-            @Override
-            public void onChanged(Sketch sketch) {
-                paintView.postInvalidate();
-            }
-        });
+        sketchViewModel.getSketch().observe(this, sketch -> paintView.postInvalidate());
     }
 
     private void hideAction() {
         List<FloatingActionButton> fabButtons = new ArrayList<>(Arrays.asList(fabParam, fabText, fabCircle, fabTriangle, fabQuad, fabLine));
-        fabButtons.forEach(fab -> fab.hide());
+        fabButtons.forEach(FloatingActionButton::hide);
         fabButtons.forEach(fab -> fab.animate().translationY(0));
 
         fabPlus.setImageResource(R.drawable.ic_baseline_add_circle_outline_24);
@@ -183,7 +171,7 @@ public class SketchEditActivity extends AppCompatActivity {
 
     private void showAction() {
         List<FloatingActionButton> fabButtons = new ArrayList<>(Arrays.asList(fabParam, fabText, fabCircle, fabTriangle, fabQuad, fabLine));
-        fabButtons.forEach(fab -> fab.show());
+        fabButtons.forEach(FloatingActionButton::show);
 
         fabParam.animate().translationX(-(fabParam.getCustomSize() + 50));
         fabParam.animate().translationY(-5);

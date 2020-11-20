@@ -49,5 +49,5 @@ public class DrawService {
         if (objectToDraw instanceof Triangle) {
             drawStrategy = new DrawTriangle();
         }
-    };
+    }
 }

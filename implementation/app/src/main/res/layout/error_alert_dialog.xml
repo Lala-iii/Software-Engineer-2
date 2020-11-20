@@ -5,7 +5,6 @@
     android:orientation="vertical">
 
     <LinearLayout
-        android:id="@+id/error_attributes"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal">
@@ -16,7 +15,7 @@
             android:layout_height="72dp"
             android:layout_margin="5dp"
             android:textAlignment="textStart"
-            android:textSize="20dp" />
+            android:textSize="20sp" />
 
     </LinearLayout>
 

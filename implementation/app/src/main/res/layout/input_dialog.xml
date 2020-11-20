@@ -5,12 +5,10 @@
     android:orientation="vertical">
 
     <LinearLayout
-        android:id="@+id/ll_strokeWidth"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal">
     <TextView
-        android:id="@+id/tv_StrokeWidth"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="5dp"
@@ -29,12 +27,10 @@
         android:autofillHints="stroke_width_default" />
     </LinearLayout>
     <LinearLayout
-        android:id="@+id/ll_color"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal">
         <TextView
-            android:id="@+id/tv_color"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="5dp"

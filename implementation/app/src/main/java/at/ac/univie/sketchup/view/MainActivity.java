@@ -41,20 +41,11 @@ public class MainActivity extends AppCompatActivity {
         arrayAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, mainViewModel.getSketches().getValue());
         listView.setAdapter(arrayAdapter);
 
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id)
-            {
-                startEditActivity(position+1);
-            }
-        });
+        listView.setOnItemClickListener((parent, view, position, id) -> startEditActivity(position+1));
 
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                int sketchId = mainViewModel.createNewSketch();
-                startEditActivity(sketchId);
-            }
+        fab.setOnClickListener(view -> {
+            int sketchId = mainViewModel.createNewSketch();
+            startEditActivity(sketchId);
         });
 
 
@@ -98,12 +89,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void setUpObserver() {
-        mainViewModel.getSketches().observe(this, new Observer<List<Sketch>>() {
-            @Override
-            public void onChanged(List<Sketch> sketches) {
-                arrayAdapter.notifyDataSetChanged();
-            }
-        });
+        mainViewModel.getSketches().observe(this, sketches -> arrayAdapter.notifyDataSetChanged());
     }
 
     private void startEditActivity(int sketchId) {

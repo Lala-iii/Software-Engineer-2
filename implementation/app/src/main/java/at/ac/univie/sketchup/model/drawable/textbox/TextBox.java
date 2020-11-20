@@ -1,8 +1,5 @@
 package at.ac.univie.sketchup.model.drawable.textbox;
 
-import android.graphics.Canvas;
-import android.graphics.Paint;
-
 import at.ac.univie.sketchup.model.drawable.parameters.Color;
 import at.ac.univie.sketchup.model.drawable.DrawableObject;
 
