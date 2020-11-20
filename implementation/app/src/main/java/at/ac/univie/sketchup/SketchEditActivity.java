@@ -68,8 +68,8 @@ public class SketchEditActivity extends AppCompatActivity {
         View dialogView = inflater.inflate(R.layout.type_text_alert_dialog, null);
         dialogBuilder.setView(dialogView);
 
-        final EditText editText = (EditText) dialogView.findViewById(R.id.edt_comment);
-        Button buttonSubmit = (Button) dialogView.findViewById(R.id.buttonSubmit);
+        final EditText editText = dialogView.findViewById(R.id.edt_comment);
+        Button buttonSubmit = dialogView.findViewById(R.id.buttonSubmit);
 
         buttonSubmit.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -90,12 +90,12 @@ public class SketchEditActivity extends AppCompatActivity {
         View dialogView = inflater.inflate(R.layout.input_dialog, null);
         dialogBuilder.setView(dialogView);
 
-        Spinner sp_color = (Spinner) dialogView.findViewById(R.id.sp_color);
+        Spinner sp_color = dialogView.findViewById(R.id.sp_color);
         sp_color.setAdapter(new ArrayAdapter<Color>(this, android.R.layout.simple_spinner_item, Color.values()));
 
-        final EditText et_strokeWidth = (EditText) dialogView.findViewById(R.id.et_strokeWidth);
+        final EditText et_strokeWidth = dialogView.findViewById(R.id.et_strokeWidth);
 
-        Button btn_confirm = (Button) dialogView.findViewById(R.id.btn_confirm);
+        Button btn_confirm = dialogView.findViewById(R.id.btn_confirm);
 
         dialogBuilder.show();
 
@@ -111,13 +111,13 @@ public class SketchEditActivity extends AppCompatActivity {
                 View dialogView2 = inflater2.inflate(R.layout.error_alert_dialog, null);
                 dialogBuilder2.setView(dialogView2);
 
-                TextView error_txt = (TextView) dialogView2.findViewById(R.id.error_message);
+                TextView error_txt = dialogView2.findViewById(R.id.error_message);
 
                 error_txt.setText(e.getMessage());
 
                 dialogBuilder2.show();
 
-                Button btn_close = (Button) dialogView2.findViewById(R.id.btn_close);
+                Button btn_close = dialogView2.findViewById(R.id.btn_close);
 
                 btn_close.setOnClickListener(new View.OnClickListener() {
                     public void onClick(View v) {

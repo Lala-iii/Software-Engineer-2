@@ -9,10 +9,10 @@ import at.ac.univie.sketchup.model.Sketch;
 
 public class SketchRepository {
 
-    private static SketchRepository instance = new SketchRepository();
-    private ArrayList<Sketch> dataSet = new ArrayList<>();
+    private static final SketchRepository instance = new SketchRepository();
+    private final ArrayList<Sketch> dataSet = new ArrayList<>();
 
-    private SketchRepository(){};
+    private SketchRepository(){}
 
     public static SketchRepository getInstance(){
         return instance;

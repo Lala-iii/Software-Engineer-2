@@ -46,9 +46,8 @@ public class PaintView extends View {
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
-        switch (event.getAction()) {
-            case MotionEvent.ACTION_DOWN:
-                    sketchViewModel.addSelectedToSketch(event.getX(), event.getY());
+        if (event.getAction() == MotionEvent.ACTION_DOWN) {
+            sketchViewModel.addSelectedToSketch(event.getX(), event.getY());
         }
         return true;
     }

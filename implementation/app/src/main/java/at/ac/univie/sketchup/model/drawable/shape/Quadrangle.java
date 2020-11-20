@@ -25,10 +25,10 @@ public class Quadrangle extends Shape {
     @Override
     public void draw(Canvas canvas, Paint paint) {
         Rect rect = new Rect(
-                (int) ((Quadrangle) this).getPosition().getX(),
-                (int) ((Quadrangle) this).getPosition().getY(),
-                (int) ((Quadrangle) this).getEndPoint().getX(),
-                (int) ((Quadrangle) this).getEndPoint().getY()
+                (int) this.getPosition().getX(),
+                (int) this.getPosition().getY(),
+                (int) this.getEndPoint().getX(),
+                (int) this.getEndPoint().getY()
         );
         canvas.drawRect(
                 rect,

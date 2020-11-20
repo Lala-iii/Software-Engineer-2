@@ -17,7 +17,6 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import java.util.List;
 
 import at.ac.univie.sketchup.model.Sketch;
-import at.ac.univie.sketchup.model.drawable.shape.Shape;
 import at.ac.univie.sketchup.viewmodel.MainActivityViewModel;
 
 public class MainActivity extends AppCompatActivity {
@@ -88,7 +87,7 @@ public class MainActivity extends AppCompatActivity {
     private void setUpViewElements() {
         setContentView(R.layout.activity_main);
 
-        listView = (ListView)findViewById(R.id.listView);
+        listView = findViewById(R.id.listView);
         fab = findViewById(R.id.floatingActionButton);
     }
 
