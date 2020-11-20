@@ -1,4 +1,4 @@
-package at.ac.univie.sketchup;
+package at.ac.univie.sketchup.view;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
@@ -21,8 +21,9 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import at.ac.univie.sketchup.R;
 import at.ac.univie.sketchup.exception.IncorrectAttributesException;
-import at.ac.univie.sketchup.model.drawable.DrawableObjectFactory;
+import at.ac.univie.sketchup.view.service.DrawableObjectFactory;
 import at.ac.univie.sketchup.model.drawable.parameters.Color;
 import at.ac.univie.sketchup.model.drawable.DrawableObject;
 import at.ac.univie.sketchup.model.Sketch;

@@ -1,5 +1,6 @@
-package at.ac.univie.sketchup.model.drawable;
+package at.ac.univie.sketchup.view.service;
 
+import at.ac.univie.sketchup.model.drawable.DrawableObject;
 import at.ac.univie.sketchup.model.drawable.shape.Circle;
 import at.ac.univie.sketchup.model.drawable.shape.Line;
 import at.ac.univie.sketchup.model.drawable.shape.Quadrangle;
