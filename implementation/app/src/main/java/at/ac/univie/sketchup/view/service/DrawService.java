@@ -12,25 +12,22 @@ import at.ac.univie.sketchup.model.drawable.shape.Line;
 import at.ac.univie.sketchup.model.drawable.shape.Quadrangle;
 import at.ac.univie.sketchup.model.drawable.shape.Triangle;
 import at.ac.univie.sketchup.model.drawable.textbox.TextBox;
+import at.ac.univie.sketchup.view.service.drawstrategy.DrawStrategy;
+import at.ac.univie.sketchup.view.service.drawstrategy.DrawTextBox;
+import at.ac.univie.sketchup.view.service.drawstrategy.shape.DrawCircle;
 
 public class DrawService {
 
-    public static void handle(Canvas canvas, DrawableObject objectToDraw) {
+    private DrawStrategy drawStrategy;
+
+    public void handle(Canvas canvas, DrawableObject objectToDraw) {
         if (objectToDraw instanceof TextBox) {
-            canvas.drawText(
-                    ((TextBox) objectToDraw).getText(),
-                    objectToDraw.getPosition().getX(),
-                    objectToDraw.getPosition().getY(),
-                    setUpPaint(objectToDraw)
-            );
+            drawStrategy = new DrawTextBox();
+            drawStrategy.drawObject(objectToDraw, canvas);
         }
         if (objectToDraw instanceof Circle) {
-            canvas.drawCircle(
-                    objectToDraw.getPosition().getX(),
-                    objectToDraw.getPosition().getY(),
-                    ((Circle) objectToDraw).getRadius(),
-                    setUpPaint(objectToDraw)
-            );
+            drawStrategy = new DrawCircle();
+            drawStrategy.drawObject(objectToDraw, canvas);
         }
         if (objectToDraw instanceof Line) {
             canvas.drawLine(
@@ -66,6 +63,8 @@ public class DrawService {
 
             canvas.drawPath(path, setUpPaint(objectToDraw));
         }
+
+        //drawStrategy.drawObject(objectToDraw, canvas);
     }
 
     private static Paint setUpPaint(DrawableObject objectToDraw) {

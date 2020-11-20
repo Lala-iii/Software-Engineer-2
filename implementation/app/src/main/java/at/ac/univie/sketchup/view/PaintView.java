@@ -16,6 +16,7 @@ import at.ac.univie.sketchup.viewmodel.SketchEditActivityViewModel;
 public class PaintView extends View {
 
     private SketchEditActivityViewModel sketchViewModel;
+    private DrawService drawService;
 
     public PaintView(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -23,6 +24,7 @@ public class PaintView extends View {
 
     public void init(SketchEditActivityViewModel vm) {
         sketchViewModel = vm;
+        drawService = new DrawService();
     }
 
     @Override
@@ -31,7 +33,7 @@ public class PaintView extends View {
         canvas.save();
 
         for (DrawableObject objectToDraw : sketchViewModel.getObjectsToDraw()) {
-            DrawService.handle(canvas, objectToDraw);
+            drawService.handle(canvas, objectToDraw);
         }
 
         canvas.restore();
