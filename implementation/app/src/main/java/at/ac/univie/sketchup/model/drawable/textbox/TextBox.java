@@ -2,6 +2,7 @@ package at.ac.univie.sketchup.model.drawable.textbox;
 
 import at.ac.univie.sketchup.model.drawable.parameters.Color;
 import at.ac.univie.sketchup.model.drawable.DrawableObject;
+import at.ac.univie.sketchup.model.drawable.parameters.Coordinate;
 
 public class TextBox extends DrawableObject {
 
@@ -20,4 +21,8 @@ public class TextBox extends DrawableObject {
         this.text = text;
     }
 
+    @Override
+    public void onTouchMove(float x, float y) {
+        this.setAnchorCoordinate(new Coordinate(x, y));
+    }
 }

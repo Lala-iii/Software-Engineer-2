@@ -30,6 +30,8 @@ public class PaintView extends View {
         super.onDraw(canvas);
         canvas.save();
 
+        drawService.handle(canvas, sketchViewModel.getDrawableObject());
+
         for (DrawableObject objectToDraw : sketchViewModel.getObjectsToDraw()) {
             drawService.handle(canvas, objectToDraw);
         }
@@ -49,10 +51,19 @@ public class PaintView extends View {
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
-        if (event.getAction() == MotionEvent.ACTION_DOWN) {
-            sketchViewModel.addSelectedToSketch(event.getX(), event.getY());
+        switch (event.getAction()) {
+            case MotionEvent.ACTION_DOWN:
+                sketchViewModel.onTouchDown(event.getX(), event.getY());
+                break;
+            case MotionEvent.ACTION_MOVE:
+                sketchViewModel.onTouchMove(event.getX(), event.getY());
+                break;
+            case MotionEvent.ACTION_CANCEL:
+            case MotionEvent.ACTION_UP:
+                sketchViewModel.addSelectedToSketch();
+                break;
         }
+        postInvalidate();
         return true;
     }
-
 }

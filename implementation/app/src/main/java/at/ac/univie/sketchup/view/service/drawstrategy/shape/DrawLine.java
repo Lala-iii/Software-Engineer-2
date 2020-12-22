@@ -11,10 +11,10 @@ public class DrawLine implements DrawStrategy {
     @Override
     public boolean drawObject(DrawableObject objectToDraw, Canvas canvas) {
         canvas.drawLine(
-                objectToDraw.getPosition().getX(),
-                objectToDraw.getPosition().getY(),
-                ((Line) objectToDraw).getEndPoint().getX(),
-                ((Line) objectToDraw).getEndPoint().getY(),
+                objectToDraw.getAnchorCoordinate().getX(),
+                objectToDraw.getAnchorCoordinate().getY(),
+                ((Line) objectToDraw).getEndCoordinate().getX(),
+                ((Line) objectToDraw).getEndCoordinate().getY(),
                 setPaint(objectToDraw)
         );
 

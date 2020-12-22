@@ -8,7 +8,7 @@ import at.ac.univie.sketchup.model.drawable.parameters.Coordinate;
 public abstract class DrawableObject implements Cloneable {
 
     private Color color;
-    private Coordinate position;
+    private Coordinate anchorCoordinate;
     private int inputSize;   // Brush, Text or Stroke size
 
     public DrawableObject(Color c, int size) {
@@ -24,12 +24,12 @@ public abstract class DrawableObject implements Cloneable {
         this.color = color;
     }
 
-    public Coordinate getPosition() {
-        return position;
+    public Coordinate getAnchorCoordinate() {
+        return anchorCoordinate;
     }
 
-    public void setPosition(Coordinate position) {
-        this.position = position;
+    public void setAnchorCoordinate(Coordinate anchorCoordinate) {
+        this.anchorCoordinate = anchorCoordinate;
     }
 
     public int getInputSize() {
@@ -44,5 +44,11 @@ public abstract class DrawableObject implements Cloneable {
     @Override
     public Object clone() throws CloneNotSupportedException {
         return super.clone();
+    }
+
+    public abstract void onTouchMove(float x, float y);
+
+    public void onTouchDown(float x, float y) {
+        this.anchorCoordinate = new Coordinate(x, y);
     }
 }
