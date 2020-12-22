@@ -12,8 +12,8 @@ public class DrawTextBox implements DrawStrategy{
     public boolean drawObject(DrawableObject objectToDraw, Canvas canvas) {
         canvas.drawText(
                 ((TextBox) objectToDraw).getText(),
-                objectToDraw.getPosition().getX(),
-                objectToDraw.getPosition().getY(),
+                objectToDraw.getAnchorCoordinate().getX(),
+                objectToDraw.getAnchorCoordinate().getY(),
                 setPaint(objectToDraw)
         );
         return true;

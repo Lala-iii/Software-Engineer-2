@@ -12,8 +12,8 @@ public class DrawCircle implements DrawStrategy {
     @Override
     public boolean drawObject(DrawableObject objectToDraw, Canvas canvas) {
         canvas.drawCircle(
-                objectToDraw.getPosition().getX(),
-                objectToDraw.getPosition().getY(),
+                objectToDraw.getAnchorCoordinate().getX(),
+                objectToDraw.getAnchorCoordinate().getY(),
                 ((Circle) objectToDraw).getRadius(),
                 setPaint(objectToDraw)
         );

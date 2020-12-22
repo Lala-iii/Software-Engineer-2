@@ -5,23 +5,23 @@ import android.graphics.Paint;
 import android.graphics.Path;
 
 import at.ac.univie.sketchup.model.drawable.DrawableObject;
-import at.ac.univie.sketchup.model.drawable.shape.Triangle;
+import at.ac.univie.sketchup.model.drawable.parameters.Coordinate;
+import at.ac.univie.sketchup.model.drawable.shape.Circle;
+import at.ac.univie.sketchup.model.drawable.shape.Polygon;
 import at.ac.univie.sketchup.view.service.drawstrategy.DrawStrategy;
 
-public class DrawTriangle implements DrawStrategy {
+public class DrawPolygon implements DrawStrategy {
     @Override
     public boolean drawObject(DrawableObject objectToDraw, Canvas canvas) {
-        float width = ((Triangle) objectToDraw).getRadius();
-
         Path path = new Path();
-        path.moveTo(objectToDraw.getAnchorCoordinate().getX(), objectToDraw.getAnchorCoordinate().getY() - width); // Top
-        path.lineTo(objectToDraw.getAnchorCoordinate().getX() - width, objectToDraw.getAnchorCoordinate().getY() + width); // Bottom left
-        path.lineTo(objectToDraw.getAnchorCoordinate().getX() + width, objectToDraw.getAnchorCoordinate().getY() + width); // Bottom right
-        path.lineTo(objectToDraw.getAnchorCoordinate().getX(), objectToDraw.getAnchorCoordinate().getY() - width); // Back to top
-        path.close();
+        Polygon polygon = (Polygon) objectToDraw;
+
+        path.moveTo(polygon.getAnchorCoordinate().getX(), polygon.getAnchorCoordinate().getY());
+        for (Coordinate c : polygon.getCoordinates())
+            path.lineTo(c.getX(), c.getY());
+        //path.close();
 
         canvas.drawPath(path, setPaint(objectToDraw));
-
         return true;
     }
 

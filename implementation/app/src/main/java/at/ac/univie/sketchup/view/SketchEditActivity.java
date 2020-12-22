@@ -23,6 +23,7 @@ import java.util.List;
 
 import at.ac.univie.sketchup.R;
 import at.ac.univie.sketchup.exception.IncorrectAttributesException;
+import at.ac.univie.sketchup.model.drawable.shape.Polygon;
 import at.ac.univie.sketchup.view.service.DrawableObjectFactory;
 import at.ac.univie.sketchup.model.drawable.parameters.Color;
 import at.ac.univie.sketchup.model.drawable.DrawableObject;
@@ -37,7 +38,7 @@ import at.ac.univie.sketchup.viewmodel.SketchEditActivityViewModel;
 
 public class SketchEditActivity extends AppCompatActivity {
 
-    private FloatingActionButton fabParam, fabText, fabCircle, fabTriangle, fabQuad, fabLine, fabPlus;
+    private FloatingActionButton fabParam, fabText, fabCircle, fabTriangle, fabQuadrangle, fabLine, fabPlus, fabPolygon;
     private PaintView paintView;
     private boolean isButtonsHide = true;
 
@@ -135,12 +136,13 @@ public class SketchEditActivity extends AppCompatActivity {
         setContentView(R.layout.activity_sketch_editor);
         paintView = findViewById(R.id.paintView);
 
-        fabText = findViewById(R.id.floatingActionButton);
-        fabPlus = findViewById(R.id.fab1);
-        fabCircle = findViewById(R.id.fab2);
-        fabTriangle = findViewById(R.id.fab3);
-        fabQuad = findViewById(R.id.fab4);
-        fabLine = findViewById(R.id.fab5);
+        fabText = findViewById(R.id.fabText);
+        fabPlus = findViewById(R.id.fabMenu);
+        fabCircle = findViewById(R.id.fabCircle);
+        fabTriangle = findViewById(R.id.fabTriangle);
+        fabQuadrangle = findViewById(R.id.fabQuadrangle);
+        fabLine = findViewById(R.id.fabLine);
+        fabPolygon = findViewById(R.id.fabPolygon);
         fabParam = findViewById(R.id.fabParam);
     }
 
@@ -160,7 +162,7 @@ public class SketchEditActivity extends AppCompatActivity {
     }
 
     private void hideAction() {
-        List<FloatingActionButton> fabButtons = new ArrayList<>(Arrays.asList(fabParam, fabText, fabCircle, fabTriangle, fabQuad, fabLine));
+        List<FloatingActionButton> fabButtons = new ArrayList<>(Arrays.asList(fabParam, fabText, fabCircle, fabTriangle, fabQuadrangle, fabLine, fabPolygon));
         fabButtons.forEach(FloatingActionButton::hide);
         fabButtons.forEach(fab -> fab.animate().translationY(0));
 
@@ -170,17 +172,18 @@ public class SketchEditActivity extends AppCompatActivity {
     }
 
     private void showAction() {
-        List<FloatingActionButton> fabButtons = new ArrayList<>(Arrays.asList(fabParam, fabText, fabCircle, fabTriangle, fabQuad, fabLine));
+        List<FloatingActionButton> fabButtons = new ArrayList<>(Arrays.asList(fabParam, fabText, fabCircle, fabTriangle, fabQuadrangle, fabLine, fabPolygon));
         fabButtons.forEach(FloatingActionButton::show);
 
         fabParam.animate().translationX(-(fabParam.getCustomSize() + 50));
         fabParam.animate().translationY(-5);
         //fabParam.animate().translationY(-(fabParam.getCustomSize() + 5 + fabText.getCustomSize() + 5 + fabCircle.getCustomSize() + 5 + fabTriangle.getCustomSize() + 5 + fabQuad.getCustomSize() + 5 + fabLine.getCustomSize() + 50));
-        fabText.animate().translationY(-(fabText.getCustomSize() + 5 + fabCircle.getCustomSize() + 5 + fabTriangle.getCustomSize() + 5 + fabQuad.getCustomSize() + 5 + fabLine.getCustomSize() + 50));
-        fabCircle.animate().translationY(-(fabCircle.getCustomSize() + 5 + fabTriangle.getCustomSize() + 5 + fabQuad.getCustomSize() + 5 + fabLine.getCustomSize() + 50));
-        fabTriangle.animate().translationY(-(fabTriangle.getCustomSize() + 5 + fabQuad.getCustomSize() + 5 + fabLine.getCustomSize() + 50));
-        fabQuad.animate().translationY(-(fabQuad.getCustomSize() + 5 + fabLine.getCustomSize() + 50));
-        fabLine.animate().translationY(-(fabLine.getCustomSize() + 50));
+        fabText.animate().translationY(-(fabPolygon.getCustomSize() + 5 + fabText.getCustomSize() + 5 + fabCircle.getCustomSize() + 5 + fabTriangle.getCustomSize() + 5 + fabQuadrangle.getCustomSize() + 5 + fabLine.getCustomSize() + 50));
+        fabCircle.animate().translationY(-(fabPolygon.getCustomSize() + 5 + fabCircle.getCustomSize() + 5 + fabTriangle.getCustomSize() + 5 + fabQuadrangle.getCustomSize() + 5 + fabLine.getCustomSize() + 50));
+        fabTriangle.animate().translationY(-(fabPolygon.getCustomSize() + 5 + fabTriangle.getCustomSize() + 5 + fabQuadrangle.getCustomSize() + 5 + fabLine.getCustomSize() + 50));
+        fabQuadrangle.animate().translationY(-(fabPolygon.getCustomSize() + 5 + fabQuadrangle.getCustomSize() + 5 + fabLine.getCustomSize() + 50));
+        fabLine.animate().translationY(-(fabPolygon.getCustomSize() + 5 + fabLine.getCustomSize() + 50));
+        fabPolygon.animate().translationY(-(fabPolygon.getCustomSize() + 50));
 
         fabPlus.setImageResource(R.drawable.ic_baseline_remove_circle_outline_24);
         isButtonsHide = false;
@@ -202,8 +205,9 @@ public class SketchEditActivity extends AppCompatActivity {
         });
         fabCircle.setOnClickListener(view -> setSelected(drawableObjectFactory.getDrawableObject(Circle.class)));
         fabTriangle.setOnClickListener(view -> setSelected(drawableObjectFactory.getDrawableObject(Triangle.class)));
-        fabQuad.setOnClickListener(view -> setSelected(drawableObjectFactory.getDrawableObject(Quadrangle.class)));
+        fabQuadrangle.setOnClickListener(view -> setSelected(drawableObjectFactory.getDrawableObject(Quadrangle.class)));
         fabLine.setOnClickListener(view -> setSelected(drawableObjectFactory.getDrawableObject(Line.class)));
+        fabPolygon.setOnClickListener(view -> setSelected(drawableObjectFactory.getDrawableObject(Polygon.class)));
     }
 
 

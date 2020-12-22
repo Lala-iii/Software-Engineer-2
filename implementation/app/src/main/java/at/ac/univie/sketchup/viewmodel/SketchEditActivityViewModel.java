@@ -13,6 +13,7 @@ import at.ac.univie.sketchup.model.drawable.parameters.Color;
 import at.ac.univie.sketchup.model.drawable.parameters.Coordinate;
 import at.ac.univie.sketchup.model.drawable.DrawableObject;
 import at.ac.univie.sketchup.model.Sketch;
+import at.ac.univie.sketchup.model.drawable.shape.Polygon;
 import at.ac.univie.sketchup.model.drawable.textbox.TextBox;
 import at.ac.univie.sketchup.repository.SketchRepository;
 
@@ -20,6 +21,7 @@ public class SketchEditActivityViewModel extends ViewModel {
 
     private MutableLiveData<Sketch> sketch;
     private DrawableObject selected;
+    private DrawableObject drawableObject;
 
     public void init(int id){
 
@@ -37,23 +39,14 @@ public class SketchEditActivityViewModel extends ViewModel {
         return Objects.requireNonNull(sketch.getValue()).getDrawableObjects();
     }
 
-    public void addSelectedToSketch(float x, float y) {
-        if (selected == null) return;
-
-        // Create copy(!) of selected object and set coordinate from touch
-        DrawableObject objectToSet;
-        try {
-            objectToSet = (DrawableObject) selected.clone(); // May be an issue with cloning Color. Monitor and make deep clone in case
-            objectToSet.setPosition(new Coordinate(x, y));
-        } catch (CloneNotSupportedException e) {
-            e.printStackTrace();
-            return;
-        }
+    public void addSelectedToSketch() {
+        if (selected == null || this.drawableObject == null) return;
 
         // Add obj to sketch and thought event for observer
         Sketch currentSketch = sketch.getValue();
-        Objects.requireNonNull(currentSketch).addDrawableObject(objectToSet);
+        Objects.requireNonNull(currentSketch).addDrawableObject(this.drawableObject);
         sketch.postValue(currentSketch);
+        this.drawableObject = null;
 
         // todo write in storage(?)
     }
@@ -83,8 +76,37 @@ public class SketchEditActivityViewModel extends ViewModel {
         } else {
          //Custom ExceptionClass Usage
             throw new IncorrectAttributesException("Select the element first to which color changes should be applied!");
-
-
         }
+    }
+
+    public void onTouchDown(float x, float y) {
+        if (selected == null) return;
+        cloneToNew();
+        this.drawableObject.onTouchDown(x, y);
+    }
+
+    public void onTouchMove(float x, float y) {
+        if (selected == null) return;
+        this.drawableObject.onTouchMove(x, y);
+    }
+
+    private void cloneToNew() {
+        // Create copy(!) of selected object and set coordinate from touch
+        try {
+            this.drawableObject = (DrawableObject) selected.clone();
+
+            if (this.drawableObject instanceof Polygon) {
+                this.drawableObject = (Polygon) selected.clone();
+                ((Polygon)this.drawableObject).initializeList();
+            }
+            // May be an issue with cloning Color. Monitor and make deep clone in case
+        } catch (CloneNotSupportedException e) {
+            e.printStackTrace();
+            return;
+        }
+    }
+
+    public DrawableObject getDrawableObject() {
+        return this.drawableObject;
     }
 }

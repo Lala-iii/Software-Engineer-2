@@ -14,10 +14,10 @@ public class DrawQuadrangle implements DrawStrategy {
     public boolean drawObject(DrawableObject objectToDraw, Canvas canvas) {
         @SuppressLint("DrawAllocation")
         Rect rect = new Rect(
-                (int) objectToDraw.getPosition().getX(),
-                (int) objectToDraw.getPosition().getY(),
-                (int) ((Quadrangle) objectToDraw).getEndPoint().getX(),
-                (int) ((Quadrangle) objectToDraw).getEndPoint().getY()
+                (int) objectToDraw.getAnchorCoordinate().getX(),
+                (int) objectToDraw.getAnchorCoordinate().getY(),
+                (int) ((Quadrangle) objectToDraw).getEndCoordinate().getX(),
+                (int) ((Quadrangle) objectToDraw).getEndCoordinate().getY()
         );
         canvas.drawRect(rect, setPaint(objectToDraw));
 
