@@ -6,12 +6,15 @@ import java.util.ArrayList;
 
 import at.ac.univie.sketchup.model.drawable.parameters.Color;
 import at.ac.univie.sketchup.model.drawable.parameters.Coordinate;
+import at.ac.univie.sketchup.model.drawable.shape.Circle;
 import at.ac.univie.sketchup.model.drawable.shape.DoublePointShape;
 import at.ac.univie.sketchup.model.drawable.shape.Polygon;
+import at.ac.univie.sketchup.model.drawable.textbox.TextBox;
 
 public class CombinedShape extends DrawableObject{
 
     private ArrayList<DrawableObject> drawableObjects = new ArrayList<>();
+    private String title;
 
     public CombinedShape(ArrayList<DrawableObject> shapes) {
         super(Color.BLACK,70); // todo do we need it???
@@ -33,7 +36,21 @@ public class CombinedShape extends DrawableObject{
         this.drawableObjects = drawableObjects;
     }
 
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
     private DrawableObject cloneSelected(DrawableObject selectedShape) {
+        if (selectedShape instanceof CombinedShape) {
+            DrawableObject emptyObj = new TextBox();
+            emptyObj.setAnchorCoordinate(new Coordinate(0,0));
+            return emptyObj; // very bad dirty cheat: replace CombinedShape with empty TextBox to avoid recursion
+        }
+
         try {
             DrawableObject clonedObj = (DrawableObject) selectedShape.clone();
 
@@ -88,5 +105,10 @@ public class CombinedShape extends DrawableObject{
     public Object clone() throws CloneNotSupportedException {
         CombinedShape cloned = new CombinedShape(drawableObjects);
         return cloned;
+    }
+
+    @Override
+    public String toString() {
+        return title;
     }
 }

@@ -111,12 +111,17 @@ public class SketchEditActivityViewModel extends ViewModel {
         return this.drawableObjToAdd;
     }
 
-    public void storeNewCombinedShape() {
+    public void storeNewCombinedShape(String title) {
         CombinedShape cs = new CombinedShape(sketch.getValue().getDrawableObjects());
+        cs.setTitle(title);
         sketch.getValue().addCombinedShape(cs);
     }
 
     public CombinedShape getCombinedShapeById(int id) {
         return sketch.getValue().getCreatedCombinedShapes().get(id);
+    }
+
+    public ArrayList getCombinedShapeTitles() {
+        return sketch.getValue().getCreatedCombinedShapes();
     }
 }
