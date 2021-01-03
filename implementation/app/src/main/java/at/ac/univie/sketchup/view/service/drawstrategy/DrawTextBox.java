@@ -6,7 +6,7 @@ import android.graphics.Paint;
 import at.ac.univie.sketchup.model.drawable.DrawableObject;
 import at.ac.univie.sketchup.model.drawable.textbox.TextBox;
 
-public class DrawTextBox implements DrawStrategy{
+public class DrawTextBox implements DrawStrategy {
 
     @Override
     public boolean drawObject(DrawableObject objectToDraw, Canvas canvas) {

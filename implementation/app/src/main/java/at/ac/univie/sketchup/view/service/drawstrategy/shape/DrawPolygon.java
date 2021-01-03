@@ -34,4 +34,9 @@ public class DrawPolygon implements DrawStrategy {
         mPaint.setStrokeWidth(objectToDraw.getInputSize());
         return mPaint;
     }
+
+    @Override
+    public boolean inSelectedArea(Coordinate coordinate) {
+        return false;
+    }
 }

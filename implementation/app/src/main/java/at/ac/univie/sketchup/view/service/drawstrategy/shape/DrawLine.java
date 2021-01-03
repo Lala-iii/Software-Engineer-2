@@ -4,6 +4,7 @@ import android.graphics.Canvas;
 import android.graphics.Paint;
 
 import at.ac.univie.sketchup.model.drawable.DrawableObject;
+import at.ac.univie.sketchup.model.drawable.parameters.Coordinate;
 import at.ac.univie.sketchup.model.drawable.shape.Line;
 import at.ac.univie.sketchup.view.service.drawstrategy.DrawStrategy;
 
@@ -29,5 +30,10 @@ public class DrawLine implements DrawStrategy {
         mPaint.setStyle(Paint.Style.STROKE);
         mPaint.setStrokeWidth(objectToDraw.getInputSize());
         return mPaint;
+    }
+
+    @Override
+    public boolean inSelectedArea(Coordinate coordinate) {
+        return false;
     }
 }

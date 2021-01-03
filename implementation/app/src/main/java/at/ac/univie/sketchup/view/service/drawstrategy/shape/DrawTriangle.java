@@ -5,6 +5,7 @@ import android.graphics.Paint;
 import android.graphics.Path;
 
 import at.ac.univie.sketchup.model.drawable.DrawableObject;
+import at.ac.univie.sketchup.model.drawable.parameters.Coordinate;
 import at.ac.univie.sketchup.model.drawable.shape.Triangle;
 import at.ac.univie.sketchup.view.service.drawstrategy.DrawStrategy;
 
@@ -33,5 +34,10 @@ public class DrawTriangle implements DrawStrategy {
         mPaint.setStyle(Paint.Style.STROKE);
         mPaint.setStrokeWidth(objectToDraw.getInputSize());
         return mPaint;
+    }
+
+    @Override
+    public boolean inSelectedArea(Coordinate coordinate) {
+        return false;
     }
 }

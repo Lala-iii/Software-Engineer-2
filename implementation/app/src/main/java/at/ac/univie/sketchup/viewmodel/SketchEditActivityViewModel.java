@@ -20,8 +20,9 @@ import at.ac.univie.sketchup.repository.SketchRepository;
 public class SketchEditActivityViewModel extends ViewModel {
 
     private MutableLiveData<Sketch> sketch;
-    private DrawableObject selected;
+    private DrawableObject template;
     private DrawableObject drawableObject;
+    private Mode mode;
 
     public void init(int id){
 
@@ -40,7 +41,7 @@ public class SketchEditActivityViewModel extends ViewModel {
     }
 
     public void addSelectedToSketch() {
-        if (selected == null || this.drawableObject == null) return;
+        if (template == null || this.drawableObject == null) return;
 
         // Add obj to sketch and thought event for observer
         Sketch currentSketch = sketch.getValue();
@@ -51,19 +52,20 @@ public class SketchEditActivityViewModel extends ViewModel {
         // todo write in storage(?)
     }
 
-    public void setSelected(DrawableObject s) {
-        selected = s;
+    public void setTemplate(DrawableObject t) {
+        this.template = t;
+        this.mode = Mode.CREATE;
     }
 
     public void setTextForSelected(String text) {
-        if (selected instanceof TextBox) {
-            ((TextBox) selected).setText(text);
+        if (this.template instanceof TextBox) {
+            ((TextBox) this.template).setText(text);
         }
     }
 
     public void setSizeForSelected(int s) throws IncorrectAttributesException {
-        if (null != selected) {
-            selected.setInputSize(s);
+        if (this.template != null) {
+            this.template.setInputSize(s);
         } else {
             // Custom ExceptionClass Usage
             throw new IncorrectAttributesException("Select the element first to which size changes should be applied!");
@@ -71,8 +73,8 @@ public class SketchEditActivityViewModel extends ViewModel {
     }
 
     public void setColorForSelected(Color c) throws IncorrectAttributesException {
-        if (null != selected) {
-            selected.setColor(c);
+        if (this.template != null) {
+            this.template.setColor(c);
         } else {
          //Custom ExceptionClass Usage
             throw new IncorrectAttributesException("Select the element first to which color changes should be applied!");
@@ -80,33 +82,38 @@ public class SketchEditActivityViewModel extends ViewModel {
     }
 
     public void onTouchDown(float x, float y) {
-        if (selected == null) return;
+        if (this.template == null) return;
         cloneToNew();
         this.drawableObject.onTouchDown(x, y);
     }
 
     public void onTouchMove(float x, float y) {
-        if (selected == null) return;
+        if (this.template == null) return;
         this.drawableObject.onTouchMove(x, y);
     }
 
     private void cloneToNew() {
         // Create copy(!) of selected object and set coordinate from touch
         try {
-            this.drawableObject = (DrawableObject) selected.clone();
+            this.drawableObject = (DrawableObject) this.template.clone();
 
             if (this.drawableObject instanceof Polygon) {
-                this.drawableObject = (Polygon) selected.clone();
+                this.drawableObject = (Polygon) template.clone();
                 ((Polygon)this.drawableObject).initializeList();
             }
             // May be an issue with cloning Color. Monitor and make deep clone in case
         } catch (CloneNotSupportedException e) {
             e.printStackTrace();
-            return;
         }
     }
 
     public DrawableObject getDrawableObject() {
         return this.drawableObject;
     }
+
+    public void setDrawableObject(DrawableObject drawableObject) { this.drawableObject = drawableObject;}
+
+    public void setMode(Mode mode) { this.mode = mode; }
+
+    public Mode getMode() { return this.mode; }
 }

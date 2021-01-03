@@ -2,7 +2,6 @@ package at.ac.univie.sketchup.view;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
 import android.content.Intent;
@@ -27,13 +26,11 @@ import at.ac.univie.sketchup.model.drawable.shape.Polygon;
 import at.ac.univie.sketchup.view.service.DrawableObjectFactory;
 import at.ac.univie.sketchup.model.drawable.parameters.Color;
 import at.ac.univie.sketchup.model.drawable.DrawableObject;
-import at.ac.univie.sketchup.model.Sketch;
 import at.ac.univie.sketchup.model.drawable.shape.Circle;
 import at.ac.univie.sketchup.model.drawable.shape.Line;
 import at.ac.univie.sketchup.model.drawable.shape.Quadrangle;
 import at.ac.univie.sketchup.model.drawable.shape.Triangle;
 import at.ac.univie.sketchup.model.drawable.textbox.TextBox;
-import at.ac.univie.sketchup.view.PaintView;
 import at.ac.univie.sketchup.viewmodel.SketchEditActivityViewModel;
 
 public class SketchEditActivity extends AppCompatActivity {
@@ -153,7 +150,7 @@ public class SketchEditActivity extends AppCompatActivity {
     }
 
     private void setSelected(DrawableObject selected) {
-        sketchViewModel.setSelected(selected);
+        sketchViewModel.setTemplate(selected);
     }
 
     // Observer through an event to redraw all object if sketch was changed.

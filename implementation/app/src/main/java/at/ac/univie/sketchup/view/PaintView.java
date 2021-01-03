@@ -4,12 +4,14 @@ import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.util.AttributeSet;
+import android.view.Display;
 import android.view.MotionEvent;
 import android.view.View;
 
 import at.ac.univie.sketchup.model.drawable.DrawableObject;
 import at.ac.univie.sketchup.view.service.DrawService;
 import at.ac.univie.sketchup.viewmodel.SketchEditActivityViewModel;
+import at.ac.univie.sketchup.viewmodel.Mode;
 
 public class PaintView extends View {
 
@@ -39,18 +41,12 @@ public class PaintView extends View {
         canvas.restore();
     }
 
-    private Paint setUpPaint(DrawableObject objectToDraw) {
-        Paint mPaint = new Paint();
-        mPaint.setColor(objectToDraw.getColor().getAndroidColor());
-        mPaint.setAntiAlias(true);
-        mPaint.setStyle(Paint.Style.FILL);
-        mPaint.setTextSize(objectToDraw.getInputSize());
-        mPaint.setStrokeWidth(objectToDraw.getInputSize());
-        return mPaint;
-    }
-
     @Override
     public boolean onTouchEvent(MotionEvent event) {
+
+        if (sketchViewModel.getMode() == Mode.EDIT) {
+
+        }
         switch (event.getAction()) {
             case MotionEvent.ACTION_DOWN:
                 sketchViewModel.onTouchDown(event.getX(), event.getY());
