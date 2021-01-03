@@ -1,13 +1,13 @@
 package at.ac.univie.sketchup.model.drawable;
 
+import androidx.annotation.NonNull;
+
 import java.util.ArrayList;
-import java.util.List;
 
 import at.ac.univie.sketchup.model.drawable.parameters.Color;
 import at.ac.univie.sketchup.model.drawable.parameters.Coordinate;
 import at.ac.univie.sketchup.model.drawable.shape.DoublePointShape;
 import at.ac.univie.sketchup.model.drawable.shape.Polygon;
-import at.ac.univie.sketchup.model.drawable.textbox.TextBox;
 
 public class CombinedShape extends DrawableObject{
 
@@ -27,6 +27,10 @@ public class CombinedShape extends DrawableObject{
 
     public ArrayList<DrawableObject> getDrawableObjects() {
         return drawableObjects;
+    }
+
+    public void setDrawableObjects(ArrayList<DrawableObject> drawableObjects) {
+        this.drawableObjects = drawableObjects;
     }
 
     private DrawableObject cloneSelected(DrawableObject selectedShape) {
@@ -77,5 +81,12 @@ public class CombinedShape extends DrawableObject{
         newX = obj.getAnchorCoordinate().getX() + diff.getX();
         newY = obj.getAnchorCoordinate().getY() + diff.getY();
         obj.setAnchorCoordinate(new Coordinate(newX, newY));
+    }
+
+    @NonNull
+    @Override
+    public Object clone() throws CloneNotSupportedException {
+        CombinedShape cloned = new CombinedShape(drawableObjects);
+        return cloned;
     }
 }

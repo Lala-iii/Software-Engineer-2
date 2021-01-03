@@ -99,6 +99,7 @@ public class SketchEditActivityViewModel extends ViewModel {
                 this.drawableObjToAdd = (Polygon) selected.clone();
                 ((Polygon)this.drawableObjToAdd).initializeList();
             }
+
             // May be an issue with cloning Color. Monitor and make deep clone in case
         } catch (CloneNotSupportedException e) {
             e.printStackTrace();
@@ -111,7 +112,7 @@ public class SketchEditActivityViewModel extends ViewModel {
     }
 
     public void storeNewCombinedShape() {
-        CombinedShape cs = new CombinedShape(sketch.getValue().getDrawableObjects()); // todo create shape only from current layer
+        CombinedShape cs = new CombinedShape(sketch.getValue().getDrawableObjects());
         sketch.getValue().addCombinedShape(cs);
     }
 
