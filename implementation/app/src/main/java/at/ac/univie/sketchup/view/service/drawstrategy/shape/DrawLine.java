@@ -33,7 +33,12 @@ public class DrawLine implements DrawStrategy {
     }
 
     @Override
-    public boolean inSelectedArea(Coordinate coordinate) {
+    public boolean inSelectedArea(Coordinate begin, Coordinate end, DrawableObject drawableObject) {
         return false;
+    }
+
+    @Override
+    public void onTouchMove(float x, float y, DrawableObject drawableObject) {
+
     }
 }

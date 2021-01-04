@@ -1,5 +1,5 @@
 package at.ac.univie.sketchup.viewmodel;
 
-enum Mode {
-    CREATE, EDIT
+public enum Mode {
+    CREATE, EDIT, SELECTION
 }

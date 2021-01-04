@@ -55,8 +55,13 @@ public class DrawService {
         return null;
     }
 
-    public boolean isSelectDrawableObject(Coordinate coordinate, DrawableObject drawableObject) {
+    public boolean isSelectDrawableObject(Coordinate begin, Coordinate end, DrawableObject drawableObject) {
         DrawStrategy drawStrategy = determineDrawableObject(drawableObject);
-        return drawStrategy.inSelectedArea(coordinate);
+        return drawStrategy.inSelectedArea(begin, end, drawableObject);
+    }
+
+    public void onTouchMove(float x, float y, DrawableObject drawableObject) {
+        DrawStrategy drawStrategy = determineDrawableObject(drawableObject);
+        drawStrategy.onTouchMove(x, y, drawableObject); // TODO handle onTouchDown aswell here only onTouchUp should be done in SketchEditVM
     }
 }

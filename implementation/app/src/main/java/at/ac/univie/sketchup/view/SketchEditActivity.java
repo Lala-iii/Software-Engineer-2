@@ -31,11 +31,13 @@ import at.ac.univie.sketchup.model.drawable.shape.Line;
 import at.ac.univie.sketchup.model.drawable.shape.Quadrangle;
 import at.ac.univie.sketchup.model.drawable.shape.Triangle;
 import at.ac.univie.sketchup.model.drawable.textbox.TextBox;
+import at.ac.univie.sketchup.viewmodel.Mode;
 import at.ac.univie.sketchup.viewmodel.SketchEditActivityViewModel;
 
 public class SketchEditActivity extends AppCompatActivity {
 
-    private FloatingActionButton fabParam, fabText, fabCircle, fabTriangle, fabQuadrangle, fabLine, fabPlus, fabPolygon;
+    private FloatingActionButton fabParam, fabText, fabCircle, fabTriangle, fabQuadrangle,
+            fabLine, fabPlus, fabPolygon, fabSelector;
     private PaintView paintView;
     private boolean isButtonsHide = true;
 
@@ -141,6 +143,7 @@ public class SketchEditActivity extends AppCompatActivity {
         fabLine = findViewById(R.id.fabLine);
         fabPolygon = findViewById(R.id.fabPolygon);
         fabParam = findViewById(R.id.fabParam);
+        fabSelector = findViewById(R.id.fabSelector);
     }
 
     private void setViewModel() {
@@ -159,9 +162,9 @@ public class SketchEditActivity extends AppCompatActivity {
     }
 
     private void hideAction() {
-        List<FloatingActionButton> fabButtons = new ArrayList<>(Arrays.asList(fabParam, fabText, fabCircle, fabTriangle, fabQuadrangle, fabLine, fabPolygon));
+        List<FloatingActionButton> fabButtons = new ArrayList<>(Arrays.asList(fabParam, fabText, fabCircle, fabTriangle, fabQuadrangle, fabLine, fabPolygon, fabSelector));
         fabButtons.forEach(FloatingActionButton::hide);
-        fabButtons.forEach(fab -> fab.animate().translationY(0));
+        fabButtons.forEach(fab -> { fab.animate().translationY(0); fab.animate().translationX(0); });
 
         fabPlus.setImageResource(R.drawable.ic_baseline_add_circle_outline_24);
 
@@ -169,9 +172,11 @@ public class SketchEditActivity extends AppCompatActivity {
     }
 
     private void showAction() {
-        List<FloatingActionButton> fabButtons = new ArrayList<>(Arrays.asList(fabParam, fabText, fabCircle, fabTriangle, fabQuadrangle, fabLine, fabPolygon));
+        List<FloatingActionButton> fabButtons = new ArrayList<>(Arrays.asList(fabParam, fabText, fabCircle, fabTriangle, fabQuadrangle, fabLine, fabPolygon, fabSelector));
         fabButtons.forEach(FloatingActionButton::show);
 
+        fabSelector.animate().translationX(-(fabSelector.getCustomSize() + 5 + fabParam.getCustomSize() + 50));
+        fabSelector.animate().translationY(-5);
         fabParam.animate().translationX(-(fabParam.getCustomSize() + 50));
         fabParam.animate().translationY(-5);
         //fabParam.animate().translationY(-(fabParam.getCustomSize() + 5 + fabText.getCustomSize() + 5 + fabCircle.getCustomSize() + 5 + fabTriangle.getCustomSize() + 5 + fabQuad.getCustomSize() + 5 + fabLine.getCustomSize() + 50));
@@ -205,6 +210,7 @@ public class SketchEditActivity extends AppCompatActivity {
         fabQuadrangle.setOnClickListener(view -> setSelected(drawableObjectFactory.getDrawableObject(Quadrangle.class)));
         fabLine.setOnClickListener(view -> setSelected(drawableObjectFactory.getDrawableObject(Line.class)));
         fabPolygon.setOnClickListener(view -> setSelected(drawableObjectFactory.getDrawableObject(Polygon.class)));
+        fabSelector.setOnClickListener(view -> sketchViewModel.setMode(Mode.SELECTION));
     }
 
 

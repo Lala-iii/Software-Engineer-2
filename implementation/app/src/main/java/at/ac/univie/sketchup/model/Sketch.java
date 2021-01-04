@@ -21,7 +21,7 @@ public class Sketch {
     }
 
     public int getId() {
-        return id;
+        return this.id;
     }
 
     public void setId(int id) {
@@ -29,7 +29,7 @@ public class Sketch {
     }
 
     public String getTitle() {
-        return title;
+        return this.title;
     }
 
     public void setTitle(String title) {
@@ -38,10 +38,10 @@ public class Sketch {
 
     @Override
     public String toString() {
-        return title;
+        return this.title;
     }
 
     public void addDrawableObject(DrawableObject object) {
-        drawableObjects.add(object);
+        this.drawableObjects.add(object);
     }
 }

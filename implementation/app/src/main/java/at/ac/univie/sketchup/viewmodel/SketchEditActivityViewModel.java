@@ -24,7 +24,7 @@ public class SketchEditActivityViewModel extends ViewModel {
     private DrawableObject drawableObject;
     private Mode mode;
 
-    public void init(int id){
+    public void init(int id) {
 
         SketchRepository sketchRepository = SketchRepository.getInstance();
         sketch = sketchRepository.findOneById(id);
@@ -32,7 +32,7 @@ public class SketchEditActivityViewModel extends ViewModel {
         //todo add exception in case item do not exist
     }
 
-    public LiveData<Sketch> getSketch(){
+    public LiveData<Sketch> getSketch() {
         return sketch;
     }
 
@@ -76,20 +76,31 @@ public class SketchEditActivityViewModel extends ViewModel {
         if (this.template != null) {
             this.template.setColor(c);
         } else {
-         //Custom ExceptionClass Usage
+            //Custom ExceptionClass Usage
             throw new IncorrectAttributesException("Select the element first to which color changes should be applied!");
         }
     }
 
     public void onTouchDown(float x, float y) {
+        // TODO maybe it is better to move the ontouch events to drawstrategy; check it
         if (this.template == null) return;
-        cloneToNew();
-        this.drawableObject.onTouchDown(x, y);
+        if (this.mode == Mode.CREATE) {
+            cloneToNew();
+            this.drawableObject.onTouchDown(x, y);
+        } else if (this.mode == Mode.EDIT) {
+            Coordinate origin = this.drawableObject.getAnchorCoordinate();
+            this.drawableObject.onTouchDown(x + origin.getX(), y + origin.getY());
+        }
     }
 
     public void onTouchMove(float x, float y) {
         if (this.template == null) return;
-        this.drawableObject.onTouchMove(x, y);
+        //if (this.mode == Mode.CREATE) {
+            this.drawableObject.onTouchMove(x, y);
+        //} else if (this.mode == Mode.EDIT) {
+        //    Coordinate origin = this.drawableObject.getAnchorCoordinate();
+        //    this.drawableObject.onTouchMove(x + origin.getX(), y + origin.getY());
+        //}
     }
 
     private void cloneToNew() {
@@ -98,8 +109,8 @@ public class SketchEditActivityViewModel extends ViewModel {
             this.drawableObject = (DrawableObject) this.template.clone();
 
             if (this.drawableObject instanceof Polygon) {
-                this.drawableObject = (Polygon) template.clone();
-                ((Polygon)this.drawableObject).initializeList();
+                this.drawableObject = (Polygon) this.template.clone();
+                ((Polygon) this.drawableObject).initializeList();
             }
             // May be an issue with cloning Color. Monitor and make deep clone in case
         } catch (CloneNotSupportedException e) {
@@ -111,9 +122,15 @@ public class SketchEditActivityViewModel extends ViewModel {
         return this.drawableObject;
     }
 
-    public void setDrawableObject(DrawableObject drawableObject) { this.drawableObject = drawableObject;}
+    public void setDrawableObject(DrawableObject drawableObject) {
+        this.drawableObject = drawableObject;
+    }
 
-    public void setMode(Mode mode) { this.mode = mode; }
+    public void setMode(Mode mode) {
+        this.mode = mode;
+    }
 
-    public Mode getMode() { return this.mode; }
+    public Mode getMode() {
+        return this.mode;
+    }
 }

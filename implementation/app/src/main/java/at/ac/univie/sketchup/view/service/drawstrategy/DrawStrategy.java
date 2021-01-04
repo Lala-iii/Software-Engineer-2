@@ -10,5 +10,6 @@ public interface DrawStrategy {
 
     boolean drawObject(DrawableObject objectToDraw, Canvas canvas);
     Paint setPaint(DrawableObject objectToDraw);
-    boolean inSelectedArea(Coordinate coordinate);
+    boolean inSelectedArea(Coordinate begin, Coordinate end, DrawableObject drawableObject);
+    void onTouchMove(float x, float y, DrawableObject drawableObject);
 }
