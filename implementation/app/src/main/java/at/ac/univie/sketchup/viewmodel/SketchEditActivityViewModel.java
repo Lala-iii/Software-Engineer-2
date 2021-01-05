@@ -19,11 +19,14 @@ import at.ac.univie.sketchup.view.service.DrawService;
 import at.ac.univie.sketchup.view.service.drawstrategy.DrawStrategy;
 
 public class SketchEditActivityViewModel extends ViewModel {
+    public static final int CREATE = 1;
+    public static final int EDIT = 2;
+    public static final int SELECTION = 3;
 
     private MutableLiveData<Sketch> sketch;
     private DrawableObject template;
     private DrawStrategy drawStrategy;
-    private Mode mode;
+    private LiveData<Mode> mode;
 
     public void init(int id) {
 
@@ -55,7 +58,7 @@ public class SketchEditActivityViewModel extends ViewModel {
 
     public void setTemplate(DrawableObject t) {
         this.template = t;
-        this.mode = Mode.CREATE;
+        setMode(Mode.CREATE);
     }
 
     public void setTextForSelected(String text) {
@@ -128,11 +131,11 @@ public class SketchEditActivityViewModel extends ViewModel {
         this.drawStrategy = drawStrategy;
     }
 
-    public void setMode(Mode mode) {
+    public void setMode(LiveData<Mode> mode) {
         this.mode = mode;
     }
 
-    public Mode getMode() {
+    public LiveData<Mode> getMode() {
         return this.mode;
     }
 }

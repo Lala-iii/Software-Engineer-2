@@ -59,7 +59,7 @@ public class DrawTriangle implements DrawStrategy {
 
     @Override
     public void onTouchMove(float x, float y) {
-
+        this.triangle.setAnchorCoordinate(new Coordinate(x, y));
     }
 
     @Override

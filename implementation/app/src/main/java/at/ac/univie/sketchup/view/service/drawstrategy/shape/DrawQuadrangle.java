@@ -75,7 +75,7 @@ public class DrawQuadrangle implements DrawStrategy {
 
     @Override
     public void onTouchDown(float x, float y) {
-
+        this.quadrangle.onTouchDown(x, y);
     }
 
     @Override

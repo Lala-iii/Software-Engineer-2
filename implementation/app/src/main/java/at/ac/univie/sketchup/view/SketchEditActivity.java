@@ -159,6 +159,11 @@ public class SketchEditActivity extends AppCompatActivity {
     // Observer through an event to redraw all object if sketch was changed.
     private void setObserver() {
         sketchViewModel.getSketch().observe(this, sketch -> paintView.postInvalidate());
+        sketchViewModel.getMode().observe(this, mode -> {
+            if (mode == Mode.EDIT) {
+
+            }
+        });
     }
 
     private void hideAction() {
@@ -212,6 +217,4 @@ public class SketchEditActivity extends AppCompatActivity {
         fabPolygon.setOnClickListener(view -> setSelected(drawableObjectFactory.getDrawableObject(Polygon.class)));
         fabSelector.setOnClickListener(view -> sketchViewModel.setMode(Mode.SELECTION));
     }
-
-
 }

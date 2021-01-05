@@ -10,10 +10,13 @@ import at.ac.univie.sketchup.view.service.drawstrategy.DrawStrategy;
 
 public class DrawLine implements DrawStrategy {
     private Line line;
+    private Coordinate begin;
+    private Coordinate end;
 
     public DrawLine(DrawableObject drawableObject) {
         this.line = new Line(drawableObject.getColor(), drawableObject.getInputSize());
     }
+
     @Override
     public boolean drawObject(Canvas canvas) {
         canvas.drawLine(
@@ -38,26 +41,40 @@ public class DrawLine implements DrawStrategy {
 
     @Override
     public boolean inSelectedArea(Coordinate begin, Coordinate end) {
-        return false;
+        float beginLineX = this.line.getAnchorCoordinate().getX();
+        float beginLineY = this.line.getAnchorCoordinate().getY();
+        float endLineX = this.line.getEndCoordinate().getX();
+        float endLineY = this.line.getEndCoordinate().getY();
+        float beginX = Math.min(end.getX(), begin.getX());
+        float beginY = Math.min(end.getY(), begin.getY());
+        float endX = Math.max(end.getX(), begin.getX());
+        float endY = Math.max(end.getY(), begin.getY());
+
+        return (beginLineX > beginX && beginLineY > beginY &&
+                endLineX < endX && endLineY < endY);
     }
 
     @Override
     public void onTouchMove(float x, float y) {
-
+        this.line.setEndCoordinate(new Coordinate(x, y));
     }
 
     @Override
     public void onTouchDown(float x, float y) {
-
+        this.line.setAnchorCoordinate(new Coordinate(x, y));
     }
 
     @Override
     public void onEditDown(float x, float y) {
-
+        this.begin = this.line.getAnchorCoordinate();
+        this.end = this.line.getEndCoordinate();
     }
 
     @Override
     public void onEditMove(float x, float y) {
-
+        float diffX = (begin.getX() - x) * (-1);
+        float diffY = (begin.getY() - y) * (-1);
+        this.line.setAnchorCoordinate(new Coordinate(x, y));
+        this.line.setEndCoordinate(new Coordinate(end.getX() + diffX, end.getY() + diffY));
     }
 }
