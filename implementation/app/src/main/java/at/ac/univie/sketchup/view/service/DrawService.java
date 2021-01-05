@@ -22,46 +22,36 @@ import at.ac.univie.sketchup.view.service.drawstrategy.shape.DrawTriangle;
 public class DrawService {
 
 
-    public void handle(Canvas canvas, DrawableObject objectToDraw) {
-        DrawStrategy drawStrategy = determineDrawableObject(objectToDraw);
+    public void handle(DrawableObject objectToDraw) {
+        /*DrawStrategy drawStrategy = determineDrawableObject(objectToDraw);
 
         if (drawStrategy != null) {
             drawStrategy.drawObject(objectToDraw, canvas);
         } else {
             //todo custom exception DrawableObjectNotDefined
-        }
+        }*/
     }
 
-    private DrawStrategy determineDrawableObject(DrawableObject drawableObject) {
+    public DrawStrategy determineDrawableObject(DrawableObject drawableObject) {
         DrawStrategy result = null;
         if (drawableObject instanceof TextBox)
-            result = new DrawTextBox();
+            result = new DrawTextBox(drawableObject);
         else if (drawableObject instanceof Shape)
             result = determineShape(drawableObject);
         return result;
     }
 
-    private DrawStrategy determineShape(DrawableObject objectToDraw) {
-        if (objectToDraw instanceof Circle)
-            return new DrawCircle();
-        else if (objectToDraw instanceof Line)
-            return new DrawLine();
-        else if (objectToDraw instanceof Quadrangle)
-            return new DrawQuadrangle();
-        else if (objectToDraw instanceof Triangle)
-            return new DrawTriangle();
-        else if (objectToDraw instanceof Polygon)
-            return new DrawPolygon();
+    private DrawStrategy determineShape(DrawableObject drawableObject) {
+        if (drawableObject instanceof Circle)
+            return new DrawCircle(drawableObject);
+        else if (drawableObject instanceof Line)
+            return new DrawLine(drawableObject);
+        else if (drawableObject instanceof Quadrangle)
+            return new DrawQuadrangle(drawableObject);
+        else if (drawableObject instanceof Triangle)
+            return new DrawTriangle(drawableObject);
+        else if (drawableObject instanceof Polygon)
+            return new DrawPolygon(drawableObject);
         return null;
-    }
-
-    public boolean isSelectDrawableObject(Coordinate begin, Coordinate end, DrawableObject drawableObject) {
-        DrawStrategy drawStrategy = determineDrawableObject(drawableObject);
-        return drawStrategy.inSelectedArea(begin, end, drawableObject);
-    }
-
-    public void onTouchMove(float x, float y, DrawableObject drawableObject) {
-        DrawStrategy drawStrategy = determineDrawableObject(drawableObject);
-        drawStrategy.onTouchMove(x, y, drawableObject); // TODO handle onTouchDown aswell here only onTouchUp should be done in SketchEditVM
     }
 }

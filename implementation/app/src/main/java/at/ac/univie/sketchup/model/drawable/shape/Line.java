@@ -4,7 +4,11 @@ import at.ac.univie.sketchup.model.drawable.parameters.Color;
 import at.ac.univie.sketchup.model.drawable.parameters.Coordinate;
 
 public class Line extends DoublePointShape {
+    public Line(Color c, int size) {
+        super(c, size);
+    }
+
     public Line() {
-        super(Color.BLACK,6);
+        this(Color.BLACK,6);
     }
 }

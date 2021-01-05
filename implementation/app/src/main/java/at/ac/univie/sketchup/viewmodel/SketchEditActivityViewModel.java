@@ -13,15 +13,16 @@ import at.ac.univie.sketchup.model.drawable.parameters.Color;
 import at.ac.univie.sketchup.model.drawable.parameters.Coordinate;
 import at.ac.univie.sketchup.model.drawable.DrawableObject;
 import at.ac.univie.sketchup.model.Sketch;
-import at.ac.univie.sketchup.model.drawable.shape.Polygon;
 import at.ac.univie.sketchup.model.drawable.textbox.TextBox;
 import at.ac.univie.sketchup.repository.SketchRepository;
+import at.ac.univie.sketchup.view.service.DrawService;
+import at.ac.univie.sketchup.view.service.drawstrategy.DrawStrategy;
 
 public class SketchEditActivityViewModel extends ViewModel {
 
     private MutableLiveData<Sketch> sketch;
     private DrawableObject template;
-    private DrawableObject drawableObject;
+    private DrawStrategy drawStrategy;
     private Mode mode;
 
     public void init(int id) {
@@ -36,18 +37,18 @@ public class SketchEditActivityViewModel extends ViewModel {
         return sketch;
     }
 
-    public ArrayList<DrawableObject> getObjectsToDraw() {
+    public ArrayList<DrawStrategy> getObjectsToDraw() {
         return Objects.requireNonNull(sketch.getValue()).getDrawableObjects();
     }
 
     public void addSelectedToSketch() {
-        if (template == null || this.drawableObject == null) return;
+        if (template == null || this.drawStrategy == null) return;
 
         // Add obj to sketch and thought event for observer
         Sketch currentSketch = sketch.getValue();
-        Objects.requireNonNull(currentSketch).addDrawableObject(this.drawableObject);
+        Objects.requireNonNull(currentSketch).addDrawableObject(this.drawStrategy);
         sketch.postValue(currentSketch);
-        this.drawableObject = null;
+        this.drawStrategy = null;
 
         // todo write in storage(?)
     }
@@ -81,49 +82,50 @@ public class SketchEditActivityViewModel extends ViewModel {
         }
     }
 
-    public void onTouchDown(float x, float y) {
+    /*public void onTouchDown(float x, float y) {
         // TODO maybe it is better to move the ontouch events to drawstrategy; check it
         if (this.template == null) return;
         if (this.mode == Mode.CREATE) {
             cloneToNew();
-            this.drawableObject.onTouchDown(x, y);
+            this.drawStrategy.onTouchDown(x, y);
         } else if (this.mode == Mode.EDIT) {
-            Coordinate origin = this.drawableObject.getAnchorCoordinate();
-            this.drawableObject.onTouchDown(x + origin.getX(), y + origin.getY());
+            Coordinate origin = this.drawStrategy.getAnchorCoordinate();
+            this.drawStrategy.onTouchDown(x + origin.getX(), y + origin.getY());
         }
     }
 
     public void onTouchMove(float x, float y) {
         if (this.template == null) return;
         //if (this.mode == Mode.CREATE) {
-            this.drawableObject.onTouchMove(x, y);
+            this.drawStrategy.onTouchMove(x, y);
         //} else if (this.mode == Mode.EDIT) {
         //    Coordinate origin = this.drawableObject.getAnchorCoordinate();
         //    this.drawableObject.onTouchMove(x + origin.getX(), y + origin.getY());
         //}
-    }
+    }*/
 
-    private void cloneToNew() {
+    public void cloneToNew() {
+        if (this.template == null) return;
+
         // Create copy(!) of selected object and set coordinate from touch
         try {
-            this.drawableObject = (DrawableObject) this.template.clone();
-
-            if (this.drawableObject instanceof Polygon) {
+            this.drawStrategy = new DrawService().determineDrawableObject(((DrawableObject)this.template.clone()));
+            /*if (this.drawableObject instanceof Polygon) {
                 this.drawableObject = (Polygon) this.template.clone();
                 ((Polygon) this.drawableObject).initializeList();
-            }
+            }*/
             // May be an issue with cloning Color. Monitor and make deep clone in case
         } catch (CloneNotSupportedException e) {
             e.printStackTrace();
         }
     }
 
-    public DrawableObject getDrawableObject() {
-        return this.drawableObject;
+    public DrawStrategy getDrawStrategy() {
+        return this.drawStrategy;
     }
 
-    public void setDrawableObject(DrawableObject drawableObject) {
-        this.drawableObject = drawableObject;
+    public void setDrawStrategy(DrawStrategy drawStrategy) {
+        this.drawStrategy = drawStrategy;
     }
 
     public void setMode(Mode mode) {

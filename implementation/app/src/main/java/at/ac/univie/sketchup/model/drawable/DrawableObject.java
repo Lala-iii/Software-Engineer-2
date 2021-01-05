@@ -7,7 +7,6 @@ import at.ac.univie.sketchup.model.drawable.parameters.Coordinate;
 
 public abstract class DrawableObject implements Cloneable {
 
-    private boolean selector;
     private Color color;
     private Coordinate anchorCoordinate;
     private int inputSize;   // Brush, Text or Stroke size
@@ -15,16 +14,11 @@ public abstract class DrawableObject implements Cloneable {
     public DrawableObject(Color c, int size) {
         color = c;
         inputSize = size;
-        this.selector = false;
     }
 
     public Color getColor() {
         return color;
     }
-
-    public void setSelector() { this.selector = true;}
-
-    public boolean isSelector() { return this.selector; }
 
     public void setColor(Color color) {
         this.color = color;

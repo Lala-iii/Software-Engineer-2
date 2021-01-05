@@ -6,19 +6,20 @@ import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
 
-import at.ac.univie.sketchup.model.drawable.DrawableObject;
+import at.ac.univie.sketchup.model.drawable.parameters.Color;
 import at.ac.univie.sketchup.model.drawable.parameters.Coordinate;
 import at.ac.univie.sketchup.model.drawable.shape.Quadrangle;
 import at.ac.univie.sketchup.view.service.DrawService;
-import at.ac.univie.sketchup.viewmodel.SketchEditActivityViewModel;
+import at.ac.univie.sketchup.view.service.drawstrategy.shape.DrawQuadrangle;
 import at.ac.univie.sketchup.viewmodel.Mode;
+import at.ac.univie.sketchup.viewmodel.SketchEditActivityViewModel;
 
 public class PaintView extends View {
 
     private SketchEditActivityViewModel sketchViewModel;
     private DrawService drawService;
 
-    private DrawableObject selector;
+    private DrawQuadrangle selector;
     private Coordinate selectorBegin;
     private Coordinate selectorEnd;
 
@@ -37,14 +38,13 @@ public class PaintView extends View {
         canvas.save();
 
         if (sketchViewModel.getMode() == Mode.SELECTION && this.selector != null) {
-            drawService.handle(canvas, selector);
+            //drawService.handle(canvas, selector);
+            selector.drawObject(canvas);
         }
 
-        drawService.handle(canvas, sketchViewModel.getDrawableObject());
+        sketchViewModel.getDrawStrategy().drawObject(canvas);
 
-        for (DrawableObject objectToDraw : sketchViewModel.getObjectsToDraw()) {
-            drawService.handle(canvas, objectToDraw);
-        }
+        sketchViewModel.getObjectsToDraw().forEach(s -> s.drawObject(canvas));
 
         canvas.restore();
     }
@@ -56,9 +56,8 @@ public class PaintView extends View {
             switch (event.getAction()) {
                 case MotionEvent.ACTION_DOWN:
                     selectorBegin = new Coordinate(event.getX(), event.getY());
-                    selector = new Quadrangle();
-                    selector.setSelector();
-                    selector.setAnchorCoordinate(new Coordinate(event.getX(), event.getY()));
+                    selector = new DrawQuadrangle(new Quadrangle(Color.BLACK, 5, true));
+                    selector.getQuadrangle().setAnchorCoordinate(new Coordinate(event.getX(), event.getY()));
                     break;
                 case MotionEvent.ACTION_MOVE:
                     selectorEnd = new Coordinate(event.getX(), event.getY());
@@ -67,22 +66,22 @@ public class PaintView extends View {
                 case MotionEvent.ACTION_CANCEL:
                 case MotionEvent.ACTION_UP:
                     sketchViewModel.getObjectsToDraw().forEach(d -> {
-                        if (drawService.isSelectDrawableObject(selectorBegin, selectorEnd, d)) {
-                            sketchViewModel.setDrawableObject(d);
+                        if (d.inSelectedArea(selectorBegin, selectorEnd)) {
+                            sketchViewModel.setDrawStrategy(d);
                             sketchViewModel.setMode(Mode.EDIT);
                         }
                     });
-
                     break;
             }
         } else if (sketchViewModel.getMode() == Mode.EDIT) {
             switch (event.getAction()) {
                 case MotionEvent.ACTION_DOWN:
-                    sketchViewModel.onTouchDown(event.getX(), event.getY());
+                    sketchViewModel.getDrawStrategy().onEditDown(event.getX(), event.getY());
                     break;
                 case MotionEvent.ACTION_MOVE:
-                    sketchViewModel.onTouchMove(event.getX(), event.getY());
-                    // Todo send current position of the selected element and store original data so you can adjust it
+                    sketchViewModel.getDrawStrategy().onEditMove(event.getX(), event.getY());
+                    // Todo send current position of the selected element and
+                    //  store original data so you can adjust it
                     break;
                 case MotionEvent.ACTION_CANCEL:
                 case MotionEvent.ACTION_UP:
@@ -92,10 +91,11 @@ public class PaintView extends View {
         } else if (sketchViewModel.getMode() == Mode.CREATE) {
             switch (event.getAction()) {
                 case MotionEvent.ACTION_DOWN:
-                    sketchViewModel.onTouchDown(event.getX(), event.getY());
+                    sketchViewModel.cloneToNew();
+                    sketchViewModel.getDrawStrategy().onTouchDown(event.getX(), event.getY());
                     break;
                 case MotionEvent.ACTION_MOVE:
-                    sketchViewModel.onTouchMove(event.getX(), event.getY());
+                    sketchViewModel.getDrawStrategy().onTouchMove(event.getX(), event.getY());
                     break;
                 case MotionEvent.ACTION_CANCEL:
                 case MotionEvent.ACTION_UP:

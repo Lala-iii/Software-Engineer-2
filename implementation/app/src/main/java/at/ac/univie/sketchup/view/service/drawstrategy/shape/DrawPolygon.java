@@ -11,37 +11,56 @@ import at.ac.univie.sketchup.model.drawable.shape.Polygon;
 import at.ac.univie.sketchup.view.service.drawstrategy.DrawStrategy;
 
 public class DrawPolygon implements DrawStrategy {
-    @Override
-    public boolean drawObject(DrawableObject objectToDraw, Canvas canvas) {
-        Path path = new Path();
-        Polygon polygon = (Polygon) objectToDraw;
+    private Polygon polygon;
 
-        path.moveTo(polygon.getAnchorCoordinate().getX(), polygon.getAnchorCoordinate().getY());
-        for (Coordinate c : polygon.getCoordinates())
+    public DrawPolygon(DrawableObject drawableObject) {
+        this.polygon = new Polygon(drawableObject.getColor(), drawableObject.getInputSize());
+    }
+
+    @Override
+    public boolean drawObject(Canvas canvas) {
+        Path path = new Path();
+        path.moveTo(this.polygon.getAnchorCoordinate().getX(), this.polygon.getAnchorCoordinate().getY());
+        for (Coordinate c : this.polygon.getCoordinates())
             path.lineTo(c.getX(), c.getY());
         //path.close();
 
-        canvas.drawPath(path, setPaint(objectToDraw));
+        canvas.drawPath(path, setPaint());
         return true;
     }
 
     @Override
-    public Paint setPaint(DrawableObject objectToDraw) {
+    public Paint setPaint() {
         Paint mPaint = new Paint();
-        mPaint.setColor(objectToDraw.getColor().getAndroidColor());
+        mPaint.setColor(this.polygon.getColor().getAndroidColor());
         mPaint.setAntiAlias(true);
         mPaint.setStyle(Paint.Style.STROKE);
-        mPaint.setStrokeWidth(objectToDraw.getInputSize());
+        mPaint.setStrokeWidth(this.polygon.getInputSize());
         return mPaint;
     }
 
     @Override
-    public boolean inSelectedArea(Coordinate begin, Coordinate end, DrawableObject drawableObject) {
+    public boolean inSelectedArea(Coordinate begin, Coordinate end) {
         return false;
     }
 
     @Override
-    public void onTouchMove(float x, float y, DrawableObject drawableObject) {
+    public void onTouchMove(float x, float y) {
+
+    }
+
+    @Override
+    public void onTouchDown(float x, float y) {
+
+    }
+
+    @Override
+    public void onEditDown(float x, float y) {
+
+    }
+
+    @Override
+    public void onEditMove(float x, float y) {
 
     }
 }

@@ -11,48 +11,69 @@ import at.ac.univie.sketchup.model.drawable.shape.Triangle;
 import at.ac.univie.sketchup.view.service.drawstrategy.DrawStrategy;
 
 public class DrawTriangle implements DrawStrategy {
+    private Triangle triangle;
+
+    public DrawTriangle(DrawableObject drawableObject) {
+        this.triangle = new Triangle(drawableObject.getColor(), drawableObject.getInputSize());
+    }
+
     @Override
-    public boolean drawObject(DrawableObject objectToDraw, Canvas canvas) {
-        float width = ((Triangle) objectToDraw).getRadius();
+    public boolean drawObject(Canvas canvas) {
+        float width = this.triangle.getRadius();
 
         Path path = new Path();
-        path.moveTo(objectToDraw.getAnchorCoordinate().getX(), objectToDraw.getAnchorCoordinate().getY() - width); // Top
-        path.lineTo(objectToDraw.getAnchorCoordinate().getX() - width, objectToDraw.getAnchorCoordinate().getY() + width); // Bottom left
-        path.lineTo(objectToDraw.getAnchorCoordinate().getX() + width, objectToDraw.getAnchorCoordinate().getY() + width); // Bottom right
-        path.lineTo(objectToDraw.getAnchorCoordinate().getX(), objectToDraw.getAnchorCoordinate().getY() - width); // Back to top
+        path.moveTo(this.triangle.getAnchorCoordinate().getX(), this.triangle.getAnchorCoordinate().getY() - width); // Top
+        path.lineTo(this.triangle.getAnchorCoordinate().getX() - width, this.triangle.getAnchorCoordinate().getY() + width); // Bottom left
+        path.lineTo(this.triangle.getAnchorCoordinate().getX() + width, this.triangle.getAnchorCoordinate().getY() + width); // Bottom right
+        path.lineTo(this.triangle.getAnchorCoordinate().getX(), this.triangle.getAnchorCoordinate().getY() - width); // Back to top
         path.close();
 
-        canvas.drawPath(path, setPaint(objectToDraw));
+        canvas.drawPath(path, setPaint());
 
         return true;
     }
 
     @Override
-    public Paint setPaint(DrawableObject objectToDraw) {
+    public Paint setPaint() {
         Paint mPaint = new Paint();
-        mPaint.setColor(objectToDraw.getColor().getAndroidColor());
+        mPaint.setColor(this.triangle.getColor().getAndroidColor());
         mPaint.setAntiAlias(true);
         mPaint.setStyle(Paint.Style.STROKE);
-        mPaint.setStrokeWidth(objectToDraw.getInputSize());
+        mPaint.setStrokeWidth(this.triangle.getInputSize());
         return mPaint;
     }
 
     @Override
-    public boolean inSelectedArea(Coordinate begin, Coordinate end, DrawableObject drawableObject) {
-        float beginTriangleX = drawableObject.getAnchorCoordinate().getX();
-        float beginTriangleY = drawableObject.getAnchorCoordinate().getY();
-        float beginX = end.getX() < begin.getX() ? end.getX() : begin.getX();
-        float beginY = end.getY() < begin.getY() ? end.getX() : begin.getX();
-        float endX = end.getX() > begin.getX() ? end.getX() : begin.getX();
-        float endY = end.getY() > begin.getY() ? end.getY() : begin.getY();
-        float radius = ((Triangle)drawableObject).getRadius();
+    public boolean inSelectedArea(Coordinate begin, Coordinate end) {
+        float beginTriangleX = this.triangle.getAnchorCoordinate().getX();
+        float beginTriangleY  = this.triangle.getAnchorCoordinate().getY();
+        float beginX = Math.min(end.getX(), begin.getX());
+        float beginY = Math.min(end.getY(), begin.getY());
+        float endX = Math.max(end.getX(), begin.getX());
+        float endY = Math.max(end.getY(), begin.getY());
+        float radius = this.triangle.getRadius();
 
         return (beginTriangleX - radius  > beginX && beginTriangleY - radius > beginY &&
                 beginTriangleX + radius < endX && beginTriangleY + radius < endY);
     }
 
     @Override
-    public void onTouchMove(float x, float y, DrawableObject drawableObject) {
+    public void onTouchMove(float x, float y) {
+
+    }
+
+    @Override
+    public void onTouchDown(float x, float y) {
+
+    }
+
+    @Override
+    public void onEditDown(float x, float y) {
+
+    }
+
+    @Override
+    public void onEditMove(float x, float y) {
 
     }
 
