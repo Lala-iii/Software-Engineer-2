@@ -69,4 +69,14 @@ public class DrawTextBox implements DrawStrategy {
     public void onEditMove(float x, float y) {
         this.textBox.setAnchorCoordinate(new Coordinate(x, y));
     }
+
+    @Override
+    public void restore() {
+
+    }
+
+    @Override
+    public void store() {
+
+    }
 }

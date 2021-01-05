@@ -87,4 +87,14 @@ public class DrawQuadrangle implements DrawStrategy {
     public void onEditMove(float x, float y) {
 
     }
+
+    @Override
+    public void restore() {
+
+    }
+
+    @Override
+    public void store() {
+
+    }
 }

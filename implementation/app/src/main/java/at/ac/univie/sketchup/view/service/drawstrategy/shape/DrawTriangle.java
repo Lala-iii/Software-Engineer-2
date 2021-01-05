@@ -77,4 +77,14 @@ public class DrawTriangle implements DrawStrategy {
 
     }
 
+    @Override
+    public void restore() {
+
+    }
+
+    @Override
+    public void store() {
+
+    }
+
 }

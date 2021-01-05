@@ -37,7 +37,7 @@ public class PaintView extends View {
         super.onDraw(canvas);
         canvas.save();
 
-        if (sketchViewModel.getMode() == Mode.SELECTION && this.selector != null) {
+        if (sketchViewModel.getMode().getValue() == SketchEditActivityViewModel.SELECTION && this.selector != null) {
             //drawService.handle(canvas, selector);
             selector.drawObject(canvas);
         }
@@ -53,7 +53,7 @@ public class PaintView extends View {
     @Override
     public boolean onTouchEvent(MotionEvent event) {
 
-        if (sketchViewModel.getMode() == Mode.SELECTION) {
+        if (sketchViewModel.getMode().getValue() == SketchEditActivityViewModel.SELECTION) {
             switch (event.getAction()) {
                 case MotionEvent.ACTION_DOWN:
                     selectorBegin = new Coordinate(event.getX(), event.getY());
@@ -69,12 +69,12 @@ public class PaintView extends View {
                     sketchViewModel.getObjectsToDraw().forEach(d -> {
                         if (d.inSelectedArea(selectorBegin, selectorEnd)) {
                             sketchViewModel.setDrawStrategy(d);
-                            sketchViewModel.setMode(Mode.EDIT);
+                            sketchViewModel.setMode(SketchEditActivityViewModel.EDIT);
                         }
                     });
                     break;
             }
-        } else if (sketchViewModel.getMode() == Mode.EDIT) {
+        } else if (sketchViewModel.getMode().getValue() == SketchEditActivityViewModel.EDIT) {
             switch (event.getAction()) {
                 case MotionEvent.ACTION_DOWN:
                     sketchViewModel.getDrawStrategy().onEditDown(event.getX(), event.getY());
@@ -89,7 +89,7 @@ public class PaintView extends View {
                     //sketchViewModel.addSelectedToSketch();
                     break;
             }
-        } else if (sketchViewModel.getMode() == Mode.CREATE) {
+        } else if (sketchViewModel.getMode().getValue() == SketchEditActivityViewModel.CREATE) {
             switch (event.getAction()) {
                 case MotionEvent.ACTION_DOWN:
                     sketchViewModel.cloneToNew();

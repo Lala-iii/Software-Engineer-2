@@ -15,23 +15,25 @@ import at.ac.univie.sketchup.model.drawable.DrawableObject;
 import at.ac.univie.sketchup.model.Sketch;
 import at.ac.univie.sketchup.model.drawable.textbox.TextBox;
 import at.ac.univie.sketchup.repository.SketchRepository;
+import at.ac.univie.sketchup.view.SketchEditActivity;
 import at.ac.univie.sketchup.view.service.DrawService;
 import at.ac.univie.sketchup.view.service.drawstrategy.DrawStrategy;
 
 public class SketchEditActivityViewModel extends ViewModel {
     public static final int CREATE = 1;
-    public static final int EDIT = 2;
-    public static final int SELECTION = 3;
+    public static final Integer EDIT = 2;
+    public static final Integer SELECTION = 3;
 
     private MutableLiveData<Sketch> sketch;
     private DrawableObject template;
     private DrawStrategy drawStrategy;
-    private LiveData<Mode> mode;
+    private MutableLiveData<Integer> mode;
 
     public void init(int id) {
 
         SketchRepository sketchRepository = SketchRepository.getInstance();
         sketch = sketchRepository.findOneById(id);
+        mode = new MutableLiveData<>();
 
         //todo add exception in case item do not exist
     }
@@ -58,7 +60,7 @@ public class SketchEditActivityViewModel extends ViewModel {
 
     public void setTemplate(DrawableObject t) {
         this.template = t;
-        setMode(Mode.CREATE);
+        this.mode.setValue(SketchEditActivityViewModel.CREATE);
     }
 
     public void setTextForSelected(String text) {
@@ -131,11 +133,23 @@ public class SketchEditActivityViewModel extends ViewModel {
         this.drawStrategy = drawStrategy;
     }
 
-    public void setMode(LiveData<Mode> mode) {
-        this.mode = mode;
+    public void setMode(Integer mode) {
+        this.mode.setValue(mode);
     }
 
-    public LiveData<Mode> getMode() {
+    public MutableLiveData<Integer> getMode() {
         return this.mode;
     }
+
+    public void restoreDrawableObjectCoordinates() {
+        this.drawStrategy.restore();
+        this.mode.setValue(SketchEditActivityViewModel.CREATE);
+    }
+
+    public void storeDrawableObjectCoordinates() {
+        this.drawStrategy.store();
+        this.mode.setValue(SketchEditActivityViewModel.CREATE);
+    }
+
+
 }

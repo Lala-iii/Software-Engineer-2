@@ -14,4 +14,7 @@ public interface DrawStrategy {
     void onTouchDown(float x, float y);
     void onEditDown(float x, float y);
     void onEditMove(float x, float y);
+
+    void restore();
+    void store();
 }

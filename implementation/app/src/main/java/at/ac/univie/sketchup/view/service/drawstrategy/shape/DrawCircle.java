@@ -74,4 +74,14 @@ public class DrawCircle implements DrawStrategy {
     public void onEditMove(float x, float y) {
         this.circle.setAnchorCoordinate(new Coordinate(x, y));
     }
+
+    @Override
+    public void restore() {
+
+    }
+
+    @Override
+    public void store() {
+
+    }
 }

@@ -37,7 +37,7 @@ import at.ac.univie.sketchup.viewmodel.SketchEditActivityViewModel;
 public class SketchEditActivity extends AppCompatActivity {
 
     private FloatingActionButton fabParam, fabText, fabCircle, fabTriangle, fabQuadrangle,
-            fabLine, fabPlus, fabPolygon, fabSelector;
+            fabLine, fabPlus, fabPolygon, fabSelector, fabConfirm, fabCancel;
     private PaintView paintView;
     private boolean isButtonsHide = true;
 
@@ -144,6 +144,8 @@ public class SketchEditActivity extends AppCompatActivity {
         fabPolygon = findViewById(R.id.fabPolygon);
         fabParam = findViewById(R.id.fabParam);
         fabSelector = findViewById(R.id.fabSelector);
+        fabConfirm = findViewById(R.id.fabConfirm);
+        fabCancel = findViewById(R.id.fabCancel);
     }
 
     private void setViewModel() {
@@ -160,8 +162,23 @@ public class SketchEditActivity extends AppCompatActivity {
     private void setObserver() {
         sketchViewModel.getSketch().observe(this, sketch -> paintView.postInvalidate());
         sketchViewModel.getMode().observe(this, mode -> {
-            if (mode == Mode.EDIT) {
+            if (mode.equals(SketchEditActivityViewModel.EDIT)) {
+                fabConfirm.show();
+                fabCancel.show();
+                fabConfirm.animate().translationX(-(150 + fabConfirm.getCustomSize() + 5 + fabSelector.getCustomSize() + 5 + fabParam.getCustomSize() + 50));
+                fabConfirm.animate().translationY(-5);
 
+                fabCancel.animate().translationX(-(150 + fabCancel.getCustomSize() + 5 + fabConfirm.getCustomSize() + 5 + fabSelector.getCustomSize() + 5 + fabParam.getCustomSize() + 50));
+                fabCancel.animate().translationY(-5);
+            } else {
+                fabConfirm.hide();
+                fabCancel.hide();
+
+                fabConfirm.animate().translationY(0);
+                fabCancel.animate().translationY(0);
+
+                fabConfirm.animate().translationX(0);
+                fabCancel.animate().translationX(0);
             }
         });
     }
@@ -215,6 +232,8 @@ public class SketchEditActivity extends AppCompatActivity {
         fabQuadrangle.setOnClickListener(view -> setSelected(drawableObjectFactory.getDrawableObject(Quadrangle.class)));
         fabLine.setOnClickListener(view -> setSelected(drawableObjectFactory.getDrawableObject(Line.class)));
         fabPolygon.setOnClickListener(view -> setSelected(drawableObjectFactory.getDrawableObject(Polygon.class)));
-        fabSelector.setOnClickListener(view -> sketchViewModel.setMode(Mode.SELECTION));
+        fabSelector.setOnClickListener(view -> sketchViewModel.setMode(SketchEditActivityViewModel.SELECTION));
+        fabConfirm.setOnClickListener(view -> sketchViewModel.storeDrawableObjectCoordinates());
+        fabCancel.setOnClickListener(view -> sketchViewModel.restoreDrawableObjectCoordinates());
     }
 }

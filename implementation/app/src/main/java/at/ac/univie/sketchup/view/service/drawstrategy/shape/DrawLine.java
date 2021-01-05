@@ -12,6 +12,8 @@ public class DrawLine implements DrawStrategy {
     private Line line;
     private Coordinate begin;
     private Coordinate end;
+    private Coordinate originalAnchorCoordinate;
+    private Coordinate originalEndCoordinate;
 
     public DrawLine(DrawableObject drawableObject) {
         this.line = new Line(drawableObject.getColor(), drawableObject.getInputSize());
@@ -56,11 +58,13 @@ public class DrawLine implements DrawStrategy {
 
     @Override
     public void onTouchMove(float x, float y) {
+        this.originalEndCoordinate = new Coordinate(x, y);
         this.line.setEndCoordinate(new Coordinate(x, y));
     }
 
     @Override
     public void onTouchDown(float x, float y) {
+        this.originalAnchorCoordinate = new Coordinate(x, y);
         this.line.setAnchorCoordinate(new Coordinate(x, y));
     }
 
@@ -76,5 +80,17 @@ public class DrawLine implements DrawStrategy {
         float diffY = (begin.getY() - y) * (-1);
         this.line.setAnchorCoordinate(new Coordinate(x, y));
         this.line.setEndCoordinate(new Coordinate(end.getX() + diffX, end.getY() + diffY));
+    }
+
+    @Override
+    public void restore() {
+        this.line.setAnchorCoordinate(this.originalAnchorCoordinate);
+        this.line.setEndCoordinate(this.originalEndCoordinate);
+    }
+
+    @Override
+    public void store() {
+        this.originalAnchorCoordinate = this.line.getAnchorCoordinate();
+        this.originalEndCoordinate = this.line.getEndCoordinate();
     }
 }
