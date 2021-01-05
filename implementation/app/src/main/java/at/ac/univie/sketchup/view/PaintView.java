@@ -42,7 +42,8 @@ public class PaintView extends View {
             selector.drawObject(canvas);
         }
 
-        sketchViewModel.getDrawStrategy().drawObject(canvas);
+        if (sketchViewModel.getDrawStrategy() != null)
+            sketchViewModel.getDrawStrategy().drawObject(canvas);
 
         sketchViewModel.getObjectsToDraw().forEach(s -> s.drawObject(canvas));
 

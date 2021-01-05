@@ -22,15 +22,6 @@ import at.ac.univie.sketchup.view.service.drawstrategy.shape.DrawTriangle;
 public class DrawService {
 
 
-    public void handle(DrawableObject objectToDraw) {
-        /*DrawStrategy drawStrategy = determineDrawableObject(objectToDraw);
-
-        if (drawStrategy != null) {
-            drawStrategy.drawObject(objectToDraw, canvas);
-        } else {
-            //todo custom exception DrawableObjectNotDefined
-        }*/
-    }
 
     public DrawStrategy determineDrawableObject(DrawableObject drawableObject) {
         DrawStrategy result = null;
@@ -38,6 +29,8 @@ public class DrawService {
             result = new DrawTextBox(drawableObject);
         else if (drawableObject instanceof Shape)
             result = determineShape(drawableObject);
+
+        // TODO throw exception
         return result;
     }
 

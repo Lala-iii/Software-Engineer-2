@@ -7,7 +7,6 @@ import android.graphics.Paint;
 import android.graphics.Rect;
 
 import at.ac.univie.sketchup.model.drawable.DrawableObject;
-import at.ac.univie.sketchup.model.drawable.parameters.Color;
 import at.ac.univie.sketchup.model.drawable.parameters.Coordinate;
 import at.ac.univie.sketchup.model.drawable.shape.Quadrangle;
 import at.ac.univie.sketchup.view.service.drawstrategy.DrawStrategy;
@@ -49,7 +48,7 @@ public class DrawQuadrangle implements DrawStrategy {
         mPaint.setStyle(Paint.Style.STROKE);
         mPaint.setStrokeWidth(this.quadrangle.getInputSize());
         if (this.quadrangle.isSelector())
-            mPaint.setPathEffect(new DashPathEffect(new float[]{4,4},50));
+            mPaint.setPathEffect(new DashPathEffect(new float[]{2, 4},50));
         return mPaint;
     }
 

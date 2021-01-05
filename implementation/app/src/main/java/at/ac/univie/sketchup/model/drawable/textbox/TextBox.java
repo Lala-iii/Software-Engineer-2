@@ -8,13 +8,13 @@ public class TextBox extends DrawableObject {
 
     private String text;
 
-    public TextBox(Color c, int size) {
+    public TextBox(Color c, int size, String text) {
         super(c, size);
-        this.text = "";
+        this.text = text;
     }
 
     public TextBox() {
-        this(Color.BLACK,70);
+        this(Color.BLACK,70, "");
     }
 
     public String getText() {

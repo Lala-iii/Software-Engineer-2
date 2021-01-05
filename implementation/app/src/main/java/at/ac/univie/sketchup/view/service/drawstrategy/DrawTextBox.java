@@ -10,10 +10,9 @@ import at.ac.univie.sketchup.model.drawable.textbox.TextBox;
 
 public class DrawTextBox implements DrawStrategy {
     private final TextBox textBox;
-    private float x, y;
 
     public DrawTextBox(DrawableObject drawableObject) {
-        this.textBox = new TextBox(drawableObject.getColor(), drawableObject.getInputSize());
+        this.textBox = new TextBox(drawableObject.getColor(), drawableObject.getInputSize(), ((TextBox)drawableObject).getText());
     }
     @Override
     public boolean drawObject(Canvas canvas) {
@@ -39,26 +38,35 @@ public class DrawTextBox implements DrawStrategy {
 
     @Override
     public boolean inSelectedArea(Coordinate begin, Coordinate end) {
-        return false;
+        float beginCircleX =  this.textBox.getAnchorCoordinate().getX();
+        float beginCircleY =  this.textBox.getAnchorCoordinate().getY();
+        float beginX = Math.min(end.getX(), begin.getX());
+        float beginY = Math.min(end.getY(), begin.getY());
+        float endX = Math.max(end.getX(), begin.getX());
+        float endY = Math.max(end.getY(), begin.getY());
+
+        return (beginCircleX > beginX && beginCircleY > beginY &&
+                beginCircleX < endX && beginCircleY < endY);
+
     }
 
     @Override
     public void onTouchMove(float x, float y) {
-
+        this.textBox.setAnchorCoordinate(new Coordinate(x, y));
     }
 
     @Override
     public void onTouchDown(float x, float y) {
-
+        this.textBox.setAnchorCoordinate(new Coordinate(x, y));
     }
 
     @Override
     public void onEditDown(float x, float y) {
-        this.x = textBox.getAnchorCoordinate().getX();
+        this.textBox.setAnchorCoordinate(new Coordinate(x, y));
     }
 
     @Override
     public void onEditMove(float x, float y) {
-
+        this.textBox.setAnchorCoordinate(new Coordinate(x, y));
     }
 }
