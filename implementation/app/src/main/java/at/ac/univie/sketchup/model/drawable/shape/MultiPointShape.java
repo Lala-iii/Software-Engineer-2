@@ -14,6 +14,10 @@ public abstract class MultiPointShape extends Shape {
 
     public List<Coordinate> getCoordinates() { return this.coordinates; }
 
+    public void setCoordinates(List<Coordinate> coordinates) {
+        this.coordinates = coordinates;
+    }
+
     public void initializeList() {
         coordinates = new ArrayList<>();
     }
