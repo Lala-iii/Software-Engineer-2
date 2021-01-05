@@ -1,10 +1,11 @@
 package at.ac.univie.sketchup.model;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
 import at.ac.univie.sketchup.model.drawable.DrawableObject;
 
-public class Sketch {
+public class Sketch implements Serializable {
 
     private int id;
     private String title;
@@ -19,7 +20,9 @@ public class Sketch {
     public void setDrawableObjects(ArrayList<DrawableObject> drawableObjects) {
         this.drawableObjects = drawableObjects;
     }
-
+    public void clear() {
+        this.getDrawableObjects().clear();
+    }
     public int getId() {
         return id;
     }
@@ -35,7 +38,6 @@ public class Sketch {
     public void setTitle(String title) {
         this.title = title;
     }
-
     @Override
     public String toString() {
         return title;

@@ -7,13 +7,16 @@ import androidx.lifecycle.ViewModelProvider;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.MenuInflater;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import at.ac.univie.sketchup.R;
@@ -26,9 +29,9 @@ public class MainActivity extends AppCompatActivity {
     private ListView listView;
     private FloatingActionButton fab;
 
-    private ArrayAdapter<Sketch> arrayAdapter;
+    //private List<Sketch> arrayAdapter;
     private MainActivityViewModel mainViewModel;
-
+    private ListItemAdapter listItemAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,16 +41,26 @@ public class MainActivity extends AppCompatActivity {
         setUpViewModel();
         setUpObserver();
 
-        arrayAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, mainViewModel.getSketches().getValue());
-        listView.setAdapter(arrayAdapter);
+       //arrayAdapter = new ArrayList<Sketch>(this, android.R.layout.simple_list_item_1, mainViewModel.getSketches().getValue());
+       // listView.setAdapter(listItemAdapter);
 
-        listView.setOnItemClickListener((parent, view, position, id) -> startEditActivity(position+1));
+       // arrayAdapter=new ArrayList<>();
+        //listView.setOnItemClickListener((parent, view, position, id) -> startEditActivity(position+1));
+
+        listItemAdapter = new ListItemAdapter(mainViewModel.getSketches().getValue(), this);
+        listView.setAdapter(listItemAdapter);
+
+       // arrayAdapter=new ArrayList<>();
+
+
 
         fab.setOnClickListener(view -> {
             int sketchId = mainViewModel.createNewSketch();
             startEditActivity(sketchId);
         });
-
+       /* listItemAdapter = new ListItemAdapter(arrayAdapter,arrayAdapter.getContext());
+        listView.setAdapter(listItemAdapter);
+        listItemAdapter.notifyDataSetChanged();*/
 
     }
 
@@ -89,7 +102,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void setUpObserver() {
-        mainViewModel.getSketches().observe(this, sketches -> arrayAdapter.notifyDataSetChanged());
+        mainViewModel.getSketches().observe(this, sketches -> listItemAdapter.notifyDataSetChanged());
     }
 
     private void startEditActivity(int sketchId) {

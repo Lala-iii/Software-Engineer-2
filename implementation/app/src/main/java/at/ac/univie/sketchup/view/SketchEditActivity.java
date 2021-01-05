@@ -1,13 +1,19 @@
 package at.ac.univie.sketchup.view;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
+import android.content.Context;
+import android.content.ContextWrapper;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -17,6 +23,8 @@ import android.widget.TextView;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
+import java.io.File;
+import java.io.FileOutputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -41,7 +49,7 @@ public class SketchEditActivity extends AppCompatActivity {
     private FloatingActionButton fabParam, fabText, fabCircle, fabTriangle, fabQuadrangle, fabLine, fabPlus, fabPolygon;
     private PaintView paintView;
     private boolean isButtonsHide = true;
-
+    private List<Sketch> sketchList;
     private SketchEditActivityViewModel sketchViewModel;
     private Intent intent;
 
@@ -68,6 +76,34 @@ public class SketchEditActivity extends AppCompatActivity {
 
     }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater menuInflater= getMenuInflater();
+        menuInflater.inflate(R.menu.menu,menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        if(item.getItemId()== R.id.action2)
+        {
+            //sketchViewModel.getDrawableObject().setColor(Color.WHITE);
+            sketchViewModel.getObjectsToDraw().clear();
+            setObserver();
+        }
+        else
+        {
+           //sketchViewModel.getObjectsToDraw().
+            //sketchList.
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+
+
+  private void saveSketch(){
+
+  }
     private void createDialogForText() {
         final AlertDialog dialogBuilder = new AlertDialog.Builder(this).create();
         LayoutInflater inflater = this.getLayoutInflater();
