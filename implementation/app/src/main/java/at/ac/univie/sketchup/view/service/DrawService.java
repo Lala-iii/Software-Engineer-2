@@ -2,7 +2,6 @@ package at.ac.univie.sketchup.view.service;
 
 import android.graphics.Canvas;
 
-import at.ac.univie.sketchup.model.drawable.CombinedShape;
 import at.ac.univie.sketchup.model.drawable.DrawableObject;
 import at.ac.univie.sketchup.model.drawable.shape.Circle;
 import at.ac.univie.sketchup.model.drawable.shape.Line;
@@ -11,7 +10,6 @@ import at.ac.univie.sketchup.model.drawable.shape.Quadrangle;
 import at.ac.univie.sketchup.model.drawable.shape.Shape;
 import at.ac.univie.sketchup.model.drawable.shape.Triangle;
 import at.ac.univie.sketchup.model.drawable.textbox.TextBox;
-import at.ac.univie.sketchup.view.service.drawstrategy.DrawCombinedShape;
 import at.ac.univie.sketchup.view.service.drawstrategy.DrawStrategy;
 import at.ac.univie.sketchup.view.service.drawstrategy.DrawTextBox;
 import at.ac.univie.sketchup.view.service.drawstrategy.shape.DrawCircle;
@@ -29,8 +27,6 @@ public class DrawService {
             drawStrategy = new DrawTextBox();
         else if (objectToDraw instanceof Shape)
             drawStrategy = handleShape(objectToDraw);
-        else if (objectToDraw instanceof CombinedShape)
-            drawStrategy = new DrawCombinedShape();
 
         if (drawStrategy != null) {
             drawStrategy.drawObject(objectToDraw, canvas);

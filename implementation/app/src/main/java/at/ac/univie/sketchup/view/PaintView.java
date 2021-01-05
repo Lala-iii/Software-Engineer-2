@@ -30,7 +30,7 @@ public class PaintView extends View {
         super.onDraw(canvas);
         canvas.save();
 
-        drawService.handle(canvas, sketchViewModel.getDrawableObjToAdd()); // draw current obj first
+        drawService.handle(canvas, sketchViewModel.getDrawableObject());
 
         for (DrawableObject objectToDraw : sketchViewModel.getObjectsToDraw()) {
             drawService.handle(canvas, objectToDraw);
