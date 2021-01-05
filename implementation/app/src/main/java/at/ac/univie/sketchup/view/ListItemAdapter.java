@@ -1,13 +1,12 @@
 package at.ac.univie.sketchup.view;
 
-import android.app.AlertDialog;
-import android.content.ContentValues;
+
 import android.content.Context;
 import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
+
 import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.TextView;
@@ -43,11 +42,7 @@ public class ListItemAdapter extends BaseAdapter {
 
     @Override
     public View getView(int position, View view, ViewGroup parent) {
-        // inflate the layout for each item of listView
-       // LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        //view = inflater.inflate(R.layout.custom_layout, parent, false);
         row = LayoutInflater.from(context).inflate(R.layout.custom_layout,parent,false);
-        // get the reference of textView and button
         TextView txtSketchTitle = (TextView) row.findViewById(R.id.sketch);
         txtSketchTitle.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -62,14 +57,14 @@ public class ListItemAdapter extends BaseAdapter {
         txtSketchTitle.setText(sketches.get(position).getTitle());
         btnAction.setText("Delete");
         // Click listener of button
-        /*btnAction.setOnClickListener(new View.OnClickListener() {
+        btnAction.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
                 sketches.remove(position);
                 notifyDataSetChanged();
             }
-        });*/
+        });
 
         return row;
 

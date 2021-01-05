@@ -41,16 +41,9 @@ public class MainActivity extends AppCompatActivity {
         setUpViewModel();
         setUpObserver();
 
-       //arrayAdapter = new ArrayList<Sketch>(this, android.R.layout.simple_list_item_1, mainViewModel.getSketches().getValue());
-       // listView.setAdapter(listItemAdapter);
-
-       // arrayAdapter=new ArrayList<>();
-        //listView.setOnItemClickListener((parent, view, position, id) -> startEditActivity(position+1));
 
         listItemAdapter = new ListItemAdapter(mainViewModel.getSketches().getValue(), this);
         listView.setAdapter(listItemAdapter);
-
-       // arrayAdapter=new ArrayList<>();
 
 
 
