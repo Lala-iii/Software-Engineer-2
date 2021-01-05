@@ -2,6 +2,7 @@ package at.ac.univie.sketchup.view;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
 import android.content.Intent;
@@ -22,21 +23,22 @@ import java.util.List;
 
 import at.ac.univie.sketchup.R;
 import at.ac.univie.sketchup.exception.IncorrectAttributesException;
-import at.ac.univie.sketchup.model.drawable.CombinedShape;
 import at.ac.univie.sketchup.model.drawable.shape.Polygon;
 import at.ac.univie.sketchup.view.service.DrawableObjectFactory;
 import at.ac.univie.sketchup.model.drawable.parameters.Color;
 import at.ac.univie.sketchup.model.drawable.DrawableObject;
+import at.ac.univie.sketchup.model.Sketch;
 import at.ac.univie.sketchup.model.drawable.shape.Circle;
 import at.ac.univie.sketchup.model.drawable.shape.Line;
 import at.ac.univie.sketchup.model.drawable.shape.Quadrangle;
 import at.ac.univie.sketchup.model.drawable.shape.Triangle;
 import at.ac.univie.sketchup.model.drawable.textbox.TextBox;
+import at.ac.univie.sketchup.view.PaintView;
 import at.ac.univie.sketchup.viewmodel.SketchEditActivityViewModel;
 
 public class SketchEditActivity extends AppCompatActivity {
 
-    private FloatingActionButton fabParam, fabText, fabCircle, fabTriangle, fabQuadrangle, fabLine, fabPlus, fabPolygon, fabNewComShape, fabSelectComShape ;
+    private FloatingActionButton fabParam, fabText, fabCircle, fabTriangle, fabQuadrangle, fabLine, fabPlus, fabPolygon;
     private PaintView paintView;
     private boolean isButtonsHide = true;
 
@@ -77,25 +79,6 @@ public class SketchEditActivity extends AppCompatActivity {
 
         buttonSubmit.setOnClickListener(view -> {
             sketchViewModel.setTextForSelected(editText.getText().toString());
-            dialogBuilder.dismiss();
-        });
-
-        //todo button Cancel
-
-        dialogBuilder.show();
-    }
-
-    private void createDialogForCombinedShapeTitle() {
-        final AlertDialog dialogBuilder = new AlertDialog.Builder(this).create();
-        LayoutInflater inflater = this.getLayoutInflater();
-        View dialogView = inflater.inflate(R.layout.type_text_alert_dialog, null);
-        dialogBuilder.setView(dialogView);
-
-        final EditText editText = dialogView.findViewById(R.id.edt_comment);
-        Button buttonSubmit = dialogView.findViewById(R.id.buttonSubmit);
-
-        buttonSubmit.setOnClickListener(view -> {
-            sketchViewModel.storeNewCombinedShape(editText.getText().toString());
             dialogBuilder.dismiss();
         });
 
@@ -148,26 +131,6 @@ public class SketchEditActivity extends AppCompatActivity {
 
     }
 
-    private void createDialogForCombinedShapes() {
-        final AlertDialog dialogBuilder = new AlertDialog.Builder(this).create();
-        LayoutInflater inflater = this.getLayoutInflater();
-        View dialogView = inflater.inflate(R.layout.select_cobined_shape_diolog, null);
-        dialogBuilder.setView(dialogView);
-
-        Spinner sp_shape = dialogView.findViewById(R.id.sp_color);
-        sp_shape.setAdapter(new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, sketchViewModel.getCombinedShapeTitles()));
-
-        Button btn_confirm = dialogView.findViewById(R.id.btn_confirm);
-
-        dialogBuilder.show();
-
-        btn_confirm.setOnClickListener(view -> {
-            setSelected((CombinedShape) sp_shape.getSelectedItem());
-
-            dialogBuilder.dismiss();
-        });
-    }
-
 
     private void setViewElements() {
         setContentView(R.layout.activity_sketch_editor);
@@ -181,8 +144,6 @@ public class SketchEditActivity extends AppCompatActivity {
         fabLine = findViewById(R.id.fabLine);
         fabPolygon = findViewById(R.id.fabPolygon);
         fabParam = findViewById(R.id.fabParam);
-        fabSelectComShape = findViewById(R.id.fabCombinedShape);
-        fabNewComShape = findViewById(R.id.fabAddCombinedShape);
     }
 
     private void setViewModel() {
@@ -201,7 +162,7 @@ public class SketchEditActivity extends AppCompatActivity {
     }
 
     private void hideAction() {
-        List<FloatingActionButton> fabButtons = new ArrayList<>(Arrays.asList(fabParam, fabText, fabCircle, fabTriangle, fabQuadrangle, fabLine, fabPolygon, fabNewComShape, fabSelectComShape));
+        List<FloatingActionButton> fabButtons = new ArrayList<>(Arrays.asList(fabParam, fabText, fabCircle, fabTriangle, fabQuadrangle, fabLine, fabPolygon));
         fabButtons.forEach(FloatingActionButton::hide);
         fabButtons.forEach(fab -> fab.animate().translationY(0));
 
@@ -211,15 +172,11 @@ public class SketchEditActivity extends AppCompatActivity {
     }
 
     private void showAction() {
-        List<FloatingActionButton> fabButtons = new ArrayList<>(Arrays.asList(fabParam, fabText, fabCircle, fabTriangle, fabQuadrangle, fabLine, fabPolygon, fabNewComShape, fabSelectComShape));
+        List<FloatingActionButton> fabButtons = new ArrayList<>(Arrays.asList(fabParam, fabText, fabCircle, fabTriangle, fabQuadrangle, fabLine, fabPolygon));
         fabButtons.forEach(FloatingActionButton::show);
 
         fabParam.animate().translationX(-(fabParam.getCustomSize() + 50));
         fabParam.animate().translationY(-5);
-        fabNewComShape.animate().translationX(-(fabParam.getCustomSize() + 5 + fabNewComShape.getCustomSize() + 50));
-        fabNewComShape.animate().translationY(-5);
-        fabSelectComShape.animate().translationX(-(fabParam.getCustomSize() + 5 + fabParam.getCustomSize() + 5 + fabNewComShape.getCustomSize() + 50));
-        fabSelectComShape.animate().translationY(-5);
         //fabParam.animate().translationY(-(fabParam.getCustomSize() + 5 + fabText.getCustomSize() + 5 + fabCircle.getCustomSize() + 5 + fabTriangle.getCustomSize() + 5 + fabQuad.getCustomSize() + 5 + fabLine.getCustomSize() + 50));
         fabText.animate().translationY(-(fabPolygon.getCustomSize() + 5 + fabText.getCustomSize() + 5 + fabCircle.getCustomSize() + 5 + fabTriangle.getCustomSize() + 5 + fabQuadrangle.getCustomSize() + 5 + fabLine.getCustomSize() + 50));
         fabCircle.animate().translationY(-(fabPolygon.getCustomSize() + 5 + fabCircle.getCustomSize() + 5 + fabTriangle.getCustomSize() + 5 + fabQuadrangle.getCustomSize() + 5 + fabLine.getCustomSize() + 50));
@@ -251,8 +208,6 @@ public class SketchEditActivity extends AppCompatActivity {
         fabQuadrangle.setOnClickListener(view -> setSelected(drawableObjectFactory.getDrawableObject(Quadrangle.class)));
         fabLine.setOnClickListener(view -> setSelected(drawableObjectFactory.getDrawableObject(Line.class)));
         fabPolygon.setOnClickListener(view -> setSelected(drawableObjectFactory.getDrawableObject(Polygon.class)));
-        fabNewComShape.setOnClickListener(view -> createDialogForCombinedShapeTitle());
-        fabSelectComShape.setOnClickListener(view -> createDialogForCombinedShapes());
     }
 
 
