@@ -7,11 +7,15 @@ import androidx.lifecycle.ViewModelProvider;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.Switch;
 import android.widget.TextView;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -22,8 +26,10 @@ import java.util.List;
 
 import at.ac.univie.sketchup.R;
 import at.ac.univie.sketchup.exception.IncorrectAttributesException;
+import at.ac.univie.sketchup.model.Layer;
 import at.ac.univie.sketchup.model.drawable.CombinedShape;
 import at.ac.univie.sketchup.model.drawable.shape.Polygon;
+import at.ac.univie.sketchup.model.drawable.shape.Shape;
 import at.ac.univie.sketchup.view.service.DrawableObjectFactory;
 import at.ac.univie.sketchup.model.drawable.parameters.Color;
 import at.ac.univie.sketchup.model.drawable.DrawableObject;
@@ -45,6 +51,9 @@ public class SketchEditActivity extends AppCompatActivity {
 
     private DrawableObjectFactory drawableObjectFactory;
 
+    private boolean isChecked = true;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -53,6 +62,7 @@ public class SketchEditActivity extends AppCompatActivity {
 
         intent = getIntent();
         drawableObjectFactory = new DrawableObjectFactory();
+
         setViewModel();
 
         paintView.init(sketchViewModel);
@@ -189,10 +199,12 @@ public class SketchEditActivity extends AppCompatActivity {
         int sketchId = intent.getIntExtra("sketchId", -1);
         sketchViewModel = new ViewModelProvider(this).get(SketchEditActivityViewModel.class);
         sketchViewModel.init(sketchId);
+
     }
 
     private void setSelected(DrawableObject selected) {
         sketchViewModel.setSelected(selected);
+
     }
 
     // Observer through an event to redraw all object if sketch was changed.
@@ -253,7 +265,51 @@ public class SketchEditActivity extends AppCompatActivity {
         fabPolygon.setOnClickListener(view -> setSelected(drawableObjectFactory.getDrawableObject(Polygon.class)));
         fabNewComShape.setOnClickListener(view -> createDialogForCombinedShapeTitle());
         fabSelectComShape.setOnClickListener(view -> createDialogForCombinedShapes());
+
+       }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater menuInflater = getMenuInflater();
+        menuInflater.inflate(R.menu.main, menu);
+
+        MenuItem checkable1 = menu.findItem(R.id.layer1);
+        checkable1.setChecked(isChecked);
+
+        MenuItem checkable2 = menu.findItem(R.id.layer2);
+        checkable2.setChecked(isChecked);
+
+        MenuItem checkable3 = menu.findItem(R.id.layer3);
+        checkable3.setChecked(isChecked);
+
+        return super.onCreateOptionsMenu(menu);
+
     }
 
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.layer1:
+                isChecked = !item.isChecked();
+                item.setChecked(isChecked);
+                sketchViewModel.getByLayerId(0).setVisibility(isChecked);
+                paintView.postInvalidate();
+                return true;
+            case R.id.layer2:
+                isChecked = !item.isChecked();
+                item.setChecked(isChecked);
+                sketchViewModel.getByLayerId(1).setVisibility(isChecked);
+                paintView.postInvalidate();
+                return true;
+            case R.id.layer3:
+                isChecked = !item.isChecked();
+                item.setChecked(isChecked);
+                sketchViewModel.getByLayerId(2).setVisibility(isChecked);
+                paintView.postInvalidate();
+                return true;
+            default:
+                return false;
+        }
+    }
 
 }

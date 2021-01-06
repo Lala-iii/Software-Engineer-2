@@ -1,5 +1,7 @@
 package at.ac.univie.sketchup.viewmodel;
 
+import android.view.ViewGroup;
+
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
@@ -9,6 +11,7 @@ import java.util.ArrayList;
 import java.util.Objects;
 
 import at.ac.univie.sketchup.exception.IncorrectAttributesException;
+import at.ac.univie.sketchup.model.Layer;
 import at.ac.univie.sketchup.model.drawable.CombinedShape;
 import at.ac.univie.sketchup.model.drawable.parameters.Color;
 import at.ac.univie.sketchup.model.drawable.DrawableObject;
@@ -74,7 +77,7 @@ public class SketchEditActivityViewModel extends ViewModel {
         if (null != selected) {
             selected.setColor(c);
         } else {
-         //Custom ExceptionClass Usage
+            //Custom ExceptionClass Usage
             throw new IncorrectAttributesException("Select the element first to which color changes should be applied!");
         }
     }
@@ -123,5 +126,9 @@ public class SketchEditActivityViewModel extends ViewModel {
 
     public ArrayList getCombinedShapeTitles() {
         return sketch.getValue().getCreatedCombinedShapes();
+    }
+
+    public Layer getByLayerId(int id) {
+        return sketch.getValue().getLayersList().get(id);
     }
 }

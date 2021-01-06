@@ -1,25 +1,54 @@
 package at.ac.univie.sketchup.model;
 
+import android.view.LayoutInflater;
+import android.view.View;
+import android.widget.Button;
+import android.widget.TextView;
+
+import androidx.appcompat.app.AlertDialog;
+
 import java.util.ArrayList;
 
+<<<<<<< implementation/app/src/main/java/at/ac/univie/sketchup/model/Sketch.java
+import at.ac.univie.sketchup.R;
+=======
 import at.ac.univie.sketchup.model.drawable.CombinedShape;
+>>>>>>> implementation/app/src/main/java/at/ac/univie/sketchup/model/Sketch.java
 import at.ac.univie.sketchup.model.drawable.DrawableObject;
 
 public class Sketch {
 
     private int id;
     private String title;
-    private ArrayList<DrawableObject> drawableObjects = new ArrayList<>();
+
+    private ArrayList<Layer> layersList = new ArrayList<>();
     private ArrayList<CombinedShape> createdCombinedShapes = new ArrayList<>();
 
-    // todo constructor
-
-    public ArrayList<DrawableObject> getDrawableObjects() {
-        return drawableObjects;
+    public ArrayList<Layer> getLayersList() {
+        return layersList;
     }
 
-    public void setDrawableObjects(ArrayList<DrawableObject> drawableObjects) {
-        this.drawableObjects = drawableObjects;
+    public Sketch() {
+
+        Layer l1 = new Layer(true);
+        Layer l2 = new Layer(true);
+        Layer l3 = new Layer(true);
+
+        layersList.add(l1);
+        layersList.add(l2);
+        layersList.add(l3);
+
+    }
+
+
+    public ArrayList<DrawableObject> getDrawableObjects() {
+        ArrayList<DrawableObject> drawableObjects = new ArrayList<>();
+        for (Layer l : layersList) {
+            if (l.getVisibility()) {
+                l.getDrawableObjects().forEach(drawableObject -> drawableObjects.add(drawableObject));
+            }
+        }
+        return drawableObjects;
     }
 
     public int getId() {
@@ -52,7 +81,18 @@ public class Sketch {
     }
 
     public void addDrawableObject(DrawableObject object) {
-        drawableObjects.add(object);
+        Layer lastVisible = null;
+        Layer layerZero = new Layer(true);
+
+        for (Layer l : layersList) {
+            if (l.getVisibility()) lastVisible = l;
+        }
+
+        if(lastVisible != null)
+            lastVisible.addDrawableObject(object);
+        else
+            layerZero.addDrawableObject(object);
+
     }
 
     public void addCombinedShape(CombinedShape combinedShapes) {
