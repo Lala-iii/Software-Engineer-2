@@ -50,8 +50,8 @@ public class MainActivityViewModel extends ViewModel {
         return newSketch.getId();
     }
 
-    public void deleteSketchById(int id) {
-        sketchRepository.deleteById(id);
+    public void deleteSketchById(int id,Context context) {
+        sketchRepository.deleteById(id,context);
     }
 
     private Sketch createSketch() {

@@ -64,7 +64,7 @@ public class ListItemAdapter extends BaseAdapter {
             @Override
             public void onClick(View view) {
 
-                viewModel.deleteSketchById(sketches.get(position).getId());
+                viewModel.deleteSketchById(sketches.get(position).getId(),context);
 //                sketches.remove(position);
 
                 notifyDataSetChanged();

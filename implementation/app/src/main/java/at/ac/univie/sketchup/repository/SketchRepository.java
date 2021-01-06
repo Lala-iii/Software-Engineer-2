@@ -21,9 +21,10 @@ public class SketchRepository {
     private static final SketchRepository instance = new SketchRepository();
     private ArrayList<Sketch> dataSet = new ArrayList<>();
 
-    private SketchRepository(){}
+    private SketchRepository() {
+    }
 
-    public static SketchRepository getInstance(){
+    public static SketchRepository getInstance() {
         return instance;
     }
 
@@ -37,16 +38,19 @@ public class SketchRepository {
         return data;
     }
 
-    public MutableLiveData<Sketch> findOneById(int id){
+    public MutableLiveData<Sketch> findOneById(int id) {
         MutableLiveData<Sketch> data = new MutableLiveData<>();
-        data.setValue(dataSet.get(id-1));
+        data.setValue(dataSet.get(id - 1));
 
         return data;
     }
 
-    public void deleteById(int id) {
-        for(int i = 0; i < dataSet.size(); i++ ){
-            if (dataSet.get(i).getId() == id) dataSet.remove(i);
+    public void deleteById(int id, Context context) {
+        for (int i = 0; i < dataSet.size(); i++) {
+            if (dataSet.get(i).getId() == id) {
+                dataSet.remove(i);
+                storeSketches(context);
+            }
         }
     }
 
@@ -57,7 +61,7 @@ public class SketchRepository {
     /**
      * Create seed data for test. TODO Remove and create separate service that can be reused for test
      */
-    private void createSeedData(){
+    private void createSeedData() {
         Sketch s1 = new Sketch();
         s1.setId(1);
         s1.setTitle("Sketch 1");
@@ -68,9 +72,10 @@ public class SketchRepository {
         s2.setTitle("Sketch 2");
         dataSet.add(s2);
     }
-    public void storeSketches(Context context){
+
+    public void storeSketches(Context context) {
         File dir = new File(context.getFilesDir(), "mydir");
-        if(!dir.exists()){
+        if (!dir.exists()) {
             dir.mkdir();
         }
 
@@ -82,14 +87,14 @@ public class SketchRepository {
             os.close();
             fos.close();
 
-        } catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
     public ArrayList<Sketch> loadSketches(Context context) throws IOException, ClassNotFoundException {
         File dir = new File(context.getFilesDir(), "mydir");
-        if(dir.exists()) {
+        if (dir.exists()) {
             File file = new File(dir, "SketchUp.se2");
             if (!file.exists()) return new ArrayList<>();
             FileInputStream fis = new FileInputStream(file);
