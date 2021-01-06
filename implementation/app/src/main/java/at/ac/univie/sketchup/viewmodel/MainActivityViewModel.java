@@ -47,7 +47,11 @@ public class MainActivityViewModel extends ViewModel {
 
     private Sketch createSketch() {
         Sketch s = new Sketch();
-        s.setId(sketches.getValue().get(sketches.getValue().size()-1).getId() + 1);
+        if ( sketches.getValue().size() == 0) {
+            s.setId(1);
+        } else {
+            s.setId(sketches.getValue().get(sketches.getValue().size()-1).getId() + 1);
+        }
         s.setTitle("Sketch " + s.getId());
 
         return s;
