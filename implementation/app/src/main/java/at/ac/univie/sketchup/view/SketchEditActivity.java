@@ -54,7 +54,7 @@ public class SketchEditActivity extends AppCompatActivity {
     private DrawableObjectFactory drawableObjectFactory;
 
     private boolean isChecked = true;
-  
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -145,7 +145,6 @@ public class SketchEditActivity extends AppCompatActivity {
     private void setViewElements() {
         setContentView(R.layout.activity_sketch_editor);
         paintView = findViewById(R.id.paintView);
-        //paintLayer1 = findViewById(R.id.paintLayer1);
 
         fabText = findViewById(R.id.fabText);
         fabPlus = findViewById(R.id.fabMenu);
@@ -212,17 +211,16 @@ public class SketchEditActivity extends AppCompatActivity {
     }
 
     private void buttonsLister() {
-           fabParam.setOnClickListener(view -> createDialogForParam());
-           fabText.setOnClickListener(view -> {
-               setSelected(drawableObjectFactory.getDrawableObject(TextBox.class));
-               createDialogForText();
-           });
-           fabCircle.setOnClickListener(view -> setSelected(drawableObjectFactory.getDrawableObject(Circle.class)));
-           fabTriangle.setOnClickListener(view -> setSelected(drawableObjectFactory.getDrawableObject(Triangle.class)));
-           fabQuadrangle.setOnClickListener(view -> setSelected(drawableObjectFactory.getDrawableObject(Quadrangle.class)));
-           fabLine.setOnClickListener(view -> setSelected(drawableObjectFactory.getDrawableObject(Line.class)));
-           fabPolygon.setOnClickListener(view -> setSelected(drawableObjectFactory.getDrawableObject(Polygon.class)));
-
+        fabParam.setOnClickListener(view -> createDialogForParam());
+        fabText.setOnClickListener(view -> {
+            setSelected(drawableObjectFactory.getDrawableObject(TextBox.class));
+            createDialogForText();
+        });
+        fabCircle.setOnClickListener(view -> setSelected(drawableObjectFactory.getDrawableObject(Circle.class)));
+        fabTriangle.setOnClickListener(view -> setSelected(drawableObjectFactory.getDrawableObject(Triangle.class)));
+        fabQuadrangle.setOnClickListener(view -> setSelected(drawableObjectFactory.getDrawableObject(Quadrangle.class)));
+        fabLine.setOnClickListener(view -> setSelected(drawableObjectFactory.getDrawableObject(Line.class)));
+        fabPolygon.setOnClickListener(view -> setSelected(drawableObjectFactory.getDrawableObject(Polygon.class)));
 
        }
 
@@ -250,22 +248,18 @@ public class SketchEditActivity extends AppCompatActivity {
                 isChecked = !item.isChecked();
                 item.setChecked(isChecked);
                 sketchViewModel.getByLayerId(0).setVisibility(isChecked);
-
                 paintView.postInvalidate();
                 return true;
             case R.id.layer2:
                 isChecked = !item.isChecked();
                 item.setChecked(isChecked);
                 sketchViewModel.getByLayerId(1).setVisibility(isChecked);
-
                 paintView.postInvalidate();
                 return true;
             case R.id.layer3:
                 isChecked = !item.isChecked();
                 item.setChecked(isChecked);
-
                 sketchViewModel.getByLayerId(2).setVisibility(isChecked);
-
                 paintView.postInvalidate();
                 return true;
             default:

@@ -1,7 +1,15 @@
 package at.ac.univie.sketchup.model;
 
+import android.view.LayoutInflater;
+import android.view.View;
+import android.widget.Button;
+import android.widget.TextView;
+
+import androidx.appcompat.app.AlertDialog;
+
 import java.util.ArrayList;
 
+import at.ac.univie.sketchup.R;
 import at.ac.univie.sketchup.model.drawable.DrawableObject;
 
 public class Sketch {
@@ -15,6 +23,7 @@ public class Sketch {
     }
 
     public Sketch() {
+
         Layer l1 = new Layer(true);
         Layer l2 = new Layer(true);
         Layer l3 = new Layer(true);
@@ -22,6 +31,7 @@ public class Sketch {
         layersList.add(l1);
         layersList.add(l2);
         layersList.add(l3);
+
     }
 
 
@@ -58,9 +68,16 @@ public class Sketch {
 
     public void addDrawableObject(DrawableObject object) {
         Layer lastVisible = null;
+        Layer layerZero = new Layer(true);
+
         for (Layer l : layersList) {
             if (l.getVisibility()) lastVisible = l;
         }
-        lastVisible.addDrawableObject(object);
+
+        if(lastVisible != null)
+            lastVisible.addDrawableObject(object);
+        else
+            layerZero.addDrawableObject(object);
+
     }
 }
