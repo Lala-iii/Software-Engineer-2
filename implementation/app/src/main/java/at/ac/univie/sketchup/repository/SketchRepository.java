@@ -35,6 +35,12 @@ public class SketchRepository {
         return data;
     }
 
+    public void deleteById(int id) {
+        for(int i = 0; i < dataSet.size(); i++ ){
+            if (dataSet.get(i).getId() == id) dataSet.remove(i);
+        }
+    }
+
     public void createSketch(Sketch sketch) {
         dataSet.add(sketch);
     }

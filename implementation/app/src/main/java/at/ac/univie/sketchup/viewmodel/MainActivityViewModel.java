@@ -13,13 +13,14 @@ import at.ac.univie.sketchup.repository.SketchRepository;
 public class MainActivityViewModel extends ViewModel {
 
     private MutableLiveData<List<Sketch>> sketches;
+    private SketchRepository sketchRepository;
 
     public void init(){
         if (sketches != null) {
             return;
         }
-        SketchRepository sketchRepository = SketchRepository.getInstance();
-         sketches = sketchRepository.findAll();
+        sketchRepository = SketchRepository.getInstance();
+        sketches = sketchRepository.findAll();
     }
 
     public LiveData<List<Sketch>> getSketches(){
@@ -35,6 +36,10 @@ public class MainActivityViewModel extends ViewModel {
 
          // todo write in storage(?)
          return newSketch.getId();
+    }
+
+    public void deleteSketchById(int id) {
+        sketchRepository.deleteById(id);
     }
 
     private Sketch createSketch(){

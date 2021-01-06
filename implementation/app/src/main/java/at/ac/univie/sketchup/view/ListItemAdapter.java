@@ -11,12 +11,16 @@ import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.TextView;
 
+import androidx.lifecycle.ViewModel;
+
 import java.util.List;
 
 import at.ac.univie.sketchup.R;
 import at.ac.univie.sketchup.model.Sketch;
+import at.ac.univie.sketchup.viewmodel.MainActivityViewModel;
 
 public class ListItemAdapter extends BaseAdapter {
+    MainActivityViewModel viewModel;
     private List<Sketch> sketches;
     private Context context;
     private View row;
@@ -52,22 +56,26 @@ public class ListItemAdapter extends BaseAdapter {
                 context.startActivity(intent);
             }
         });
+        txtSketchTitle.setText(sketches.get(position).getTitle());
 
         Button btnAction = (Button) row.findViewById(R.id.delete_button);
-        txtSketchTitle.setText(sketches.get(position).getTitle());
-        btnAction.setText("Delete");
         // Click listener of button
         btnAction.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
-                sketches.remove(position);
+                viewModel.deleteSketchById(sketches.get(position).getId());
+//                sketches.remove(position);
                 notifyDataSetChanged();
             }
         });
 
         return row;
 
+    }
+
+    public void setViewModel(ViewModel vm){
+      viewModel = (MainActivityViewModel) vm;
     }
 
 }

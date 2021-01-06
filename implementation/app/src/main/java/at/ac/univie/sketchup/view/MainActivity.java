@@ -43,9 +43,8 @@ public class MainActivity extends AppCompatActivity {
 
 
         listItemAdapter = new ListItemAdapter(mainViewModel.getSketches().getValue(), this);
+        listItemAdapter.setViewModel(mainViewModel);
         listView.setAdapter(listItemAdapter);
-
-
 
         fab.setOnClickListener(view -> {
             int sketchId = mainViewModel.createNewSketch();
