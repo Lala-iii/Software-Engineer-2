@@ -1,6 +1,7 @@
 package at.ac.univie.sketchup.view.service.drawstrategy;
 
 import android.graphics.Canvas;
+import android.graphics.DashPathEffect;
 import android.graphics.Paint;
 
 import at.ac.univie.sketchup.model.drawable.DrawableObject;
@@ -10,6 +11,7 @@ import at.ac.univie.sketchup.model.drawable.textbox.TextBox;
 
 public class DrawTextBox implements DrawStrategy {
     private final TextBox textBox;
+    private Coordinate originalAnchorCoordinate;
 
     public DrawTextBox(DrawableObject drawableObject) {
         this.textBox = new TextBox(drawableObject.getColor(), drawableObject.getInputSize(), ((TextBox)drawableObject).getText());
@@ -27,12 +29,14 @@ public class DrawTextBox implements DrawStrategy {
 
     @Override
     public Paint setPaint() {
-        Paint mPaint = new Paint();
-        mPaint.setColor(this.textBox.getColor().getAndroidColor());
-        mPaint.setAntiAlias(true);
-        mPaint.setStyle(Paint.Style.FILL);
-        mPaint.setTextSize(this.textBox.getInputSize());
-        return mPaint;
+        Paint paint = new Paint();
+        paint.setColor(this.textBox.getColor().getAndroidColor());
+        paint.setAntiAlias(true);
+        paint.setStyle(Paint.Style.FILL);
+        paint.setTextSize(this.textBox.getInputSize());
+        if (this.textBox.isSelected())
+            paint.setPathEffect(new DashPathEffect(new float[]{2, 4},50));
+        return paint;
     }
 
 
@@ -51,13 +55,15 @@ public class DrawTextBox implements DrawStrategy {
     }
 
     @Override
-    public void onTouchMove(float x, float y) {
+    public void onTouchDown(float x, float y) {
         this.textBox.setAnchorCoordinate(new Coordinate(x, y));
+        this.originalAnchorCoordinate = this.textBox.getAnchorCoordinate();
     }
 
     @Override
-    public void onTouchDown(float x, float y) {
+    public void onTouchMove(float x, float y) {
         this.textBox.setAnchorCoordinate(new Coordinate(x, y));
+        this.originalAnchorCoordinate = this.textBox.getAnchorCoordinate();
     }
 
     @Override
@@ -71,12 +77,17 @@ public class DrawTextBox implements DrawStrategy {
     }
 
     @Override
-    public void restore() {
+    public DrawableObject getDrawableObject() {
+        return this.textBox;
+    }
 
+    @Override
+    public void restore() {
+        this.textBox.setAnchorCoordinate(this.originalAnchorCoordinate);
     }
 
     @Override
     public void store() {
-
+        this.originalAnchorCoordinate = this.textBox.getAnchorCoordinate();
     }
 }

@@ -24,9 +24,4 @@ public class TextBox extends DrawableObject {
     public void setText(String text) {
         this.text = text;
     }
-
-    @Override
-    public void onTouchMove(float x, float y) {
-        this.setAnchorCoordinate(new Coordinate(x, y));
-    }
 }

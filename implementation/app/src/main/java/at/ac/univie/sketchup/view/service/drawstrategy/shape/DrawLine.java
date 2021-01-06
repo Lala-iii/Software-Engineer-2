@@ -1,6 +1,7 @@
 package at.ac.univie.sketchup.view.service.drawstrategy.shape;
 
 import android.graphics.Canvas;
+import android.graphics.DashPathEffect;
 import android.graphics.Paint;
 
 import at.ac.univie.sketchup.model.drawable.DrawableObject;
@@ -33,12 +34,14 @@ public class DrawLine implements DrawStrategy {
 
     @Override
     public Paint setPaint() {
-        Paint mPaint = new Paint();
-        mPaint.setColor(this.line.getColor().getAndroidColor());
-        mPaint.setAntiAlias(true);
-        mPaint.setStyle(Paint.Style.STROKE);
-        mPaint.setStrokeWidth(this.line.getInputSize());
-        return mPaint;
+        Paint paint = new Paint();
+        paint.setColor(this.line.getColor().getAndroidColor());
+        paint.setAntiAlias(true);
+        paint.setStyle(Paint.Style.STROKE);
+        paint.setStrokeWidth(this.line.getInputSize());
+        if (this.line.isSelected())
+            paint.setPathEffect(new DashPathEffect(new float[]{2, 4},50));
+        return paint;
     }
 
     @Override
@@ -80,6 +83,11 @@ public class DrawLine implements DrawStrategy {
         float diffY = (begin.getY() - y) * (-1);
         this.line.setAnchorCoordinate(new Coordinate(x, y));
         this.line.setEndCoordinate(new Coordinate(end.getX() + diffX, end.getY() + diffY));
+    }
+
+    @Override
+    public DrawableObject getDrawableObject() {
+        return this.line;
     }
 
     @Override

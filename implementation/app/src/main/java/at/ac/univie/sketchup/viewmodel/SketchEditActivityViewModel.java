@@ -20,7 +20,7 @@ import at.ac.univie.sketchup.view.service.DrawService;
 import at.ac.univie.sketchup.view.service.drawstrategy.DrawStrategy;
 
 public class SketchEditActivityViewModel extends ViewModel {
-    public static final int CREATE = 1;
+    public static final Integer CREATE = 1;
     public static final Integer EDIT = 2;
     public static final Integer SELECTION = 3;
 
@@ -72,6 +72,8 @@ public class SketchEditActivityViewModel extends ViewModel {
     public void setSizeForSelected(int s) throws IncorrectAttributesException {
         if (this.template != null) {
             this.template.setInputSize(s);
+            if (this.drawStrategy != null)
+                this.drawStrategy.getDrawableObject().setInputSize(s);
         } else {
             // Custom ExceptionClass Usage
             throw new IncorrectAttributesException("Select the element first to which size changes should be applied!");
@@ -81,33 +83,13 @@ public class SketchEditActivityViewModel extends ViewModel {
     public void setColorForSelected(Color c) throws IncorrectAttributesException {
         if (this.template != null) {
             this.template.setColor(c);
+            if (this.drawStrategy != null)
+                this.drawStrategy.getDrawableObject().setColor(c);
         } else {
             //Custom ExceptionClass Usage
             throw new IncorrectAttributesException("Select the element first to which color changes should be applied!");
         }
     }
-
-    /*public void onTouchDown(float x, float y) {
-        // TODO maybe it is better to move the ontouch events to drawstrategy; check it
-        if (this.template == null) return;
-        if (this.mode == Mode.CREATE) {
-            cloneToNew();
-            this.drawStrategy.onTouchDown(x, y);
-        } else if (this.mode == Mode.EDIT) {
-            Coordinate origin = this.drawStrategy.getAnchorCoordinate();
-            this.drawStrategy.onTouchDown(x + origin.getX(), y + origin.getY());
-        }
-    }
-
-    public void onTouchMove(float x, float y) {
-        if (this.template == null) return;
-        //if (this.mode == Mode.CREATE) {
-            this.drawStrategy.onTouchMove(x, y);
-        //} else if (this.mode == Mode.EDIT) {
-        //    Coordinate origin = this.drawableObject.getAnchorCoordinate();
-        //    this.drawableObject.onTouchMove(x + origin.getX(), y + origin.getY());
-        //}
-    }*/
 
     public void cloneToNew() {
         if (this.template == null) return;
@@ -143,11 +125,13 @@ public class SketchEditActivityViewModel extends ViewModel {
 
     public void restoreDrawableObjectCoordinates() {
         this.drawStrategy.restore();
+        this.drawStrategy.getDrawableObject().setSelected(false);
         this.mode.setValue(SketchEditActivityViewModel.CREATE);
     }
 
     public void storeDrawableObjectCoordinates() {
         this.drawStrategy.store();
+        this.drawStrategy.getDrawableObject().setSelected(false);
         this.mode.setValue(SketchEditActivityViewModel.CREATE);
     }
 

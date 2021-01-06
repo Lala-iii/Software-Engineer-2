@@ -10,10 +10,12 @@ public interface DrawStrategy {
     boolean drawObject(Canvas canvas);
     Paint setPaint();
     boolean inSelectedArea(Coordinate begin, Coordinate end);
-    void onTouchMove(float x, float y);
     void onTouchDown(float x, float y);
+    void onTouchMove(float x, float y);
     void onEditDown(float x, float y);
     void onEditMove(float x, float y);
+
+    DrawableObject getDrawableObject();
 
     void restore();
     void store();

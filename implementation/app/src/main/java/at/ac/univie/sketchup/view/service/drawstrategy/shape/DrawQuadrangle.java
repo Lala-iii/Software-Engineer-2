@@ -12,18 +12,14 @@ import at.ac.univie.sketchup.model.drawable.shape.Quadrangle;
 import at.ac.univie.sketchup.view.service.drawstrategy.DrawStrategy;
 
 public class DrawQuadrangle implements DrawStrategy {
-    public Quadrangle getQuadrangle() {
-        return quadrangle;
-    }
-
-    public void setQuadrangle(Quadrangle quadrangle) {
-        this.quadrangle = quadrangle;
-    }
-
-    Quadrangle quadrangle;
+    private Quadrangle quadrangle;
+    private Coordinate originalAnchorCoordinate;
+    private Coordinate originalEndCoordinate;
+    private Coordinate begin;
+    private Coordinate end;
 
     public DrawQuadrangle(DrawableObject drawableObject) {
-        quadrangle = new Quadrangle(drawableObject.getColor(), drawableObject.getInputSize(), false);
+        quadrangle = new Quadrangle(drawableObject.getColor(), drawableObject.getInputSize());
     }
 
     @Override
@@ -42,14 +38,14 @@ public class DrawQuadrangle implements DrawStrategy {
 
     @Override
     public Paint setPaint() {
-        Paint mPaint = new Paint();
-        mPaint.setColor(this.quadrangle.getColor().getAndroidColor());
-        mPaint.setAntiAlias(true);
-        mPaint.setStyle(Paint.Style.STROKE);
-        mPaint.setStrokeWidth(this.quadrangle.getInputSize());
-        if (this.quadrangle.isSelector())
-            mPaint.setPathEffect(new DashPathEffect(new float[]{2, 4},50));
-        return mPaint;
+        Paint paint = new Paint();
+        paint.setColor(this.quadrangle.getColor().getAndroidColor());
+        paint.setAntiAlias(true);
+        paint.setStyle(Paint.Style.STROKE);
+        paint.setStrokeWidth(this.quadrangle.getInputSize());
+        if (this.quadrangle.isSelected())
+            paint.setPathEffect(new DashPathEffect(new float[]{2, 4},50));
+        return paint;
     }
 
     @Override
@@ -68,33 +64,45 @@ public class DrawQuadrangle implements DrawStrategy {
     }
 
     @Override
-    public void onTouchMove(float x, float y) {
-        // TODO handle moving of selected element
-        this.quadrangle.onTouchMove(x, y);
+    public void onTouchDown(float x, float y) {
+        this.quadrangle.setAnchorCoordinate(new Coordinate(x, y));
+        this.originalAnchorCoordinate = this.quadrangle.getAnchorCoordinate();
     }
 
     @Override
-    public void onTouchDown(float x, float y) {
-        this.quadrangle.onTouchDown(x, y);
+    public void onTouchMove(float x, float y) {
+        this.quadrangle.setEndCoordinate(new Coordinate(x, y));
+        this.originalEndCoordinate = this.quadrangle.getEndCoordinate();
     }
 
     @Override
     public void onEditDown(float x, float y) {
-
+        this.begin = this.quadrangle.getAnchorCoordinate();
+        this.end = this.quadrangle.getEndCoordinate();
     }
 
     @Override
     public void onEditMove(float x, float y) {
+        float diffX = (begin.getX() - x) * (-1);
+        float diffY = (begin.getY() - y) * (-1);
+        this.quadrangle.setAnchorCoordinate(new Coordinate(x, y));
+        this.quadrangle.setEndCoordinate(new Coordinate(end.getX() + diffX, end.getY() + diffY));
+    }
 
+    @Override
+    public DrawableObject getDrawableObject() {
+        return this.quadrangle;
     }
 
     @Override
     public void restore() {
-
+        this.quadrangle.setAnchorCoordinate(this.originalAnchorCoordinate);
+        this.quadrangle.setEndCoordinate(this.originalEndCoordinate);
     }
 
     @Override
     public void store() {
-
+        this.originalAnchorCoordinate = this.quadrangle.getAnchorCoordinate();
+        this.originalEndCoordinate = this.quadrangle.getEndCoordinate();
     }
 }

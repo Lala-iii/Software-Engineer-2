@@ -57,8 +57,9 @@ public class PaintView extends View {
             switch (event.getAction()) {
                 case MotionEvent.ACTION_DOWN:
                     selectorBegin = new Coordinate(event.getX(), event.getY());
-                    selector = new DrawQuadrangle(new Quadrangle(Color.BLACK, 5, true));
-                    selector.getQuadrangle().setAnchorCoordinate(new Coordinate(event.getX(), event.getY()));
+                    selector = new DrawQuadrangle(new Quadrangle(Color.BLACK, 5));
+                    selector.getDrawableObject().setSelected(true);
+                    selector.onTouchDown(event.getX(), event.getY());
                     break;
                 case MotionEvent.ACTION_MOVE:
                     selectorEnd = new Coordinate(event.getX(), event.getY());
@@ -69,6 +70,7 @@ public class PaintView extends View {
                     sketchViewModel.getObjectsToDraw().forEach(d -> {
                         if (d.inSelectedArea(selectorBegin, selectorEnd)) {
                             sketchViewModel.setDrawStrategy(d);
+                            sketchViewModel.getDrawStrategy().getDrawableObject().setSelected(true);
                             sketchViewModel.setMode(SketchEditActivityViewModel.EDIT);
                         }
                     });

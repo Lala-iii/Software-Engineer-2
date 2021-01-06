@@ -234,6 +234,6 @@ public class SketchEditActivity extends AppCompatActivity {
         fabPolygon.setOnClickListener(view -> setSelected(drawableObjectFactory.getDrawableObject(Polygon.class)));
         fabSelector.setOnClickListener(view -> sketchViewModel.setMode(SketchEditActivityViewModel.SELECTION));
         fabConfirm.setOnClickListener(view -> sketchViewModel.storeDrawableObjectCoordinates());
-        fabCancel.setOnClickListener(view -> sketchViewModel.restoreDrawableObjectCoordinates());
+        fabCancel.setOnClickListener(view ->  { sketchViewModel.restoreDrawableObjectCoordinates(); paintView.postInvalidate(); });
     }
 }
