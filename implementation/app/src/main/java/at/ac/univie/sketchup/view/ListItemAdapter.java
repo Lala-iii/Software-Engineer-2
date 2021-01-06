@@ -52,7 +52,7 @@ public class ListItemAdapter extends BaseAdapter {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(context.getApplicationContext(), SketchEditActivity.class);
-                intent.putExtra("sketchId", position+1);
+                intent.putExtra("sketchId", sketches.get(position).getId());
                 context.startActivity(intent);
             }
         });
@@ -64,8 +64,7 @@ public class ListItemAdapter extends BaseAdapter {
             @Override
             public void onClick(View view) {
 
-                viewModel.deleteSketchById(sketches.get(position).getId(),context);
-//                sketches.remove(position);
+                viewModel.deleteSketchById(sketches.get(position).getId());
 
                 notifyDataSetChanged();
 
@@ -78,6 +77,11 @@ public class ListItemAdapter extends BaseAdapter {
 
     public void setViewModel(ViewModel vm){
       viewModel = (MainActivityViewModel) vm;
+    }
+
+    public void addAll(List<Sketch> all) {
+        sketches = all;
+        notifyDataSetChanged();
     }
 
 }

@@ -29,7 +29,6 @@ public class MainActivity extends AppCompatActivity {
     private ListView listView;
     private FloatingActionButton fab;
 
-    //private List<Sketch> arrayAdapter;
     private MainActivityViewModel mainViewModel;
     private ListItemAdapter listItemAdapter;
 
@@ -41,7 +40,6 @@ public class MainActivity extends AppCompatActivity {
         setUpViewModel();
         setUpObserver();
 
-
         listItemAdapter = new ListItemAdapter(mainViewModel.getSketches().getValue(), this);
         listItemAdapter.setViewModel(mainViewModel);
         listView.setAdapter(listItemAdapter);
@@ -50,36 +48,7 @@ public class MainActivity extends AppCompatActivity {
             int sketchId = mainViewModel.createNewSketch();
             startEditActivity(sketchId);
         });
-       /* listItemAdapter = new ListItemAdapter(arrayAdapter,arrayAdapter.getContext());
-        listView.setAdapter(listItemAdapter);
-        listItemAdapter.notifyDataSetChanged();*/
-
     }
-
-
-//    @Override
-//    public boolean onCreateOptionsMenu(Menu menu)
-//    {
-//        MenuInflater menuInflater = getMenuInflater();
-//        menuInflater.inflate(R.menu.main_menu, menu);
-//
-//        return super.onCreateOptionsMenu(menu);
-//    }
-//
-//    @Override
-//    public boolean onOptionsItemSelected(@NonNull MenuItem item)
-//    {
-//        super.onOptionsItemSelected(item);
-//
-//        if(item.getItemId() == R.id.add_note)
-//        {
-//            Intent intent = new Intent(getApplicationContext(), NoteEditorActivity.class);
-//            startActivity(intent);
-//            return true;
-//        }
-//
-//        return false;
-//    }
 
     private void setUpViewElements() {
         setContentView(R.layout.activity_main);
@@ -94,7 +63,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void setUpObserver() {
-        mainViewModel.getSketches().observe(this, sketches -> listItemAdapter.notifyDataSetChanged());
+        mainViewModel.getSketches().observe(this, sketches -> listItemAdapter.addAll(mainViewModel.getSketches().getValue()));
     }
 
     private void startEditActivity(int sketchId) {

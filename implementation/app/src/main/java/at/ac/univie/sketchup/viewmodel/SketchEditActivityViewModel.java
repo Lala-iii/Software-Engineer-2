@@ -1,7 +1,5 @@
 package at.ac.univie.sketchup.viewmodel;
 
-import android.content.Context;
-
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
@@ -12,7 +10,6 @@ import java.util.Objects;
 
 import at.ac.univie.sketchup.exception.IncorrectAttributesException;
 import at.ac.univie.sketchup.model.drawable.parameters.Color;
-import at.ac.univie.sketchup.model.drawable.parameters.Coordinate;
 import at.ac.univie.sketchup.model.drawable.DrawableObject;
 import at.ac.univie.sketchup.model.Sketch;
 import at.ac.univie.sketchup.model.drawable.shape.Polygon;
@@ -25,10 +22,12 @@ public class SketchEditActivityViewModel extends ViewModel {
     private DrawableObject selected;
     private DrawableObject drawableObject;
 
-    public void init(int id){
+    private SketchRepository sketchRepository;
 
-        SketchRepository sketchRepository = SketchRepository.getInstance();
-        sketch = sketchRepository.findOneById(id);
+    public void init(int id){
+        sketchRepository = SketchRepository.getInstance();
+        sketch = new MutableLiveData<>();
+        sketch.setValue(sketchRepository.findOneById(id));
 
         //todo add exception in case item do not exist
     }
@@ -49,8 +48,6 @@ public class SketchEditActivityViewModel extends ViewModel {
         Objects.requireNonNull(currentSketch).addDrawableObject(this.drawableObject);
         sketch.postValue(currentSketch);
         this.drawableObject = null;
-
-        // todo write in storage(?)
     }
 
     public void setSelected(DrawableObject s) {
@@ -112,7 +109,14 @@ public class SketchEditActivityViewModel extends ViewModel {
         return this.drawableObject;
     }
 
-    public void storeSketches(Context applicationContext) {
-        SketchRepository.getInstance().storeSketches(applicationContext);
+    public void storeSketchChanges() {
+        sketchRepository.update(sketch.getValue());
+    }
+
+    public void deleteAllDrawObj() {
+        Sketch s = sketch.getValue();
+        ArrayList<DrawableObject> drawableObjects = new ArrayList<>();
+        s.setDrawableObjects(drawableObjects);
+        sketch.postValue(s);
     }
 }

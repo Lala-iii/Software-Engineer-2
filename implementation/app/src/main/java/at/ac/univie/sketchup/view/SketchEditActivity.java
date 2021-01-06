@@ -3,14 +3,10 @@ package at.ac.univie.sketchup.view;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
-import android.content.Context;
-import android.content.ContextWrapper;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Environment;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -24,11 +20,6 @@ import android.widget.TextView;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -39,13 +30,11 @@ import at.ac.univie.sketchup.model.drawable.shape.Polygon;
 import at.ac.univie.sketchup.view.service.DrawableObjectFactory;
 import at.ac.univie.sketchup.model.drawable.parameters.Color;
 import at.ac.univie.sketchup.model.drawable.DrawableObject;
-import at.ac.univie.sketchup.model.Sketch;
 import at.ac.univie.sketchup.model.drawable.shape.Circle;
 import at.ac.univie.sketchup.model.drawable.shape.Line;
 import at.ac.univie.sketchup.model.drawable.shape.Quadrangle;
 import at.ac.univie.sketchup.model.drawable.shape.Triangle;
 import at.ac.univie.sketchup.model.drawable.textbox.TextBox;
-import at.ac.univie.sketchup.view.PaintView;
 import at.ac.univie.sketchup.viewmodel.SketchEditActivityViewModel;
 
 public class SketchEditActivity extends AppCompatActivity {
@@ -53,7 +42,6 @@ public class SketchEditActivity extends AppCompatActivity {
     private FloatingActionButton fabParam, fabText, fabCircle, fabTriangle, fabQuadrangle, fabLine, fabPlus, fabPolygon;
     private PaintView paintView;
     private boolean isButtonsHide = true;
-    private List<Sketch> sketchList;
     private SketchEditActivityViewModel  sketchViewModel;
     private Intent intent;
     private DrawableObjectFactory drawableObjectFactory;
@@ -88,37 +76,14 @@ public class SketchEditActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        if(item.getItemId()== R.id.action2)
-        {
-            sketchViewModel.getObjectsToDraw().clear();
-            setObserver();
+        if (item.getItemId()== R.id.action2) {
+            sketchViewModel.deleteAllDrawObj(); //clear Sketch
         }
-        else
-        {
-           sketchViewModel.storeSketches(this.getApplicationContext());
-
-
+        else {
+            sketchViewModel.storeSketchChanges(); //save all new changes on Sketch
         }
         return super.onOptionsItemSelected(item);
     }
-
-
-
-  private void saveSketch(Sketch sketch)  {
-
-     try {
-         String fileName ="Sketch" + System.currentTimeMillis();
-         FileOutputStream fos = this.getApplicationContext().openFileOutput(fileName,MODE_PRIVATE);
-         ObjectOutputStream os = new ObjectOutputStream(fos);
-
-         os.writeObject(sketch);
-         os.close();
-         fos.close();
-     }
-     catch (IOException e) {
-         e.printStackTrace();
-     }
-  }
 
     private void createDialogForText() {
         final AlertDialog dialogBuilder = new AlertDialog.Builder(this).create();
