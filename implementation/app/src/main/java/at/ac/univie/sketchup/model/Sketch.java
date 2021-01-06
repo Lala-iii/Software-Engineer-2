@@ -8,16 +8,31 @@ public class Sketch {
 
     private int id;
     private String title;
-    private ArrayList<DrawableObject> drawableObjects = new ArrayList<>();
+    private ArrayList<Layer> layersList = new ArrayList<>();
 
-    // todo constructor
-
-    public ArrayList<DrawableObject> getDrawableObjects() {
-        return drawableObjects;
+    public ArrayList<Layer> getLayersList() {
+        return layersList;
     }
 
-    public void setDrawableObjects(ArrayList<DrawableObject> drawableObjects) {
-        this.drawableObjects = drawableObjects;
+    public Sketch() {
+        Layer l1 = new Layer(true);
+        Layer l2 = new Layer(true);
+        Layer l3 = new Layer(true);
+
+        layersList.add(l1);
+        layersList.add(l2);
+        layersList.add(l3);
+    }
+
+
+    public ArrayList<DrawableObject> getDrawableObjects() {
+        ArrayList<DrawableObject> drawableObjects = new ArrayList<>();
+        for (Layer l : layersList) {
+            if (l.getVisibility()) {
+                l.getDrawableObjects().forEach(drawableObject -> drawableObjects.add(drawableObject));
+            }
+        }
+        return drawableObjects;
     }
 
     public int getId() {
@@ -42,6 +57,10 @@ public class Sketch {
     }
 
     public void addDrawableObject(DrawableObject object) {
-        drawableObjects.add(object);
+        Layer lastVisible = null;
+        for (Layer l : layersList) {
+            if (l.getVisibility()) lastVisible = l;
+        }
+        lastVisible.addDrawableObject(object);
     }
 }
