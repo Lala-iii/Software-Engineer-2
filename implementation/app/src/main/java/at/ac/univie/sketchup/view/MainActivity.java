@@ -90,7 +90,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void setUpViewModel() {
         mainViewModel = new ViewModelProvider(this).get(MainActivityViewModel.class);
-        mainViewModel.init();
+        mainViewModel.init(this.getApplicationContext());
     }
 
     private void setUpObserver() {

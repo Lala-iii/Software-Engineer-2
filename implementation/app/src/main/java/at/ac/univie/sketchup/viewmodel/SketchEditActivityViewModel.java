@@ -1,5 +1,7 @@
 package at.ac.univie.sketchup.viewmodel;
 
+import android.content.Context;
+
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
@@ -108,5 +110,9 @@ public class SketchEditActivityViewModel extends ViewModel {
 
     public DrawableObject getDrawableObject() {
         return this.drawableObject;
+    }
+
+    public void storeSketches(Context applicationContext) {
+        SketchRepository.getInstance().storeSketches(applicationContext);
     }
 }

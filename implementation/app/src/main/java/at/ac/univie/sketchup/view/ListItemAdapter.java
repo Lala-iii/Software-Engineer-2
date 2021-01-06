@@ -66,7 +66,9 @@ public class ListItemAdapter extends BaseAdapter {
 
                 viewModel.deleteSketchById(sketches.get(position).getId());
 //                sketches.remove(position);
+
                 notifyDataSetChanged();
+
             }
         });
 

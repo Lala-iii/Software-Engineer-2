@@ -10,6 +10,7 @@ import android.content.Context;
 import android.content.ContextWrapper;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Environment;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -24,7 +25,10 @@ import android.widget.TextView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -50,9 +54,8 @@ public class SketchEditActivity extends AppCompatActivity {
     private PaintView paintView;
     private boolean isButtonsHide = true;
     private List<Sketch> sketchList;
-    private SketchEditActivityViewModel sketchViewModel;
+    private SketchEditActivityViewModel  sketchViewModel;
     private Intent intent;
-
     private DrawableObjectFactory drawableObjectFactory;
 
     @Override
@@ -87,23 +90,36 @@ public class SketchEditActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         if(item.getItemId()== R.id.action2)
         {
-            //sketchViewModel.getDrawableObject().setColor(Color.WHITE);
             sketchViewModel.getObjectsToDraw().clear();
             setObserver();
         }
         else
         {
-           //sketchViewModel.getObjectsToDraw().
-            //sketchList.
+           sketchViewModel.storeSketches(this.getApplicationContext());
+
+
         }
         return super.onOptionsItemSelected(item);
     }
 
 
 
-  private void saveSketch(){
+  private void saveSketch(Sketch sketch)  {
 
+     try {
+         String fileName ="Sketch" + System.currentTimeMillis();
+         FileOutputStream fos = this.getApplicationContext().openFileOutput(fileName,MODE_PRIVATE);
+         ObjectOutputStream os = new ObjectOutputStream(fos);
+
+         os.writeObject(sketch);
+         os.close();
+         fos.close();
+     }
+     catch (IOException e) {
+         e.printStackTrace();
+     }
   }
+
     private void createDialogForText() {
         final AlertDialog dialogBuilder = new AlertDialog.Builder(this).create();
         LayoutInflater inflater = this.getLayoutInflater();
