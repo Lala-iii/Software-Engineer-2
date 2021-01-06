@@ -9,14 +9,20 @@ import androidx.appcompat.app.AlertDialog;
 
 import java.util.ArrayList;
 
+<<<<<<< implementation/app/src/main/java/at/ac/univie/sketchup/model/Sketch.java
 import at.ac.univie.sketchup.R;
+=======
+import at.ac.univie.sketchup.model.drawable.CombinedShape;
+>>>>>>> implementation/app/src/main/java/at/ac/univie/sketchup/model/Sketch.java
 import at.ac.univie.sketchup.model.drawable.DrawableObject;
 
 public class Sketch {
 
     private int id;
     private String title;
+
     private ArrayList<Layer> layersList = new ArrayList<>();
+    private ArrayList<CombinedShape> createdCombinedShapes = new ArrayList<>();
 
     public ArrayList<Layer> getLayersList() {
         return layersList;
@@ -61,6 +67,14 @@ public class Sketch {
         this.title = title;
     }
 
+    public ArrayList<CombinedShape> getCreatedCombinedShapes() {
+        return createdCombinedShapes;
+    }
+
+    public void setCreatedCombinedShapes(ArrayList<CombinedShape> createdCombinedShapes) {
+        this.createdCombinedShapes = createdCombinedShapes;
+    }
+
     @Override
     public String toString() {
         return title;
@@ -79,5 +93,9 @@ public class Sketch {
         else
             layerZero.addDrawableObject(object);
 
+    }
+
+    public void addCombinedShape(CombinedShape combinedShapes) {
+        createdCombinedShapes.add(combinedShapes);
     }
 }
