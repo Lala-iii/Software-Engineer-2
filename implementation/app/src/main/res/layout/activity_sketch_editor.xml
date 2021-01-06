@@ -96,7 +96,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|right"
         android:layout_margin="12dp"
-        android:src="@drawable/ic_line"
+        android:src="@drawable/ic_curve_line"
         android:visibility="gone"
         app:fabCustomSize="50dp"
         app:fabSize="auto"
@@ -109,7 +109,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|right"
         android:layout_margin="12dp"
-        android:src="@android:drawable/ic_menu_manage"
+        android:src="@drawable/ic_wrench"
         android:visibility="gone"
         app:fabCustomSize="50dp"
         app:fabSize="auto"
@@ -123,6 +123,20 @@
         android:layout_gravity="bottom|right"
         android:layout_margin="12dp"
         android:src="@drawable/ic_cropping_tool"
+        android:visibility="gone"
+        app:fabCustomSize="50dp"
+        app:fabSize="auto"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintRight_toRightOf="parent" />
+
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fabDelete"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|right"
+        android:layout_margin="12dp"
+        android:src="@drawable/ic_dustbin"
         android:visibility="gone"
         app:fabCustomSize="50dp"
         app:fabSize="auto"

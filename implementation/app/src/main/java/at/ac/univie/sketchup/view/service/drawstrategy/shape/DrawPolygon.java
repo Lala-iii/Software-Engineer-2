@@ -20,11 +20,13 @@ public class DrawPolygon implements DrawStrategy {
 
     private Coordinate begin;
     private List<Coordinate> coordinates;
+    private int id;
 
     public DrawPolygon(DrawableObject drawableObject) {
         this.polygon = new Polygon(drawableObject.getColor(), drawableObject.getInputSize());
         this.originalCoordinates = new ArrayList<>();
         this.coordinates = new ArrayList<>();
+        this.originalCoordinates = new ArrayList<>();
     }
 
     @Override
@@ -74,14 +76,15 @@ public class DrawPolygon implements DrawStrategy {
 
     @Override
     public void onTouchDown(float x, float y) {
+        this.polygon.initializeList();
+        this.id = 0;
         this.polygon.setAnchorCoordinate(new Coordinate(x, y));
         this.originalAnchorCoordinate = this.polygon.getAnchorCoordinate();
-
     }
 
     @Override
     public void onTouchMove(float x, float y) {
-        this.polygon.addCoordinate(x, y);
+        this.polygon.addCoordinate(x, y, id++);
         this.originalCoordinates.add(new Coordinate(x, y));
     }
 
@@ -98,12 +101,12 @@ public class DrawPolygon implements DrawStrategy {
         this.polygon.setAnchorCoordinate(new Coordinate(this.polygon.getAnchorCoordinate().getX() + diffX, this.polygon.getAnchorCoordinate().getY() + diffY));
         int i = 0;
         for (Coordinate c : this.polygon.getCoordinates()) {
-            //float diffX = (this.coordinates.get(i).getX() - x);
-            //float diffY = (this.coordinates.get(i).getX() - x);
             c.setX(this.coordinates.get(i).getX() + diffX);
             c.setY(this.coordinates.get(i).getY() + diffY);
             i++;
         };
+
+        this.begin = new Coordinate(x, y);
     }
 
     @Override

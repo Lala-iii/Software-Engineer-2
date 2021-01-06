@@ -59,6 +59,7 @@ public class SketchEditActivityViewModel extends ViewModel {
     }
 
     public void setTemplate(DrawableObject t) {
+        restoreDrawableObjectCoordinates();
         this.template = t;
         this.mode.setValue(SketchEditActivityViewModel.CREATE);
     }
@@ -93,14 +94,8 @@ public class SketchEditActivityViewModel extends ViewModel {
 
     public void cloneToNew() {
         if (this.template == null) return;
-
-        // Create copy(!) of selected object and set coordinate from touch
         try {
             this.drawStrategy = new DrawService().determineDrawableObject(((DrawableObject)this.template.clone()));
-            /*if (this.drawableObject instanceof Polygon) {
-                this.drawableObject = (Polygon) this.template.clone();
-                ((Polygon) this.drawableObject).initializeList();
-            }*/
             // May be an issue with cloning Color. Monitor and make deep clone in case
         } catch (CloneNotSupportedException e) {
             e.printStackTrace();
@@ -124,15 +119,26 @@ public class SketchEditActivityViewModel extends ViewModel {
     }
 
     public void restoreDrawableObjectCoordinates() {
+        if (this.drawStrategy == null) return;
         this.drawStrategy.restore();
         this.drawStrategy.getDrawableObject().setSelected(false);
-        this.mode.setValue(SketchEditActivityViewModel.CREATE);
+        this.mode.setValue(SketchEditActivityViewModel.SELECTION);
+
     }
 
     public void storeDrawableObjectCoordinates() {
         this.drawStrategy.store();
         this.drawStrategy.getDrawableObject().setSelected(false);
-        this.mode.setValue(SketchEditActivityViewModel.CREATE);
+        this.mode.setValue(SketchEditActivityViewModel.SELECTION);
+    }
+
+    public void removeDrawableObject() {
+        if (this.drawStrategy == null) return;
+        if (this.sketch.getValue().getDrawableObjects() == null) return;
+
+        this.mode.setValue(SketchEditActivityViewModel.SELECTION);
+        this.sketch.getValue().getDrawableObjects().remove(this.drawStrategy);
+        this.drawStrategy = null;
     }
 
 

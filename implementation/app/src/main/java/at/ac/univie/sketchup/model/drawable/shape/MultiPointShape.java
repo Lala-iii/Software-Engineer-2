@@ -20,7 +20,7 @@ public abstract class MultiPointShape extends Shape {
 
     public void setCoordinates(List<Coordinate> coordinates) { this.coordinates = coordinates; }
 
-    public void addCoordinate(float x, float y) {
-        this.coordinates.add(new Coordinate(x, y));
+    public void addCoordinate(float x, float y, int id) {
+        this.coordinates.add(new Coordinate(x, y, id));
     }
 }
