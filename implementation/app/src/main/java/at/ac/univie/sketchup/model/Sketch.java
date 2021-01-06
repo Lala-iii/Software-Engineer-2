@@ -9,11 +9,9 @@ import androidx.appcompat.app.AlertDialog;
 
 import java.util.ArrayList;
 
-<<<<<<< implementation/app/src/main/java/at/ac/univie/sketchup/model/Sketch.java
 import at.ac.univie.sketchup.R;
-=======
+
 import at.ac.univie.sketchup.model.drawable.CombinedShape;
->>>>>>> implementation/app/src/main/java/at/ac/univie/sketchup/model/Sketch.java
 import at.ac.univie.sketchup.model.drawable.DrawableObject;
 
 public class Sketch {
