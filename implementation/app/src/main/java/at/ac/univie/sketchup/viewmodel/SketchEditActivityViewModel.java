@@ -1,5 +1,7 @@
 package at.ac.univie.sketchup.viewmodel;
 
+import android.view.ViewGroup;
+
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
@@ -9,6 +11,8 @@ import java.util.ArrayList;
 import java.util.Objects;
 
 import at.ac.univie.sketchup.exception.IncorrectAttributesException;
+import at.ac.univie.sketchup.model.Layer;
+import at.ac.univie.sketchup.model.drawable.CombinedShape;
 import at.ac.univie.sketchup.model.drawable.parameters.Color;
 import at.ac.univie.sketchup.model.drawable.DrawableObject;
 import at.ac.univie.sketchup.model.Sketch;
@@ -20,7 +24,7 @@ public class SketchEditActivityViewModel extends ViewModel {
 
     private MutableLiveData<Sketch> sketch;
     private DrawableObject selected;
-    private DrawableObject drawableObject;
+    private DrawableObject drawableObjToAdd;
 
     private SketchRepository sketchRepository;
 
@@ -41,13 +45,15 @@ public class SketchEditActivityViewModel extends ViewModel {
     }
 
     public void addSelectedToSketch() {
-        if (selected == null || this.drawableObject == null) return;
+        if (selected == null || this.drawableObjToAdd == null) return;
 
         // Add obj to sketch and thought event for observer
         Sketch currentSketch = sketch.getValue();
-        Objects.requireNonNull(currentSketch).addDrawableObject(this.drawableObject);
+        Objects.requireNonNull(currentSketch).addDrawableObject(this.drawableObjToAdd);
         sketch.postValue(currentSketch);
-        this.drawableObject = null;
+        this.drawableObjToAdd = null;
+
+        // todo write in storage(?)
     }
 
     public void setSelected(DrawableObject s) {
@@ -73,7 +79,7 @@ public class SketchEditActivityViewModel extends ViewModel {
         if (null != selected) {
             selected.setColor(c);
         } else {
-         //Custom ExceptionClass Usage
+            //Custom ExceptionClass Usage
             throw new IncorrectAttributesException("Select the element first to which color changes should be applied!");
         }
     }
@@ -81,23 +87,24 @@ public class SketchEditActivityViewModel extends ViewModel {
     public void onTouchDown(float x, float y) {
         if (selected == null) return;
         cloneToNew();
-        this.drawableObject.onTouchDown(x, y);
+        this.drawableObjToAdd.onTouchDown(x, y);
     }
 
     public void onTouchMove(float x, float y) {
         if (selected == null) return;
-        this.drawableObject.onTouchMove(x, y);
+        this.drawableObjToAdd.onTouchMove(x, y);
     }
 
     private void cloneToNew() {
         // Create copy(!) of selected object and set coordinate from touch
         try {
-            this.drawableObject = (DrawableObject) selected.clone();
+            this.drawableObjToAdd = (DrawableObject) selected.clone();
 
-            if (this.drawableObject instanceof Polygon) {
-                this.drawableObject = (Polygon) selected.clone();
-                ((Polygon)this.drawableObject).initializeList();
+            if (this.drawableObjToAdd instanceof Polygon) {
+                this.drawableObjToAdd = (Polygon) selected.clone();
+                ((Polygon)this.drawableObjToAdd).initializeList();
             }
+
             // May be an issue with cloning Color. Monitor and make deep clone in case
         } catch (CloneNotSupportedException e) {
             e.printStackTrace();
@@ -105,8 +112,26 @@ public class SketchEditActivityViewModel extends ViewModel {
         }
     }
 
-    public DrawableObject getDrawableObject() {
-        return this.drawableObject;
+    public DrawableObject getDrawableObjToAdd() {
+        return this.drawableObjToAdd;
+    }
+
+    public void storeNewCombinedShape(String title) {
+        CombinedShape cs = new CombinedShape(sketch.getValue().getDrawableObjects());
+        cs.setTitle(title);
+        sketch.getValue().addCombinedShape(cs);
+    }
+
+    public CombinedShape getCombinedShapeById(int id) {
+        return sketch.getValue().getCreatedCombinedShapes().get(id);
+    }
+
+    public ArrayList getCombinedShapeTitles() {
+        return sketch.getValue().getCreatedCombinedShapes();
+    }
+
+    public Layer getByLayerId(int id) {
+        return sketch.getValue().getLayersList().get(id);
     }
 
     public void storeSketchChanges() {

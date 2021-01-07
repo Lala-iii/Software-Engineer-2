@@ -16,6 +16,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.Switch;
 import android.widget.TextView;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -26,7 +27,10 @@ import java.util.List;
 
 import at.ac.univie.sketchup.R;
 import at.ac.univie.sketchup.exception.IncorrectAttributesException;
+import at.ac.univie.sketchup.model.Layer;
+import at.ac.univie.sketchup.model.drawable.CombinedShape;
 import at.ac.univie.sketchup.model.drawable.shape.Polygon;
+import at.ac.univie.sketchup.model.drawable.shape.Shape;
 import at.ac.univie.sketchup.view.service.DrawableObjectFactory;
 import at.ac.univie.sketchup.model.drawable.parameters.Color;
 import at.ac.univie.sketchup.model.drawable.DrawableObject;
@@ -39,12 +43,15 @@ import at.ac.univie.sketchup.viewmodel.SketchEditActivityViewModel;
 
 public class SketchEditActivity extends AppCompatActivity {
 
-    private FloatingActionButton fabParam, fabText, fabCircle, fabTriangle, fabQuadrangle, fabLine, fabPlus, fabPolygon;
+    private FloatingActionButton fabParam, fabText, fabCircle, fabTriangle, fabQuadrangle, fabLine, fabPlus, fabPolygon, fabNewComShape, fabSelectComShape ;
     private PaintView paintView;
     private boolean isButtonsHide = true;
     private SketchEditActivityViewModel  sketchViewModel;
     private Intent intent;
     private DrawableObjectFactory drawableObjectFactory;
+
+    private boolean isChecked = true;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,6 +61,7 @@ public class SketchEditActivity extends AppCompatActivity {
 
         intent = getIntent();
         drawableObjectFactory = new DrawableObjectFactory();
+
         setViewModel();
 
         paintView.init(sketchViewModel);
@@ -96,6 +104,25 @@ public class SketchEditActivity extends AppCompatActivity {
 
         buttonSubmit.setOnClickListener(view -> {
             sketchViewModel.setTextForSelected(editText.getText().toString());
+            dialogBuilder.dismiss();
+        });
+
+        //todo button Cancel
+
+        dialogBuilder.show();
+    }
+
+    private void createDialogForCombinedShapeTitle() {
+        final AlertDialog dialogBuilder = new AlertDialog.Builder(this).create();
+        LayoutInflater inflater = this.getLayoutInflater();
+        View dialogView = inflater.inflate(R.layout.type_text_alert_dialog, null);
+        dialogBuilder.setView(dialogView);
+
+        final EditText editText = dialogView.findViewById(R.id.edt_comment);
+        Button buttonSubmit = dialogView.findViewById(R.id.buttonSubmit);
+
+        buttonSubmit.setOnClickListener(view -> {
+            sketchViewModel.storeNewCombinedShape(editText.getText().toString());
             dialogBuilder.dismiss();
         });
 
@@ -148,6 +175,26 @@ public class SketchEditActivity extends AppCompatActivity {
 
     }
 
+    private void createDialogForCombinedShapes() {
+        final AlertDialog dialogBuilder = new AlertDialog.Builder(this).create();
+        LayoutInflater inflater = this.getLayoutInflater();
+        View dialogView = inflater.inflate(R.layout.select_cobined_shape_diolog, null);
+        dialogBuilder.setView(dialogView);
+
+        Spinner sp_shape = dialogView.findViewById(R.id.sp_color);
+        sp_shape.setAdapter(new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, sketchViewModel.getCombinedShapeTitles()));
+
+        Button btn_confirm = dialogView.findViewById(R.id.btn_confirm);
+
+        dialogBuilder.show();
+
+        btn_confirm.setOnClickListener(view -> {
+            setSelected((CombinedShape) sp_shape.getSelectedItem());
+
+            dialogBuilder.dismiss();
+        });
+    }
+
 
     private void setViewElements() {
         setContentView(R.layout.activity_sketch_editor);
@@ -161,16 +208,20 @@ public class SketchEditActivity extends AppCompatActivity {
         fabLine = findViewById(R.id.fabLine);
         fabPolygon = findViewById(R.id.fabPolygon);
         fabParam = findViewById(R.id.fabParam);
+        fabSelectComShape = findViewById(R.id.fabCombinedShape);
+        fabNewComShape = findViewById(R.id.fabAddCombinedShape);
     }
 
     private void setViewModel() {
         int sketchId = intent.getIntExtra("sketchId", -1);
         sketchViewModel = new ViewModelProvider(this).get(SketchEditActivityViewModel.class);
         sketchViewModel.init(sketchId);
+
     }
 
     private void setSelected(DrawableObject selected) {
         sketchViewModel.setSelected(selected);
+
     }
 
     // Observer through an event to redraw all object if sketch was changed.
@@ -179,7 +230,7 @@ public class SketchEditActivity extends AppCompatActivity {
     }
 
     private void hideAction() {
-        List<FloatingActionButton> fabButtons = new ArrayList<>(Arrays.asList(fabParam, fabText, fabCircle, fabTriangle, fabQuadrangle, fabLine, fabPolygon));
+        List<FloatingActionButton> fabButtons = new ArrayList<>(Arrays.asList(fabParam, fabText, fabCircle, fabTriangle, fabQuadrangle, fabLine, fabPolygon, fabNewComShape, fabSelectComShape));
         fabButtons.forEach(FloatingActionButton::hide);
         fabButtons.forEach(fab -> fab.animate().translationY(0));
 
@@ -189,11 +240,15 @@ public class SketchEditActivity extends AppCompatActivity {
     }
 
     private void showAction() {
-        List<FloatingActionButton> fabButtons = new ArrayList<>(Arrays.asList(fabParam, fabText, fabCircle, fabTriangle, fabQuadrangle, fabLine, fabPolygon));
+        List<FloatingActionButton> fabButtons = new ArrayList<>(Arrays.asList(fabParam, fabText, fabCircle, fabTriangle, fabQuadrangle, fabLine, fabPolygon, fabNewComShape, fabSelectComShape));
         fabButtons.forEach(FloatingActionButton::show);
 
         fabParam.animate().translationX(-(fabParam.getCustomSize() + 50));
         fabParam.animate().translationY(-5);
+        fabNewComShape.animate().translationX(-(fabParam.getCustomSize() + 5 + fabNewComShape.getCustomSize() + 50));
+        fabNewComShape.animate().translationY(-5);
+        fabSelectComShape.animate().translationX(-(fabParam.getCustomSize() + 5 + fabParam.getCustomSize() + 5 + fabNewComShape.getCustomSize() + 50));
+        fabSelectComShape.animate().translationY(-5);
         //fabParam.animate().translationY(-(fabParam.getCustomSize() + 5 + fabText.getCustomSize() + 5 + fabCircle.getCustomSize() + 5 + fabTriangle.getCustomSize() + 5 + fabQuad.getCustomSize() + 5 + fabLine.getCustomSize() + 50));
         fabText.animate().translationY(-(fabPolygon.getCustomSize() + 5 + fabText.getCustomSize() + 5 + fabCircle.getCustomSize() + 5 + fabTriangle.getCustomSize() + 5 + fabQuadrangle.getCustomSize() + 5 + fabLine.getCustomSize() + 50));
         fabCircle.animate().translationY(-(fabPolygon.getCustomSize() + 5 + fabCircle.getCustomSize() + 5 + fabTriangle.getCustomSize() + 5 + fabQuadrangle.getCustomSize() + 5 + fabLine.getCustomSize() + 50));
@@ -225,7 +280,53 @@ public class SketchEditActivity extends AppCompatActivity {
         fabQuadrangle.setOnClickListener(view -> setSelected(drawableObjectFactory.getDrawableObject(Quadrangle.class)));
         fabLine.setOnClickListener(view -> setSelected(drawableObjectFactory.getDrawableObject(Line.class)));
         fabPolygon.setOnClickListener(view -> setSelected(drawableObjectFactory.getDrawableObject(Polygon.class)));
+        fabNewComShape.setOnClickListener(view -> createDialogForCombinedShapeTitle());
+        fabSelectComShape.setOnClickListener(view -> createDialogForCombinedShapes());
+
+       }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater menuInflater = getMenuInflater();
+        menuInflater.inflate(R.menu.main, menu);
+
+        MenuItem checkable1 = menu.findItem(R.id.layer1);
+        checkable1.setChecked(isChecked);
+
+        MenuItem checkable2 = menu.findItem(R.id.layer2);
+        checkable2.setChecked(isChecked);
+
+        MenuItem checkable3 = menu.findItem(R.id.layer3);
+        checkable3.setChecked(isChecked);
+
+        return super.onCreateOptionsMenu(menu);
+
     }
 
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.layer1:
+                isChecked = !item.isChecked();
+                item.setChecked(isChecked);
+                sketchViewModel.getByLayerId(0).setVisibility(isChecked);
+                paintView.postInvalidate();
+                return true;
+            case R.id.layer2:
+                isChecked = !item.isChecked();
+                item.setChecked(isChecked);
+                sketchViewModel.getByLayerId(1).setVisibility(isChecked);
+                paintView.postInvalidate();
+                return true;
+            case R.id.layer3:
+                isChecked = !item.isChecked();
+                item.setChecked(isChecked);
+                sketchViewModel.getByLayerId(2).setVisibility(isChecked);
+                paintView.postInvalidate();
+                return true;
+            default:
+                return false;
+        }
+    }
 
 }
