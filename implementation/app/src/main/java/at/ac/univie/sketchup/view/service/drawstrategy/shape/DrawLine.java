@@ -18,8 +18,8 @@ public class DrawLine implements DrawStrategy, Serializable {
     private Coordinate originalAnchorCoordinate;
     private Coordinate originalEndCoordinate;
 
-    public DrawLine(DrawableObject drawableObject) {
-        this.line = new Line(drawableObject.getColor(), drawableObject.getInputSize());
+    public DrawLine(DrawableObject drawableObject) throws CloneNotSupportedException {
+        this.line = (Line) drawableObject.clone();
     }
 
     @Override

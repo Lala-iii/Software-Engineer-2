@@ -20,8 +20,8 @@ public class DrawTriangle implements DrawStrategy, Serializable {
     private Coordinate begin;
     private Coordinate end;
 
-    public DrawTriangle(DrawableObject drawableObject) {
-        this.triangle = new Triangle(drawableObject.getColor(), drawableObject.getInputSize());
+    public DrawTriangle(DrawableObject drawableObject) throws CloneNotSupportedException {
+        this.triangle = (Triangle) drawableObject.clone();
     }
 
     @Override

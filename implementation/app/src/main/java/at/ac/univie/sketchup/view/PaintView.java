@@ -55,7 +55,12 @@ public class PaintView extends View {
         if (sketchViewModel.getMode().getValue().equals(SketchEditActivityViewModel.SELECTION)) {
             switch (event.getAction()) {
                 case MotionEvent.ACTION_DOWN:
-                    selector = new DrawQuadrangle(new Quadrangle(Color.BLACK, 5));
+                    try {
+                        selector = new DrawQuadrangle(new Quadrangle(Color.BLACK, 5));
+                    } catch (CloneNotSupportedException e) {
+                        e.printStackTrace();
+                        return true;
+                    }
                     selector.getDrawableObject().setSelected(true);
                     selector.onTouchDown(event.getX(), event.getY());
                     break;

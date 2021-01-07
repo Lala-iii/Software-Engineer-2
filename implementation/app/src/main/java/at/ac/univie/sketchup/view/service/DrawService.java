@@ -25,7 +25,7 @@ import at.ac.univie.sketchup.view.service.drawstrategy.shape.DrawTriangle;
 
 public class DrawService {
 
-    public DrawStrategy determineDrawableObject(DrawableObject drawableObject) {
+    public DrawStrategy determineDrawableObject(DrawableObject drawableObject) throws CloneNotSupportedException {
         DrawStrategy result = null;
         if (drawableObject instanceof TextBox)
             result = new DrawTextBox(drawableObject);
@@ -38,7 +38,7 @@ public class DrawService {
         return result;
     }
 
-    private DrawStrategy determineShape(DrawableObject drawableObject) {
+    private DrawStrategy determineShape(DrawableObject drawableObject) throws CloneNotSupportedException {
         if (drawableObject instanceof Circle)
             return new DrawCircle(drawableObject);
         else if (drawableObject instanceof Line)
