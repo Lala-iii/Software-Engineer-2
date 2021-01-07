@@ -6,13 +6,22 @@ import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
 
-import at.ac.univie.sketchup.model.drawable.DrawableObject;
+import at.ac.univie.sketchup.model.drawable.parameters.Color;
+import at.ac.univie.sketchup.model.drawable.parameters.Coordinate;
+import at.ac.univie.sketchup.model.drawable.shape.Quadrangle;
 import at.ac.univie.sketchup.view.service.DrawService;
+import at.ac.univie.sketchup.view.service.drawstrategy.DrawStrategy;
+import at.ac.univie.sketchup.view.service.drawstrategy.shape.DrawQuadrangle;
+import at.ac.univie.sketchup.viewmodel.Mode;
 import at.ac.univie.sketchup.viewmodel.SketchEditActivityViewModel;
 
 public class PaintView extends View {
 
     private SketchEditActivityViewModel sketchViewModel;
+
+
+    private DrawQuadrangle selector;
+
     private DrawService drawService;
 //    Bitmap bitmap;
 
@@ -22,7 +31,6 @@ public class PaintView extends View {
 
     public void init(SketchEditActivityViewModel vm) {
         sketchViewModel = vm;
-        drawService = new DrawService();
     }
 
     @Override
@@ -30,28 +38,66 @@ public class PaintView extends View {
         super.onDraw(canvas);
         canvas.save();
 
-        drawService.handle(canvas, sketchViewModel.getDrawableObject()); // draw current obj first
+        if (sketchViewModel.getMode().getValue() != null && sketchViewModel.getMode().getValue().equals(SketchEditActivityViewModel.SELECTION) && this.selector != null)
+            selector.drawObject(canvas);
 
-        for (DrawableObject objectToDraw : sketchViewModel.getObjectsToDraw()) {
-            drawService.handle(canvas, objectToDraw);
-        }
+        if (sketchViewModel.getDrawStrategy() != null)
+            sketchViewModel.getDrawStrategy().drawObject(canvas);
+
+        sketchViewModel.getObjectsToDraw().forEach(s -> s.drawObject(canvas));
 
         canvas.restore();
     }
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
-        switch (event.getAction()) {
-            case MotionEvent.ACTION_DOWN:
-                sketchViewModel.onTouchDown(event.getX(), event.getY());
-                break;
-            case MotionEvent.ACTION_MOVE:
-                sketchViewModel.onTouchMove(event.getX(), event.getY());
-                break;
-            case MotionEvent.ACTION_CANCEL:
-            case MotionEvent.ACTION_UP:
-                sketchViewModel.addSelectedToSketch();
-                break;
+        if (sketchViewModel.getMode().getValue() == null) return true;
+        if (sketchViewModel.getMode().getValue().equals(SketchEditActivityViewModel.SELECTION)) {
+            switch (event.getAction()) {
+                case MotionEvent.ACTION_DOWN:
+                    selector = new DrawQuadrangle(new Quadrangle(Color.BLACK, 5));
+                    selector.getDrawableObject().setSelected(true);
+                    selector.onTouchDown(event.getX(), event.getY());
+                    break;
+                case MotionEvent.ACTION_MOVE:
+                    selector.onTouchMove(event.getX(), event.getY());
+                    break;
+                case MotionEvent.ACTION_CANCEL:
+                case MotionEvent.ACTION_UP:
+                    for (DrawStrategy d : sketchViewModel.getObjectsToDraw()) {
+                        if (d.inSelectedArea(selector.getDrawableObject().getAnchorCoordinate(), ((Quadrangle)selector.getDrawableObject()).getEndCoordinate())) {
+                            sketchViewModel.setDrawStrategy(d);
+                            sketchViewModel.getDrawStrategy().getDrawableObject().setSelected(true);
+                            sketchViewModel.setMode(SketchEditActivityViewModel.EDIT);
+                            break;
+                        }
+                    }
+                    selector = null;
+                    break;
+            }
+        } else if (sketchViewModel.getMode().getValue().equals(SketchEditActivityViewModel.EDIT)) {
+            switch (event.getAction()) {
+                case MotionEvent.ACTION_DOWN:
+                    sketchViewModel.getDrawStrategy().onEditDown(event.getX(), event.getY());
+                    break;
+                case MotionEvent.ACTION_MOVE:
+                    sketchViewModel.getDrawStrategy().onEditMove(event.getX(), event.getY());
+                    break;
+            }
+        } else if (sketchViewModel.getMode().getValue() == SketchEditActivityViewModel.CREATE) {
+            switch (event.getAction()) {
+                case MotionEvent.ACTION_DOWN:
+                    sketchViewModel.cloneToNew();
+                    sketchViewModel.getDrawStrategy().onTouchDown(event.getX(), event.getY());
+                    break;
+                case MotionEvent.ACTION_MOVE:
+                    sketchViewModel.getDrawStrategy().onTouchMove(event.getX(), event.getY());
+                    break;
+                case MotionEvent.ACTION_CANCEL:
+                case MotionEvent.ACTION_UP:
+                    sketchViewModel.addSelectedToSketch();
+                    break;
+            }
         }
         postInvalidate();
         return true;

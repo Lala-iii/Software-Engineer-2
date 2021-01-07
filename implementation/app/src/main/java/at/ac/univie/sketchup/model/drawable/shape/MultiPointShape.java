@@ -22,8 +22,7 @@ public abstract class MultiPointShape extends Shape {
         coordinates = new ArrayList<>();
     }
 
-    @Override
-    public void onTouchMove(float x, float y) {
-        coordinates.add(new Coordinate(x, y));
+    public void addCoordinate(float x, float y) {
+        this.coordinates.add(new Coordinate(x, y));
     }
 }

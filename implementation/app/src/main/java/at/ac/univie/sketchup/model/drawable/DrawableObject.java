@@ -13,6 +13,10 @@ public abstract class DrawableObject implements Cloneable, Serializable {
     private Coordinate anchorCoordinate;
     private int inputSize;   // Brush, Text or Stroke size
 
+
+
+    private boolean selected;
+
     public DrawableObject(Color c, int size) {
         color = c;
         inputSize = size;
@@ -42,15 +46,17 @@ public abstract class DrawableObject implements Cloneable, Serializable {
         this.inputSize = inputSize;
     }
 
+    public boolean isSelected() {
+        return selected;
+    }
+
+    public void setSelected(boolean selected) {
+        this.selected = selected;
+    }
+
     @NonNull
     @Override
     public Object clone() throws CloneNotSupportedException {
         return super.clone();
-    }
-
-    public abstract void onTouchMove(float x, float y);
-
-    public void onTouchDown(float x, float y) {
-        this.anchorCoordinate = new Coordinate(x, y);
     }
 }

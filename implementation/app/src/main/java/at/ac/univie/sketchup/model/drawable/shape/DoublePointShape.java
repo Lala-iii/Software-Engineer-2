@@ -15,9 +15,4 @@ public abstract class DoublePointShape extends Shape {
     public void setEndCoordinate(Coordinate endCoordinate) {
         this.endCoordinate = endCoordinate;
     }
-
-    @Override
-    public void onTouchMove(float x, float y) {
-        this.endCoordinate = new Coordinate(x, y);
-    }
 }

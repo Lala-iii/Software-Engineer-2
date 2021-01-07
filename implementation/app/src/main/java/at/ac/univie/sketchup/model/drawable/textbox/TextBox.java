@@ -8,9 +8,13 @@ public class TextBox extends DrawableObject {
 
     private String text;
 
+    public TextBox(Color c, int size, String text) {
+        super(c, size);
+        this.text = text;
+    }
+
     public TextBox() {
-        super(Color.BLACK,70);
-        text = "";
+        this(Color.BLACK,70, "");
     }
 
     public String getText() {
@@ -19,10 +23,5 @@ public class TextBox extends DrawableObject {
 
     public void setText(String text) {
         this.text = text;
-    }
-
-    @Override
-    public void onTouchMove(float x, float y) {
-        this.setAnchorCoordinate(new Coordinate(x, y));
     }
 }

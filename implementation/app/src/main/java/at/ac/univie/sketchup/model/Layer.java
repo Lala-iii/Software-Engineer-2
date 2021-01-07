@@ -4,16 +4,18 @@ import java.io.Serializable;
 import java.util.ArrayList;
 
 import at.ac.univie.sketchup.model.drawable.DrawableObject;
+import at.ac.univie.sketchup.view.service.drawstrategy.DrawStrategy;
 
 public class Layer implements Serializable {
     private boolean visibility;
-    private ArrayList<DrawableObject> drawableObjects = new ArrayList<>();
+    private ArrayList<DrawStrategy> drawableObjects = new ArrayList<>();
+
 
     public Layer(boolean visibility) {
         this.visibility = visibility;
     }
 
-    public void addDrawableObject (DrawableObject o) {
+    public void addDrawableObject (DrawStrategy o) {
         drawableObjects.add(o);
     }
 
@@ -25,11 +27,11 @@ public class Layer implements Serializable {
         this.visibility = visibility;
     }
 
-    public ArrayList<DrawableObject> getDrawableObjects() {
+    public ArrayList<DrawStrategy> getDrawableObjects() {
         return drawableObjects;
     }
 
-    public void setDrawableObjects(ArrayList<DrawableObject> drawableObjects) {
+    public void setDrawableObjects(ArrayList<DrawStrategy> drawableObjects) {
         this.drawableObjects = drawableObjects;
     }
 }

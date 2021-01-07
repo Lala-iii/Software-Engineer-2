@@ -4,8 +4,12 @@ import java.io.Serializable;
 
 import at.ac.univie.sketchup.model.drawable.parameters.Color;
 
-public class Triangle extends RadiusBasedShape implements Serializable {
+public class Triangle extends RadiusBasedShape implements Serializable{
+    public Triangle(Color c, int size) {
+        super(c, size);
+    }
+
     public Triangle(){
-        super(Color.BLACK,5);
+        this(Color.BLACK,5);
     }
 }

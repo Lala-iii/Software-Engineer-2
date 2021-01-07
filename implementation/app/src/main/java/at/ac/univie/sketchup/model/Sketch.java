@@ -6,7 +6,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 
 import at.ac.univie.sketchup.model.drawable.CombinedShape;
-import at.ac.univie.sketchup.model.drawable.DrawableObject;
+import at.ac.univie.sketchup.view.service.drawstrategy.DrawStrategy;
 
 public class Sketch implements Serializable {
 
@@ -26,8 +26,12 @@ public class Sketch implements Serializable {
     }
 
 
-    public ArrayList<DrawableObject> getDrawableObjects() {
-        ArrayList<DrawableObject> drawableObjects = new ArrayList<>();
+    //public void setDrawableObjects(ArrayList<DrawStrategy> drawableObjects) {
+    //    this.drawableObjects = drawableObjects;
+    //}
+
+    public ArrayList<DrawStrategy> getDrawableObjects() {
+        ArrayList<DrawStrategy> drawableObjects = new ArrayList<>();
         for (Layer l : layersList) {
             if (l.getVisibility()) {
                 l.getDrawableObjects().forEach(drawableObject -> drawableObjects.add(drawableObject));
@@ -42,7 +46,7 @@ public class Sketch implements Serializable {
     }
 
     public int getId() {
-        return id;
+        return this.id;
     }
 
     public void setId(int id) {
@@ -50,7 +54,7 @@ public class Sketch implements Serializable {
     }
 
     public String getTitle() {
-        return title;
+        return this.title;
     }
 
     public void setTitle(String title) {
@@ -69,10 +73,10 @@ public class Sketch implements Serializable {
 
     @Override
     public String toString() {
-        return title;
+        return this.title;
     }
 
-    public void addDrawableObject(DrawableObject object) {
+    public void addDrawableObject(DrawStrategy object) {
         Layer lastVisible = null;
         Layer layerZero = new Layer(true);
 

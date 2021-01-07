@@ -60,7 +60,7 @@ public class SketchRepository {
     }
 
     private void storeSketches(ArrayList<Sketch> sketchesToStore) {
-        File dir = new File(context.getFilesDir(), "mydir");
+        File dir = new File(context.getFilesDir(), "sketchup");
         if (!dir.exists()) {
             dir.mkdir();
         }
@@ -80,7 +80,7 @@ public class SketchRepository {
     private ArrayList<Sketch> loadSketches() {
         ArrayList<Sketch> dataSet = new ArrayList<>();
         try {
-        File dir = new File(context.getFilesDir(), "mydir");
+        File dir = new File(context.getFilesDir(), "sketchup");
         if (dir.exists()) {
             File file = new File(dir, "SketchUp.se2");
             if (!file.exists()) return new ArrayList<>();
@@ -91,11 +91,7 @@ public class SketchRepository {
             is.close();
             fis.close();
         }
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (ClassNotFoundException e) {
+        } catch (IOException | ClassNotFoundException e) {
             e.printStackTrace();
         }
         return dataSet;

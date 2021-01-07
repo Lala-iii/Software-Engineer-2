@@ -2,8 +2,11 @@ package at.ac.univie.sketchup.view.service;
 
 import android.graphics.Canvas;
 
+import java.util.ArrayList;
+
 import at.ac.univie.sketchup.model.drawable.CombinedShape;
 import at.ac.univie.sketchup.model.drawable.DrawableObject;
+import at.ac.univie.sketchup.model.drawable.parameters.Coordinate;
 import at.ac.univie.sketchup.model.drawable.shape.Circle;
 import at.ac.univie.sketchup.model.drawable.shape.Line;
 import at.ac.univie.sketchup.model.drawable.shape.Polygon;
@@ -22,34 +25,30 @@ import at.ac.univie.sketchup.view.service.drawstrategy.shape.DrawTriangle;
 
 public class DrawService {
 
+    public DrawStrategy determineDrawableObject(DrawableObject drawableObject) {
+        DrawStrategy result = null;
+        if (drawableObject instanceof TextBox)
+            result = new DrawTextBox(drawableObject);
+        else if (drawableObject instanceof Shape)
+            result = determineShape(drawableObject);
+        else if (drawableObject instanceof CombinedShape)
+            result = new DrawCombinedShape(drawableObject);
 
-    public void handle(Canvas canvas, DrawableObject objectToDraw) {
-        DrawStrategy drawStrategy = null;
-        if (objectToDraw instanceof TextBox)
-            drawStrategy = new DrawTextBox();
-        else if (objectToDraw instanceof Shape)
-            drawStrategy = handleShape(objectToDraw);
-        else if (objectToDraw instanceof CombinedShape)
-            drawStrategy = new DrawCombinedShape();
-
-        if (drawStrategy != null) {
-            drawStrategy.drawObject(objectToDraw, canvas);
-        } else {
-            //todo custom exception DrawableObjectNotDefined
-        }
+        // TODO throw exception
+        return result;
     }
 
-    private DrawStrategy handleShape(DrawableObject objectToDraw) {
-        if (objectToDraw instanceof Circle)
-            return new DrawCircle();
-        else if (objectToDraw instanceof Line)
-            return new DrawLine();
-        else if (objectToDraw instanceof Quadrangle)
-            return new DrawQuadrangle();
-        else if (objectToDraw instanceof Triangle)
-            return new DrawTriangle();
-        else if (objectToDraw instanceof Polygon)
-            return new DrawPolygon();
+    private DrawStrategy determineShape(DrawableObject drawableObject) {
+        if (drawableObject instanceof Circle)
+            return new DrawCircle(drawableObject);
+        else if (drawableObject instanceof Line)
+            return new DrawLine(drawableObject);
+        else if (drawableObject instanceof Quadrangle)
+            return new DrawQuadrangle(drawableObject);
+        else if (drawableObject instanceof Triangle)
+            return new DrawTriangle(drawableObject);
+        else if (drawableObject instanceof Polygon)
+            return new DrawPolygon(drawableObject);
         return null;
     }
 }
