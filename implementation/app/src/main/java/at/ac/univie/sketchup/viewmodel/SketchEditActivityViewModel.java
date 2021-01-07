@@ -1,7 +1,5 @@
 package at.ac.univie.sketchup.viewmodel;
 
-import android.view.ViewGroup;
-
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
@@ -24,7 +22,7 @@ public class SketchEditActivityViewModel extends ViewModel {
 
     private MutableLiveData<Sketch> sketch;
     private DrawableObject selected;
-    private DrawableObject drawableObjToAdd;
+    private DrawableObject drawableObject;
 
     private SketchRepository sketchRepository;
 
@@ -45,13 +43,13 @@ public class SketchEditActivityViewModel extends ViewModel {
     }
 
     public void addSelectedToSketch() {
-        if (selected == null || this.drawableObjToAdd == null) return;
+        if (selected == null || this.drawableObject == null) return;
 
         // Add obj to sketch and thought event for observer
         Sketch currentSketch = sketch.getValue();
-        Objects.requireNonNull(currentSketch).addDrawableObject(this.drawableObjToAdd);
+        Objects.requireNonNull(currentSketch).addDrawableObject(this.drawableObject);
         sketch.postValue(currentSketch);
-        this.drawableObjToAdd = null;
+        this.drawableObject = null;
 
         // todo write in storage(?)
     }
@@ -87,22 +85,22 @@ public class SketchEditActivityViewModel extends ViewModel {
     public void onTouchDown(float x, float y) {
         if (selected == null) return;
         cloneToNew();
-        this.drawableObjToAdd.onTouchDown(x, y);
+        this.drawableObject.onTouchDown(x, y);
     }
 
     public void onTouchMove(float x, float y) {
         if (selected == null) return;
-        this.drawableObjToAdd.onTouchMove(x, y);
+        this.drawableObject.onTouchMove(x, y);
     }
 
     private void cloneToNew() {
         // Create copy(!) of selected object and set coordinate from touch
         try {
-            this.drawableObjToAdd = (DrawableObject) selected.clone();
+            this.drawableObject = (DrawableObject) selected.clone();
 
-            if (this.drawableObjToAdd instanceof Polygon) {
-                this.drawableObjToAdd = (Polygon) selected.clone();
-                ((Polygon)this.drawableObjToAdd).initializeList();
+            if (this.drawableObject instanceof Polygon) {
+                this.drawableObject = (Polygon) selected.clone();
+                ((Polygon)this.drawableObject).initializeList();
             }
 
             // May be an issue with cloning Color. Monitor and make deep clone in case
@@ -112,8 +110,8 @@ public class SketchEditActivityViewModel extends ViewModel {
         }
     }
 
-    public DrawableObject getDrawableObjToAdd() {
-        return this.drawableObjToAdd;
+    public DrawableObject getDrawableObject() {
+        return this.drawableObject;
     }
 
     public void storeNewCombinedShape(String title) {
@@ -140,8 +138,7 @@ public class SketchEditActivityViewModel extends ViewModel {
 
     public void deleteAllDrawObj() {
         Sketch s = sketch.getValue();
-        ArrayList<DrawableObject> drawableObjects = new ArrayList<>();
-        s.setDrawableObjects(drawableObjects);
+        s.clearLayers();
         sketch.postValue(s);
     }
 }

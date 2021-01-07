@@ -2,7 +2,6 @@ package at.ac.univie.sketchup.view;
 
 import android.content.Context;
 import android.graphics.Canvas;
-import android.graphics.Paint;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
@@ -31,7 +30,7 @@ public class PaintView extends View {
         super.onDraw(canvas);
         canvas.save();
 
-        drawService.handle(canvas, sketchViewModel.getDrawableObjToAdd()); // draw current obj first
+        drawService.handle(canvas, sketchViewModel.getDrawableObject()); // draw current obj first
 
         for (DrawableObject objectToDraw : sketchViewModel.getObjectsToDraw()) {
             drawService.handle(canvas, objectToDraw);

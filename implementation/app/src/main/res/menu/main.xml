@@ -20,5 +20,22 @@
         app:showAsAction="never"
         android:checkable="true" />
 
+    <item
+        android:id="@+id/empty"
+        android:title="     "
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/delete"
+        android:title="Delete"
+        android:visible="true" />
+
+    <item
+        android:id="@+id/save"
+        android:enabled="true"
+        android:icon="@android:drawable/ic_menu_save"
+        android:title="Save"
+        android:visible="true" />
+
 
 </menu>

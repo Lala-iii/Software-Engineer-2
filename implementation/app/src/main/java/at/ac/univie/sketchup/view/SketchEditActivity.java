@@ -1,6 +1,5 @@
 package at.ac.univie.sketchup.view;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
@@ -16,7 +15,6 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
-import android.widget.Switch;
 import android.widget.TextView;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -27,10 +25,8 @@ import java.util.List;
 
 import at.ac.univie.sketchup.R;
 import at.ac.univie.sketchup.exception.IncorrectAttributesException;
-import at.ac.univie.sketchup.model.Layer;
 import at.ac.univie.sketchup.model.drawable.CombinedShape;
 import at.ac.univie.sketchup.model.drawable.shape.Polygon;
-import at.ac.univie.sketchup.model.drawable.shape.Shape;
 import at.ac.univie.sketchup.view.service.DrawableObjectFactory;
 import at.ac.univie.sketchup.model.drawable.parameters.Color;
 import at.ac.univie.sketchup.model.drawable.DrawableObject;
@@ -73,24 +69,6 @@ public class SketchEditActivity extends AppCompatActivity {
             buttonsLister();
         });
 
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        MenuInflater menuInflater= getMenuInflater();
-        menuInflater.inflate(R.menu.menu,menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        if (item.getItemId()== R.id.action2) {
-            sketchViewModel.deleteAllDrawObj(); //clear Sketch
-        }
-        else {
-            sketchViewModel.storeSketchChanges(); //save all new changes on Sketch
-        }
-        return super.onOptionsItemSelected(item);
     }
 
     private void createDialogForText() {
@@ -291,13 +269,13 @@ public class SketchEditActivity extends AppCompatActivity {
         menuInflater.inflate(R.menu.main, menu);
 
         MenuItem checkable1 = menu.findItem(R.id.layer1);
-        checkable1.setChecked(isChecked);
+        checkable1.setChecked(sketchViewModel.getByLayerId(0).getVisibility());
 
         MenuItem checkable2 = menu.findItem(R.id.layer2);
-        checkable2.setChecked(isChecked);
+        checkable2.setChecked(sketchViewModel.getByLayerId(1).getVisibility());
 
         MenuItem checkable3 = menu.findItem(R.id.layer3);
-        checkable3.setChecked(isChecked);
+        checkable3.setChecked(sketchViewModel.getByLayerId(2).getVisibility());
 
         return super.onCreateOptionsMenu(menu);
 
@@ -324,6 +302,10 @@ public class SketchEditActivity extends AppCompatActivity {
                 sketchViewModel.getByLayerId(2).setVisibility(isChecked);
                 paintView.postInvalidate();
                 return true;
+            case R.id.delete:
+                sketchViewModel.deleteAllDrawObj(); //clear Sketch
+            case R.id.save:
+                sketchViewModel.storeSketchChanges(); //save all new changes on Sketch
             default:
                 return false;
         }

@@ -1,10 +1,11 @@
 package at.ac.univie.sketchup.model;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
 import at.ac.univie.sketchup.model.drawable.DrawableObject;
 
-public class Layer {
+public class Layer implements Serializable {
     private boolean visibility;
     private ArrayList<DrawableObject> drawableObjects = new ArrayList<>();
 

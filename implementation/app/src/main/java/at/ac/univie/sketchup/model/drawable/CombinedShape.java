@@ -6,7 +6,6 @@ import java.util.ArrayList;
 
 import at.ac.univie.sketchup.model.drawable.parameters.Color;
 import at.ac.univie.sketchup.model.drawable.parameters.Coordinate;
-import at.ac.univie.sketchup.model.drawable.shape.Circle;
 import at.ac.univie.sketchup.model.drawable.shape.DoublePointShape;
 import at.ac.univie.sketchup.model.drawable.shape.Polygon;
 import at.ac.univie.sketchup.model.drawable.textbox.TextBox;

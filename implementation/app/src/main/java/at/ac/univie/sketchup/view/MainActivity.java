@@ -1,26 +1,16 @@
 package at.ac.univie.sketchup.view;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.MenuInflater;
-import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.ListView;
-import android.widget.Toast;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import at.ac.univie.sketchup.R;
-import at.ac.univie.sketchup.model.Sketch;
 import at.ac.univie.sketchup.viewmodel.MainActivityViewModel;
 
 public class MainActivity extends AppCompatActivity {

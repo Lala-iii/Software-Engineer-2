@@ -3,17 +3,7 @@ package at.ac.univie.sketchup.model;
 
 import java.io.Serializable;
 
-import android.view.LayoutInflater;
-import android.view.View;
-import android.widget.Button;
-import android.widget.TextView;
-
-import androidx.appcompat.app.AlertDialog;
-
-
 import java.util.ArrayList;
-
-import at.ac.univie.sketchup.R;
 
 import at.ac.univie.sketchup.model.drawable.CombinedShape;
 import at.ac.univie.sketchup.model.drawable.DrawableObject;
@@ -32,14 +22,7 @@ public class Sketch implements Serializable {
 
     public Sketch() {
 
-        Layer l1 = new Layer(true);
-        Layer l2 = new Layer(true);
-        Layer l3 = new Layer(true);
-
-        layersList.add(l1);
-        layersList.add(l2);
-        layersList.add(l3);
-
+        create3Layers();
     }
 
 
@@ -52,9 +35,12 @@ public class Sketch implements Serializable {
         }
         return drawableObjects;
     }
-    public void clear() {
-        this.getDrawableObjects().clear();
+
+    public void clearLayers() {
+        layersList = new ArrayList<>();
+        create3Layers();
     }
+
     public int getId() {
         return id;
     }
@@ -103,5 +89,15 @@ public class Sketch implements Serializable {
 
     public void addCombinedShape(CombinedShape combinedShapes) {
         createdCombinedShapes.add(combinedShapes);
+    }
+
+    private void create3Layers() {
+        Layer l1 = new Layer(true);
+        Layer l2 = new Layer(true);
+        Layer l3 = new Layer(true);
+
+        layersList.add(l1);
+        layersList.add(l2);
+        layersList.add(l3);
     }
 }
