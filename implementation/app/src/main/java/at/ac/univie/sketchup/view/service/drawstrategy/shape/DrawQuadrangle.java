@@ -6,12 +6,14 @@ import android.graphics.DashPathEffect;
 import android.graphics.Paint;
 import android.graphics.Rect;
 
+import java.io.Serializable;
+
 import at.ac.univie.sketchup.model.drawable.DrawableObject;
 import at.ac.univie.sketchup.model.drawable.parameters.Coordinate;
 import at.ac.univie.sketchup.model.drawable.shape.Quadrangle;
 import at.ac.univie.sketchup.view.service.drawstrategy.DrawStrategy;
 
-public class DrawQuadrangle implements DrawStrategy {
+public class DrawQuadrangle implements DrawStrategy, Serializable {
     private Quadrangle quadrangle;
     private Coordinate originalAnchorCoordinate;
     private Coordinate originalEndCoordinate;

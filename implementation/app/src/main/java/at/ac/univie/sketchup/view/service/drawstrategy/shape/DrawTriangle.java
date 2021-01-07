@@ -5,13 +5,15 @@ import android.graphics.DashPathEffect;
 import android.graphics.Paint;
 import android.graphics.Path;
 
+import java.io.Serializable;
+
 import at.ac.univie.sketchup.model.drawable.DrawableObject;
 import at.ac.univie.sketchup.model.drawable.parameters.Coordinate;
 import at.ac.univie.sketchup.model.drawable.shape.Quadrangle;
 import at.ac.univie.sketchup.model.drawable.shape.Triangle;
 import at.ac.univie.sketchup.view.service.drawstrategy.DrawStrategy;
 
-public class DrawTriangle implements DrawStrategy {
+public class DrawTriangle implements DrawStrategy, Serializable {
     private Triangle triangle;
     private Coordinate originalAnchorCoordinate;
     private Coordinate originalEndCoordinate;

@@ -4,12 +4,14 @@ import android.graphics.Canvas;
 import android.graphics.DashPathEffect;
 import android.graphics.Paint;
 
+import java.io.Serializable;
+
 import at.ac.univie.sketchup.model.drawable.DrawableObject;
 import at.ac.univie.sketchup.model.drawable.parameters.Coordinate;
 import at.ac.univie.sketchup.model.drawable.shape.Circle;
 import at.ac.univie.sketchup.view.service.drawstrategy.DrawStrategy;
 
-public class DrawCircle implements DrawStrategy {
+public class DrawCircle implements DrawStrategy, Serializable {
     private final Circle circle;
     private Coordinate origin;
     private float width;

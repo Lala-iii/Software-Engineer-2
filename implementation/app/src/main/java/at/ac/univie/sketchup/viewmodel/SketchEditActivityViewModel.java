@@ -9,8 +9,9 @@ import java.util.ArrayList;
 import java.util.Objects;
 
 import at.ac.univie.sketchup.exception.IncorrectAttributesException;
+import at.ac.univie.sketchup.model.Layer;
+import at.ac.univie.sketchup.model.drawable.CombinedShape;
 import at.ac.univie.sketchup.model.drawable.parameters.Color;
-import at.ac.univie.sketchup.model.drawable.parameters.Coordinate;
 import at.ac.univie.sketchup.model.drawable.DrawableObject;
 import at.ac.univie.sketchup.model.Sketch;
 import at.ac.univie.sketchup.model.drawable.textbox.TextBox;
@@ -29,12 +30,15 @@ public class SketchEditActivityViewModel extends ViewModel {
     private DrawStrategy drawStrategy;
     private MutableLiveData<Integer> mode;
 
-    public void init(int id) {
 
-        SketchRepository sketchRepository = SketchRepository.getInstance();
-        sketch = sketchRepository.findOneById(id);
-        mode = new MutableLiveData<>();
+    private SketchRepository sketchRepository;
 
+    public void init(int id){
+        sketchRepository = SketchRepository.getInstance();
+        sketch = new MutableLiveData<>();
+        sketch.setValue(sketchRepository.findOneById(id));
+
+                    mode = new MutableLiveData<>();
         //todo add exception in case item do not exist
     }
 
@@ -95,7 +99,9 @@ public class SketchEditActivityViewModel extends ViewModel {
     public void cloneToNew() {
         if (this.template == null) return;
         try {
+
             this.drawStrategy = new DrawService().determineDrawableObject(((DrawableObject)this.template.clone()));
+
             // May be an issue with cloning Color. Monitor and make deep clone in case
         } catch (CloneNotSupportedException e) {
             e.printStackTrace();
@@ -141,5 +147,31 @@ public class SketchEditActivityViewModel extends ViewModel {
         this.drawStrategy = null;
     }
 
+    public void storeNewCombinedShape(String title) {
+        CombinedShape cs = new CombinedShape(sketch.getValue().getDrawableObjects());
+        cs.setTitle(title);
+        sketch.getValue().addCombinedShape(cs);
+    }
 
+    public CombinedShape getCombinedShapeById(int id) {
+        return sketch.getValue().getCreatedCombinedShapes().get(id);
+    }
+
+    public ArrayList getCombinedShapeTitles() {
+        return sketch.getValue().getCreatedCombinedShapes();
+    }
+
+    public Layer getByLayerId(int id) {
+        return sketch.getValue().getLayersList().get(id);
+    }
+
+    public void storeSketchChanges() {
+        sketchRepository.update(sketch.getValue());
+    }
+
+    public void deleteAllDrawObj() {
+        Sketch s = sketch.getValue();
+        s.clearLayers();
+        sketch.postValue(s);
+    }
 }

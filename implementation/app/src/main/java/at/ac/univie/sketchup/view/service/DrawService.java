@@ -2,6 +2,9 @@ package at.ac.univie.sketchup.view.service;
 
 import android.graphics.Canvas;
 
+import java.util.ArrayList;
+
+import at.ac.univie.sketchup.model.drawable.CombinedShape;
 import at.ac.univie.sketchup.model.drawable.DrawableObject;
 import at.ac.univie.sketchup.model.drawable.parameters.Coordinate;
 import at.ac.univie.sketchup.model.drawable.shape.Circle;
@@ -11,6 +14,7 @@ import at.ac.univie.sketchup.model.drawable.shape.Quadrangle;
 import at.ac.univie.sketchup.model.drawable.shape.Shape;
 import at.ac.univie.sketchup.model.drawable.shape.Triangle;
 import at.ac.univie.sketchup.model.drawable.textbox.TextBox;
+import at.ac.univie.sketchup.view.service.drawstrategy.DrawCombinedShape;
 import at.ac.univie.sketchup.view.service.drawstrategy.DrawStrategy;
 import at.ac.univie.sketchup.view.service.drawstrategy.DrawTextBox;
 import at.ac.univie.sketchup.view.service.drawstrategy.shape.DrawCircle;
@@ -21,14 +25,14 @@ import at.ac.univie.sketchup.view.service.drawstrategy.shape.DrawTriangle;
 
 public class DrawService {
 
-
-
     public DrawStrategy determineDrawableObject(DrawableObject drawableObject) {
         DrawStrategy result = null;
         if (drawableObject instanceof TextBox)
             result = new DrawTextBox(drawableObject);
         else if (drawableObject instanceof Shape)
             result = determineShape(drawableObject);
+        else if (drawableObject instanceof CombinedShape)
+            result = new DrawCombinedShape(drawableObject);
 
         // TODO throw exception
         return result;

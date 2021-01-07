@@ -1,18 +1,13 @@
 package at.ac.univie.sketchup.model.drawable.parameters;
 
-public class Coordinate {
+import java.io.Serializable;
+
+public class Coordinate implements Serializable {
 
     private float x;
     private float y;
-    private int id;
-
-    public Coordinate(float x, float y, int id) {
-        this(x, y);
-        this.id = id;
-    }
 
     public Coordinate(float x, float y) {
-
         this.x = x;
         this.y = y;
     }

@@ -4,12 +4,14 @@ import android.graphics.Canvas;
 import android.graphics.DashPathEffect;
 import android.graphics.Paint;
 
+import java.io.Serializable;
+
 import at.ac.univie.sketchup.model.drawable.DrawableObject;
 import at.ac.univie.sketchup.model.drawable.parameters.Coordinate;
 import at.ac.univie.sketchup.model.drawable.shape.Line;
 import at.ac.univie.sketchup.view.service.drawstrategy.DrawStrategy;
 
-public class DrawLine implements DrawStrategy {
+public class DrawLine implements DrawStrategy, Serializable {
     private Line line;
     private Coordinate begin;
     private Coordinate end;

@@ -5,6 +5,7 @@ import android.graphics.DashPathEffect;
 import android.graphics.Paint;
 import android.graphics.Path;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -13,14 +14,13 @@ import at.ac.univie.sketchup.model.drawable.parameters.Coordinate;
 import at.ac.univie.sketchup.model.drawable.shape.Polygon;
 import at.ac.univie.sketchup.view.service.drawstrategy.DrawStrategy;
 
-public class DrawPolygon implements DrawStrategy {
+public class DrawPolygon implements DrawStrategy, Serializable {
     private Polygon polygon;
     private Coordinate originalAnchorCoordinate;
     private List<Coordinate> originalCoordinates;
 
     private Coordinate begin;
     private List<Coordinate> coordinates;
-    private int id;
 
     public DrawPolygon(DrawableObject drawableObject) {
         this.polygon = new Polygon(drawableObject.getColor(), drawableObject.getInputSize());
@@ -77,14 +77,13 @@ public class DrawPolygon implements DrawStrategy {
     @Override
     public void onTouchDown(float x, float y) {
         this.polygon.initializeList();
-        this.id = 0;
         this.polygon.setAnchorCoordinate(new Coordinate(x, y));
         this.originalAnchorCoordinate = this.polygon.getAnchorCoordinate();
     }
 
     @Override
     public void onTouchMove(float x, float y) {
-        this.polygon.addCoordinate(x, y, id++);
+        this.polygon.addCoordinate(x, y);
         this.originalCoordinates.add(new Coordinate(x, y));
     }
 

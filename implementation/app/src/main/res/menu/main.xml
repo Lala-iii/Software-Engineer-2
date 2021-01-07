@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/layer1"
+        android:title="Layer 1 Visibility"
+        app:showAsAction="never"
+        android:checkable="true" />
+
+    <item
+        android:id="@+id/layer2"
+        android:title="Layer 2 Visibility"
+        app:showAsAction="never"
+        android:checkable="true" />
+
+    <item
+        android:id="@+id/layer3"
+        android:title="Layer 3 Visibility"
+        app:showAsAction="never"
+        android:checkable="true" />
+
+    <item
+        android:id="@+id/empty"
+        android:title="     "
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/delete"
+        android:title="Delete"
+        android:visible="true" />
+
+    <item
+        android:id="@+id/save"
+        android:enabled="true"
+        android:icon="@android:drawable/ic_menu_save"
+        android:title="Save"
+        android:visible="true" />
+
+
+</menu>
