@@ -9,6 +9,8 @@ import at.ac.univie.sketchup.model.drawable.CombinedShape;
 import at.ac.univie.sketchup.model.drawable.DrawableObject;
 import at.ac.univie.sketchup.model.drawable.parameters.Coordinate;
 import at.ac.univie.sketchup.model.drawable.shape.Circle;
+import at.ac.univie.sketchup.model.drawable.shape.DoublePointShape;
+import at.ac.univie.sketchup.model.drawable.shape.Polygon;
 import at.ac.univie.sketchup.view.service.DrawService;
 
 public class DrawCombinedShape implements DrawStrategy, Serializable {
@@ -22,7 +24,7 @@ public class DrawCombinedShape implements DrawStrategy, Serializable {
     @Override
     public boolean drawObject(Canvas canvas) {
         if (!(this.combinedShape instanceof CombinedShape)) return false;
-        for (DrawStrategy object : ((CombinedShape) this.combinedShape).getDrawableObjects()) {
+        for (DrawStrategy object : this.combinedShape.getDrawableObjects()) {
             object.drawObject(canvas);
         }
         return true;
@@ -35,12 +37,46 @@ public class DrawCombinedShape implements DrawStrategy, Serializable {
 
     @Override
     public void onTouchDown(float x, float y) {
-        this.combinedShape.onTouchMove(x, y);
+        this.onTouchMove(x, y);
     }
 
     @Override
     public void onTouchMove(float x, float y) {
-        this.combinedShape.onTouchMove(x, y);
+        Coordinate diff = getDiffForNewCoordinate(x, y);
+
+        this.combinedShape.getDrawableObjects().forEach(obj -> setNewCoordinate(obj, diff));
+    }
+
+    private void setNewCoordinate(DrawStrategy obj, Coordinate diff) {
+        float newX;
+        float newY;
+
+        if (obj instanceof DoublePointShape) {
+            newX = ((DoublePointShape) obj).getEndCoordinate().getX() + diff.getX();
+            newY = ((DoublePointShape) obj).getEndCoordinate().getY() + diff.getY();
+            ((DoublePointShape) obj).setEndCoordinate(new Coordinate(newX, newY));
+        }
+
+        if (obj instanceof Polygon) {
+            for (Coordinate c : ((Polygon) obj).getCoordinates()) {
+                c.setX(c.getX() + diff.getX());
+                c.setY(c.getY() + diff.getY());
+            }
+        }
+
+        newX = obj.getDrawableObject().getAnchorCoordinate().getX() + diff.getX();
+        newY = obj.getDrawableObject().getAnchorCoordinate().getY() + diff.getY();
+        obj.getDrawableObject().setAnchorCoordinate(new Coordinate(newX, newY));
+    }
+
+    private Coordinate getDiffForNewCoordinate(float x, float y) {
+        if (this.combinedShape.getDrawableObjects() == null || this.combinedShape.getDrawableObjects().size() == 0) return null;
+        Coordinate c = new Coordinate(
+                x - this.combinedShape.getDrawableObjects().get(0).getDrawableObject().getAnchorCoordinate().getX(),
+                y - this.combinedShape.getDrawableObjects().get(0).getDrawableObject().getAnchorCoordinate().getY()
+        );
+
+        return c;
     }
 
     @Override

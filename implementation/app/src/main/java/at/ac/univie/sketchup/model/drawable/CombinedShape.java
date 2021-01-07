@@ -9,6 +9,7 @@ import at.ac.univie.sketchup.model.drawable.parameters.Coordinate;
 import at.ac.univie.sketchup.model.drawable.shape.DoublePointShape;
 import at.ac.univie.sketchup.model.drawable.shape.Polygon;
 import at.ac.univie.sketchup.model.drawable.textbox.TextBox;
+import at.ac.univie.sketchup.view.service.DrawService;
 import at.ac.univie.sketchup.view.service.drawstrategy.DrawStrategy;
 import at.ac.univie.sketchup.view.service.drawstrategy.DrawTextBox;
 
@@ -22,20 +23,20 @@ public class CombinedShape extends DrawableObject {
         shapes.forEach(selected -> drawableObjects.add(cloneSelected(selected)));
     }
 
-    // TODO need to adapt it to FR4
-    public void onTouchMove(float x, float y) {
+
+    /*public void onTouchMove(float x, float y) {
         Coordinate diff = getDiffForNewCoordinate(x, y);
 
         drawableObjects.forEach(obj -> setNewCoordinate(obj, diff));
-    }
+    }*/
 
     public ArrayList<DrawStrategy> getDrawableObjects() {
         return drawableObjects;
     }
 
-    public void setDrawableObjects(ArrayList<DrawStrategy> drawableObjects) {
+/*    public void setDrawableObjects(ArrayList<DrawStrategy> drawableObjects) {
         //this.drawableObjects = drawableObjects;
-    }
+    }*/
 
     public String getTitle() {
         return title;
@@ -53,7 +54,7 @@ public class CombinedShape extends DrawableObject {
         }
 
         try {
-            DrawStrategy clonedObj = null;// TODO (DrawStrategy)selectedShape.clone();
+            DrawStrategy clonedObj = new DrawService().determineDrawableObject((DrawableObject)selectedShape.getDrawableObject().clone());
 
             if (clonedObj.getDrawableObject() instanceof Polygon) {
                 ArrayList<Coordinate> coordinates = new ArrayList<>();
@@ -63,13 +64,13 @@ public class CombinedShape extends DrawableObject {
             }
 
             return clonedObj;
-        } catch (Exception e) { //TODO //CloneNotSupportedException e) {
+        } catch (CloneNotSupportedException e) {
             e.printStackTrace();
             return null;
         }
     }
 
-    private Coordinate getDiffForNewCoordinate(float x, float y) {
+/*    private Coordinate getDiffForNewCoordinate(float x, float y) {
         if (drawableObjects == null || drawableObjects.size() == 0) return null;
         Coordinate c = new Coordinate(
                 x - drawableObjects.get(0).getDrawableObject().getAnchorCoordinate().getX(),
@@ -99,7 +100,7 @@ public class CombinedShape extends DrawableObject {
         newX = obj.getDrawableObject().getAnchorCoordinate().getX() + diff.getX();
         newY = obj.getDrawableObject().getAnchorCoordinate().getY() + diff.getY();
         obj.getDrawableObject().setAnchorCoordinate(new Coordinate(newX, newY));
-    }
+    }*/
 
     @NonNull
     @Override
