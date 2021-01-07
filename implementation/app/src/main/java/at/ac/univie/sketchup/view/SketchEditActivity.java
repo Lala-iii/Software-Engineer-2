@@ -1,5 +1,6 @@
 package at.ac.univie.sketchup.view;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
@@ -45,10 +46,8 @@ public class SketchEditActivity extends AppCompatActivity {
     private FloatingActionButton fabParam, fabText, fabCircle, fabTriangle, fabQuadrangle, fabLine, fabPlus, fabPolygon, fabNewComShape, fabSelectComShape ;
     private PaintView paintView;
     private boolean isButtonsHide = true;
-
-    private SketchEditActivityViewModel sketchViewModel;
+    private SketchEditActivityViewModel  sketchViewModel;
     private Intent intent;
-
     private DrawableObjectFactory drawableObjectFactory;
 
     private boolean isChecked = true;
@@ -74,6 +73,24 @@ public class SketchEditActivity extends AppCompatActivity {
             buttonsLister();
         });
 
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater menuInflater= getMenuInflater();
+        menuInflater.inflate(R.menu.menu,menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        if (item.getItemId()== R.id.action2) {
+            sketchViewModel.deleteAllDrawObj(); //clear Sketch
+        }
+        else {
+            sketchViewModel.storeSketchChanges(); //save all new changes on Sketch
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     private void createDialogForText() {

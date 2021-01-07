@@ -1,11 +1,15 @@
 package at.ac.univie.sketchup.model;
 
+
+import java.io.Serializable;
+
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AlertDialog;
+
 
 import java.util.ArrayList;
 
@@ -14,7 +18,7 @@ import at.ac.univie.sketchup.R;
 import at.ac.univie.sketchup.model.drawable.CombinedShape;
 import at.ac.univie.sketchup.model.drawable.DrawableObject;
 
-public class Sketch {
+public class Sketch implements Serializable {
 
     private int id;
     private String title;
@@ -48,7 +52,9 @@ public class Sketch {
         }
         return drawableObjects;
     }
-
+    public void clear() {
+        this.getDrawableObjects().clear();
+    }
     public int getId() {
         return id;
     }
@@ -65,6 +71,7 @@ public class Sketch {
         this.title = title;
     }
 
+
     public ArrayList<CombinedShape> getCreatedCombinedShapes() {
         return createdCombinedShapes;
     }
@@ -72,6 +79,7 @@ public class Sketch {
     public void setCreatedCombinedShapes(ArrayList<CombinedShape> createdCombinedShapes) {
         this.createdCombinedShapes = createdCombinedShapes;
     }
+
 
     @Override
     public String toString() {

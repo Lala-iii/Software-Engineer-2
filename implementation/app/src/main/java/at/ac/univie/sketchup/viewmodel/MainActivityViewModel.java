@@ -1,11 +1,12 @@
 package at.ac.univie.sketchup.viewmodel;
 
+import android.content.Context;
+
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 import java.util.List;
-import java.util.Objects;
 
 import at.ac.univie.sketchup.model.Sketch;
 import at.ac.univie.sketchup.repository.SketchRepository;
@@ -13,33 +14,44 @@ import at.ac.univie.sketchup.repository.SketchRepository;
 public class MainActivityViewModel extends ViewModel {
 
     private MutableLiveData<List<Sketch>> sketches;
+    private SketchRepository sketchRepository;
 
-    public void init(){
+    public void init(Context context ) {
         if (sketches != null) {
             return;
         }
-        SketchRepository sketchRepository = SketchRepository.getInstance();
-         sketches = sketchRepository.findAll();
+        sketchRepository = SketchRepository.getInstance();
+        sketchRepository.setContext(context);
+
+        sketches = new MutableLiveData<>();
+        sketches.setValue(sketchRepository.findAll());
     }
 
-    public LiveData<List<Sketch>> getSketches(){
+    public LiveData<List<Sketch>> getSketches() {
         // todo create custom error if repo is not init
         return sketches;
     }
 
     public int createNewSketch() {
-         Sketch newSketch = createSketch();
-         List<Sketch> currentSketches = sketches.getValue();
-         Objects.requireNonNull(currentSketches).add(newSketch);
-         sketches.postValue(currentSketches);
+        Sketch newSketch = createSketch();
+        sketchRepository.add(newSketch);
+        sketches.postValue(sketchRepository.findAll());
 
-         // todo write in storage(?)
-         return newSketch.getId();
+        return newSketch.getId();
     }
 
-    private Sketch createSketch(){
+    public void deleteSketchById(int id) {
+        sketchRepository.deleteById(id);
+        sketches.postValue(sketchRepository.findAll());
+    }
+
+    private Sketch createSketch() {
         Sketch s = new Sketch();
-        s.setId(Objects.requireNonNull(sketches.getValue()).size() + 1);
+        if ( sketches.getValue().size() == 0) {
+            s.setId(1);
+        } else {
+            s.setId(sketches.getValue().get(sketches.getValue().size()-1).getId() + 1);
+        }
         s.setTitle("Sketch " + s.getId());
 
         return s;

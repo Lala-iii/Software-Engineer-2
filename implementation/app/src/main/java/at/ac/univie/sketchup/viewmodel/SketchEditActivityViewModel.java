@@ -26,10 +26,12 @@ public class SketchEditActivityViewModel extends ViewModel {
     private DrawableObject selected;
     private DrawableObject drawableObjToAdd;
 
-    public void init(int id){
+    private SketchRepository sketchRepository;
 
-        SketchRepository sketchRepository = SketchRepository.getInstance();
-        sketch = sketchRepository.findOneById(id);
+    public void init(int id){
+        sketchRepository = SketchRepository.getInstance();
+        sketch = new MutableLiveData<>();
+        sketch.setValue(sketchRepository.findOneById(id));
 
         //todo add exception in case item do not exist
     }
@@ -130,5 +132,16 @@ public class SketchEditActivityViewModel extends ViewModel {
 
     public Layer getByLayerId(int id) {
         return sketch.getValue().getLayersList().get(id);
+    }
+
+    public void storeSketchChanges() {
+        sketchRepository.update(sketch.getValue());
+    }
+
+    public void deleteAllDrawObj() {
+        Sketch s = sketch.getValue();
+        ArrayList<DrawableObject> drawableObjects = new ArrayList<>();
+        s.setDrawableObjects(drawableObjects);
+        sketch.postValue(s);
     }
 }

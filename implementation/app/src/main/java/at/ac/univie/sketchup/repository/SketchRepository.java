@@ -1,56 +1,103 @@
 package at.ac.univie.sketchup.repository;
 
-import androidx.lifecycle.MutableLiveData;
+import android.content.Context;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.util.ArrayList;
-import java.util.List;
 
 import at.ac.univie.sketchup.model.Sketch;
 
 public class SketchRepository {
 
     private static final SketchRepository instance = new SketchRepository();
-    private final ArrayList<Sketch> dataSet = new ArrayList<>();
+    private Context context;
 
-    private SketchRepository(){}
+    private SketchRepository() {}
 
-    public static SketchRepository getInstance(){
+    public static SketchRepository getInstance() {
         return instance;
     }
 
-    // TODO: get data from storage
-    public MutableLiveData<List<Sketch>> findAll() {
-        createSeedData();
-
-        MutableLiveData<List<Sketch>> data = new MutableLiveData<>();
-        data.setValue(dataSet);
-
-        return data;
+    public void setContext(Context context) {
+        this.context = context;
     }
 
-    public MutableLiveData<Sketch> findOneById(int id){
-        MutableLiveData<Sketch> data = new MutableLiveData<>();
-        data.setValue(dataSet.get(id-1));
-
-        return data;
+    public ArrayList<Sketch> findAll() {
+        return loadSketches();
     }
 
-    public void createSketch(Sketch sketch) {
-        dataSet.add(sketch);
+    public Sketch findOneById(int id) {
+        for(Sketch sketch : loadSketches()) {
+            if (sketch.getId() == id) return sketch;
+        }
+        return null; // todo thought not found
     }
 
-    /**
-     * Create seed data for test. TODO Remove and create separate service that can be reused for test
-     */
-    private void createSeedData(){
-        Sketch s1 = new Sketch();
-        s1.setId(1);
-        s1.setTitle("Sketch 1");
-        dataSet.add(s1);
+    public void deleteById(int id) {
+        ArrayList<Sketch> listSketches = loadSketches();
+        listSketches.removeIf(sketch -> sketch.getId() == id);
+        storeSketches(listSketches);
+    }
 
-        Sketch s2 = new Sketch();
-        s2.setId(2);
-        s2.setTitle("Sketch 2");
-        dataSet.add(s2);
+    public void add(Sketch sketch) {
+        ArrayList<Sketch> listSketches = loadSketches();
+        listSketches.add(sketch);
+        storeSketches(listSketches);
+    }
+
+    public void update(Sketch sketch) {
+        ArrayList<Sketch> listSketches = loadSketches();
+        for(int i = 0; i < listSketches.size(); i++) {
+            if (listSketches.get(i).getId() == sketch.getId()) listSketches.set(i, sketch);
+        }
+        storeSketches(listSketches);
+    }
+
+    private void storeSketches(ArrayList<Sketch> sketchesToStore) {
+        File dir = new File(context.getFilesDir(), "mydir");
+        if (!dir.exists()) {
+            dir.mkdir();
+        }
+
+        try {
+            File file = new File(dir, "SketchUp.se2");
+            FileOutputStream fos = new FileOutputStream(file);
+            ObjectOutputStream os = new ObjectOutputStream(fos);
+            os.writeObject(sketchesToStore);
+            os.close();
+            fos.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private ArrayList<Sketch> loadSketches() {
+        ArrayList<Sketch> dataSet = new ArrayList<>();
+        try {
+        File dir = new File(context.getFilesDir(), "mydir");
+        if (dir.exists()) {
+            File file = new File(dir, "SketchUp.se2");
+            if (!file.exists()) return new ArrayList<>();
+            FileInputStream fis = null;
+            fis = new FileInputStream(file);
+            ObjectInputStream is = new ObjectInputStream(fis);
+            dataSet = ((ArrayList<Sketch>) is.readObject());
+            is.close();
+            fis.close();
+        }
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+        return dataSet;
     }
 }
