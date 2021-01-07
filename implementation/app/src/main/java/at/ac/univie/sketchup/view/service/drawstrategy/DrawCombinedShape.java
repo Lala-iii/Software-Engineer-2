@@ -17,8 +17,8 @@ public class DrawCombinedShape implements DrawStrategy, Serializable {
 
     private CombinedShape combinedShape;
 
-    public DrawCombinedShape(DrawableObject drawableObject) {
-        this.combinedShape = new CombinedShape(((CombinedShape)drawableObject).getDrawableObjects());
+    public DrawCombinedShape(DrawableObject drawableObject) throws CloneNotSupportedException {
+        this.combinedShape = (CombinedShape) drawableObject.clone();
     }
 
     @Override
