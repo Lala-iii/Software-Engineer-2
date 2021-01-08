@@ -222,13 +222,13 @@ public class SketchEditActivity extends AppCompatActivity {
                 fabCancel.show();
                 fabDelete.show();
 
-                fabDelete.animate().translationX(-(fabDelete.getCustomSize() + 5 + fabSelector.getCustomSize() + 5 + fabParam.getCustomSize() + 50));
+                fabDelete.animate().translationX(-(fabDelete.getCustomSize() + 5 + fabSelector.getCustomSize() + 5 + fabSelectComShape.getCustomSize() + 5 + fabNewComShape.getCustomSize() + 5 + fabParam.getCustomSize() + 50));
                 fabDelete.animate().translationY(-50);
 
-                fabCancel.animate().translationX(-(fabCancel.getCustomSize() + 5 + fabDelete.getCustomSize() + 5 + fabSelector.getCustomSize() + 5 + fabParam.getCustomSize() + 50));
+                fabCancel.animate().translationX(-(fabCancel.getCustomSize() + 5 + fabDelete.getCustomSize() + 5 + fabSelector.getCustomSize() + 5 + fabSelectComShape.getCustomSize() + 5 + fabNewComShape.getCustomSize() + 5 + fabParam.getCustomSize() + 50));
                 fabCancel.animate().translationY(-50);
 
-                fabConfirm.animate().translationX(-(fabConfirm.getCustomSize() + 5 + fabCancel.getCustomSize() + 5 + fabDelete.getCustomSize() + 5 + fabSelector.getCustomSize() + 5 + fabParam.getCustomSize() + 50));
+                fabConfirm.animate().translationX(-(fabConfirm.getCustomSize() + 5 + fabCancel.getCustomSize() + 5 + fabDelete.getCustomSize() + 5 + fabSelector.getCustomSize() + 5 + fabSelectComShape.getCustomSize() + 5 + fabNewComShape.getCustomSize() + 5 + fabParam.getCustomSize() + 50));
                 fabConfirm.animate().translationY(-50);
             } else {
                 fabConfirm.hide();

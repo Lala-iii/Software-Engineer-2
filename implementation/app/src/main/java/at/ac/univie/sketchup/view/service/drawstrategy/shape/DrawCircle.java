@@ -21,8 +21,8 @@ public class DrawCircle implements DrawStrategy, Serializable {
     private Coordinate end;
     private Coordinate begin;
 
-    public DrawCircle(DrawableObject drawableObject) {
-        this.circle = new Circle(drawableObject.getColor(), drawableObject.getInputSize());
+    public DrawCircle(DrawableObject drawableObject) throws CloneNotSupportedException {
+        this.circle = (Circle) drawableObject.clone();
     }
 
     @Override

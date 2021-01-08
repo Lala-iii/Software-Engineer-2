@@ -15,8 +15,8 @@ public class DrawTextBox implements DrawStrategy, Serializable {
     private final TextBox textBox;
     private Coordinate originalAnchorCoordinate;
 
-    public DrawTextBox(DrawableObject drawableObject) {
-        this.textBox = new TextBox(drawableObject.getColor(), drawableObject.getInputSize(), ((TextBox)drawableObject).getText());
+    public DrawTextBox(DrawableObject drawableObject) throws CloneNotSupportedException {
+        this.textBox = (TextBox) drawableObject.clone();
     }
     @Override
     public boolean drawObject(Canvas canvas) {

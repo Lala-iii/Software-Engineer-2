@@ -20,8 +20,8 @@ public class DrawQuadrangle implements DrawStrategy, Serializable {
     private Coordinate begin;
     private Coordinate end;
 
-    public DrawQuadrangle(DrawableObject drawableObject) {
-        quadrangle = new Quadrangle(drawableObject.getColor(), drawableObject.getInputSize());
+    public DrawQuadrangle(DrawableObject drawableObject) throws CloneNotSupportedException {
+        quadrangle = (Quadrangle) drawableObject.clone();
     }
 
     @Override

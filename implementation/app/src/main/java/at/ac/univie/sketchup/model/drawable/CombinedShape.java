@@ -20,23 +20,19 @@ public class CombinedShape extends DrawableObject {
 
     public CombinedShape(ArrayList<DrawStrategy> shapes) {
         super(Color.BLACK, 70); // todo do we need it???
-        shapes.forEach(selected -> drawableObjects.add(cloneSelected(selected)));
+        shapes.forEach(selected -> {
+            try {
+                drawableObjects.add(cloneSelected(selected));
+            } catch (CloneNotSupportedException e) {
+                e.printStackTrace();
+            }
+        });
     }
-
-
-    /*public void onTouchMove(float x, float y) {
-        Coordinate diff = getDiffForNewCoordinate(x, y);
-
-        drawableObjects.forEach(obj -> setNewCoordinate(obj, diff));
-    }*/
 
     public ArrayList<DrawStrategy> getDrawableObjects() {
         return drawableObjects;
     }
 
-/*    public void setDrawableObjects(ArrayList<DrawStrategy> drawableObjects) {
-        //this.drawableObjects = drawableObjects;
-    }*/
 
     public String getTitle() {
         return title;
@@ -46,61 +42,29 @@ public class CombinedShape extends DrawableObject {
         this.title = title;
     }
 
-    private DrawStrategy cloneSelected(DrawStrategy selectedShape) {
-        if (selectedShape instanceof CombinedShape) {
+    private DrawStrategy cloneSelected(DrawStrategy selectedShape) throws CloneNotSupportedException {
+        if (selectedShape.getDrawableObject() instanceof CombinedShape) {
             DrawStrategy emptyObj = new DrawTextBox(new TextBox());
             emptyObj.getDrawableObject().setAnchorCoordinate(new Coordinate(0, 0));
             return emptyObj; // very bad dirty cheat: replace CombinedShape with empty TextBox to avoid recursion
         }
 
         try {
-            DrawStrategy clonedObj = new DrawService().determineDrawableObject((DrawableObject)selectedShape.getDrawableObject().clone());
+            DrawStrategy clonedObj = new DrawService().determineDrawableObject((DrawableObject) selectedShape.getDrawableObject());
 
             if (clonedObj.getDrawableObject() instanceof Polygon) {
                 ArrayList<Coordinate> coordinates = new ArrayList<>();
-                ((Polygon) clonedObj).getCoordinates().forEach(coordinate -> coordinates.add(new Coordinate(coordinate.getX(), coordinate.getY())));
-                ((Polygon) clonedObj).initializeList();
-                ((Polygon) clonedObj).setCoordinates(coordinates);
+                ((Polygon) clonedObj.getDrawableObject()).getCoordinates().forEach(coordinate -> coordinates.add(new Coordinate(coordinate.getX(), coordinate.getY())));
+                ((Polygon) clonedObj.getDrawableObject()).initializeList();
+                ((Polygon) clonedObj.getDrawableObject()).setCoordinates(coordinates);
             }
 
             return clonedObj;
-        } catch (CloneNotSupportedException e) {
+        } catch (Exception e ) { //CloneNotSupportedException e) {
             e.printStackTrace();
             return null;
         }
     }
-
-/*    private Coordinate getDiffForNewCoordinate(float x, float y) {
-        if (drawableObjects == null || drawableObjects.size() == 0) return null;
-        Coordinate c = new Coordinate(
-                x - drawableObjects.get(0).getDrawableObject().getAnchorCoordinate().getX(),
-                y - drawableObjects.get(0).getDrawableObject().getAnchorCoordinate().getY()
-        );
-
-        return c;
-    }
-
-    private void setNewCoordinate(DrawStrategy obj, Coordinate diff) {
-        float newX;
-        float newY;
-
-        if (obj instanceof DoublePointShape) {
-            newX = ((DoublePointShape) obj).getEndCoordinate().getX() + diff.getX();
-            newY = ((DoublePointShape) obj).getEndCoordinate().getY() + diff.getY();
-            ((DoublePointShape) obj).setEndCoordinate(new Coordinate(newX, newY));
-        }
-
-        if (obj instanceof Polygon) {
-            for (Coordinate c : ((Polygon) obj).getCoordinates()) {
-                c.setX(c.getX() + diff.getX());
-                c.setY(c.getY() + diff.getY());
-            }
-        }
-
-        newX = obj.getDrawableObject().getAnchorCoordinate().getX() + diff.getX();
-        newY = obj.getDrawableObject().getAnchorCoordinate().getY() + diff.getY();
-        obj.getDrawableObject().setAnchorCoordinate(new Coordinate(newX, newY));
-    }*/
 
     @NonNull
     @Override
