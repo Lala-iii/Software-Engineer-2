@@ -6,12 +6,9 @@ import java.util.ArrayList;
 
 import at.ac.univie.sketchup.model.drawable.parameters.Color;
 import at.ac.univie.sketchup.model.drawable.parameters.Coordinate;
-import at.ac.univie.sketchup.model.drawable.shape.DoublePointShape;
 import at.ac.univie.sketchup.model.drawable.shape.Polygon;
-import at.ac.univie.sketchup.model.drawable.textbox.TextBox;
 import at.ac.univie.sketchup.view.service.DrawService;
 import at.ac.univie.sketchup.view.service.drawstrategy.DrawStrategy;
-import at.ac.univie.sketchup.view.service.drawstrategy.DrawTextBox;
 
 public class CombinedShape extends DrawableObject {
 
@@ -20,19 +17,12 @@ public class CombinedShape extends DrawableObject {
 
     public CombinedShape(ArrayList<DrawStrategy> shapes) {
         super(Color.BLACK, 70); // todo do we need it???
-        shapes.forEach(selected -> {
-            try {
-                drawableObjects.add(cloneSelected(selected));
-            } catch (CloneNotSupportedException e) {
-                e.printStackTrace();
-            }
-        });
+        shapes.forEach(selected -> drawableObjects.add(cloneSelected(selected)));
     }
 
     public ArrayList<DrawStrategy> getDrawableObjects() {
         return drawableObjects;
     }
-
 
     public String getTitle() {
         return title;
@@ -42,15 +32,9 @@ public class CombinedShape extends DrawableObject {
         this.title = title;
     }
 
-    private DrawStrategy cloneSelected(DrawStrategy selectedShape) throws CloneNotSupportedException {
-        if (selectedShape.getDrawableObject() instanceof CombinedShape) {
-            DrawStrategy emptyObj = new DrawTextBox(new TextBox());
-            emptyObj.getDrawableObject().setAnchorCoordinate(new Coordinate(0, 0));
-            return emptyObj; // very bad dirty cheat: replace CombinedShape with empty TextBox to avoid recursion
-        }
-
+    private DrawStrategy cloneSelected(DrawStrategy selectedShape) {
         try {
-            DrawStrategy clonedObj = new DrawService().determineDrawableObject((DrawableObject) selectedShape.getDrawableObject());
+            DrawStrategy clonedObj = new DrawService().determineDrawableObject(selectedShape.getDrawableObject());
 
             if (clonedObj.getDrawableObject() instanceof Polygon) {
                 ArrayList<Coordinate> coordinates = new ArrayList<>();
@@ -60,7 +44,7 @@ public class CombinedShape extends DrawableObject {
             }
 
             return clonedObj;
-        } catch (Exception e ) { //CloneNotSupportedException e) {
+        } catch (Exception e ) {
             e.printStackTrace();
             return null;
         }
@@ -68,7 +52,7 @@ public class CombinedShape extends DrawableObject {
 
     @NonNull
     @Override
-    public Object clone() throws CloneNotSupportedException {
+    public Object clone() {
         CombinedShape cloned = new CombinedShape(drawableObjects);
         return cloned;
     }

@@ -65,6 +65,11 @@ public class DrawCombinedShape implements DrawStrategy, Serializable {
             }
         }
 
+        if (obj.getDrawableObject() instanceof CombinedShape) {
+            ((CombinedShape)obj.getDrawableObject()).getDrawableObjects().forEach(selected -> setNewCoordinate(selected, diff));
+            return;
+        }
+
         newX = obj.getDrawableObject().getAnchorCoordinate().getX() + diff.getX();
         newY = obj.getDrawableObject().getAnchorCoordinate().getY() + diff.getY();
         obj.getDrawableObject().setAnchorCoordinate(new Coordinate(newX, newY));
