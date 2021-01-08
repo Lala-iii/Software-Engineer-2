@@ -8,10 +8,8 @@ import java.io.Serializable;
 import at.ac.univie.sketchup.model.drawable.CombinedShape;
 import at.ac.univie.sketchup.model.drawable.DrawableObject;
 import at.ac.univie.sketchup.model.drawable.parameters.Coordinate;
-import at.ac.univie.sketchup.model.drawable.shape.Circle;
 import at.ac.univie.sketchup.model.drawable.shape.DoublePointShape;
 import at.ac.univie.sketchup.model.drawable.shape.Polygon;
-import at.ac.univie.sketchup.view.service.DrawService;
 
 public class DrawCombinedShape implements DrawStrategy, Serializable {
 
