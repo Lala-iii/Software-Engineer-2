@@ -50,7 +50,7 @@ public class CombinedShape extends DrawableObject {
         }
 
         try {
-            DrawStrategy clonedObj = new DrawService().determineDrawableObject((DrawableObject) selectedShape.getDrawableObject().clone());
+            DrawStrategy clonedObj = new DrawService().determineDrawableObject((DrawableObject) selectedShape.getDrawableObject());
 
             if (clonedObj.getDrawableObject() instanceof Polygon) {
                 ArrayList<Coordinate> coordinates = new ArrayList<>();

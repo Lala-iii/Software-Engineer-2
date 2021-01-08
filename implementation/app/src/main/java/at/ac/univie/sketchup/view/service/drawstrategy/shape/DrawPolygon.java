@@ -23,7 +23,7 @@ public class DrawPolygon implements DrawStrategy, Serializable {
     private List<Coordinate> coordinates;
 
     public DrawPolygon(DrawableObject drawableObject) throws CloneNotSupportedException {
-        this.polygon = (Polygon) polygon.clone();
+        this.polygon = (Polygon) drawableObject.clone();
         this.originalCoordinates = new ArrayList<>();
         this.coordinates = new ArrayList<>();
         this.originalCoordinates = new ArrayList<>();

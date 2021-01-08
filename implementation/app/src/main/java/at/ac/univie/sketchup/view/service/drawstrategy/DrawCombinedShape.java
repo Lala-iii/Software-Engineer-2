@@ -37,7 +37,8 @@ public class DrawCombinedShape implements DrawStrategy, Serializable {
 
     @Override
     public void onTouchDown(float x, float y) {
-        this.onTouchMove(x, y);
+        this.combinedShape.setAnchorCoordinate(new Coordinate(x, y));
+
     }
 
     @Override
@@ -51,14 +52,14 @@ public class DrawCombinedShape implements DrawStrategy, Serializable {
         float newX;
         float newY;
 
-        if (obj instanceof DoublePointShape) {
-            newX = ((DoublePointShape) obj).getEndCoordinate().getX() + diff.getX();
-            newY = ((DoublePointShape) obj).getEndCoordinate().getY() + diff.getY();
-            ((DoublePointShape) obj).setEndCoordinate(new Coordinate(newX, newY));
+        if (obj.getDrawableObject() instanceof DoublePointShape) {
+            newX = ((DoublePointShape) obj.getDrawableObject()).getEndCoordinate().getX() + diff.getX();
+            newY = ((DoublePointShape) obj.getDrawableObject()).getEndCoordinate().getY() + diff.getY();
+            ((DoublePointShape) obj.getDrawableObject()).setEndCoordinate(new Coordinate(newX, newY));
         }
 
-        if (obj instanceof Polygon) {
-            for (Coordinate c : ((Polygon) obj).getCoordinates()) {
+        if (obj.getDrawableObject() instanceof Polygon) {
+            for (Coordinate c : ((Polygon) obj.getDrawableObject()).getCoordinates()) {
                 c.setX(c.getX() + diff.getX());
                 c.setY(c.getY() + diff.getY());
             }
