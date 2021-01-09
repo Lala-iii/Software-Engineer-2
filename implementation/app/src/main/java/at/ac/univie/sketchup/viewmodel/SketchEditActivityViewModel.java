@@ -169,7 +169,7 @@ public class SketchEditActivityViewModel extends ViewModel {
         s.clearLayers();
         sketch.postValue(s);
     }
-    public void saveSketchAsJpg(){
-        sketchRepository.update(sketch.getValue());
+    public void saveSketchAs(ArrayList<DrawStrategy> list,String format){
+        sketchRepository.saveCanvas(list,format);
     }
 }
