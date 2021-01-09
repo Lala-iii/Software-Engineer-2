@@ -36,6 +36,8 @@ import at.ac.univie.sketchup.model.drawable.shape.Quadrangle;
 import at.ac.univie.sketchup.model.drawable.shape.Triangle;
 import at.ac.univie.sketchup.model.drawable.textbox.TextBox;
 import at.ac.univie.sketchup.view.service.DrawableObjectFactory;
+import at.ac.univie.sketchup.view.service.dialog.DialogForCombinedShapeTitle;
+import at.ac.univie.sketchup.view.service.dialog.DialogForSelectCombinedShape;
 import at.ac.univie.sketchup.view.service.dialog.DialogForText;
 import at.ac.univie.sketchup.viewmodel.SketchEditActivityViewModel;
 
@@ -75,25 +77,6 @@ public class SketchEditActivity extends AppCompatActivity {
             buttonsLister();
         });
 
-    }
-    
-    private void createDialogForCombinedShapeTitle() {
-        final AlertDialog dialogBuilder = new AlertDialog.Builder(this).create();
-        LayoutInflater inflater = this.getLayoutInflater();
-        View dialogView = inflater.inflate(R.layout.type_text_alert_dialog, null);
-        dialogBuilder.setView(dialogView);
-
-        final EditText editText = dialogView.findViewById(R.id.edt_comment);
-        Button buttonSubmit = dialogView.findViewById(R.id.buttonSubmit);
-
-        buttonSubmit.setOnClickListener(view -> {
-            sketchViewModel.storeNewCombinedShape(editText.getText().toString());
-            dialogBuilder.dismiss();
-        });
-
-        //todo button Cancel
-
-        dialogBuilder.show();
     }
 
     private void createDialogForParam() {
@@ -139,27 +122,6 @@ public class SketchEditActivity extends AppCompatActivity {
         });
 
     }
-
-    private void createDialogForCombinedShapes() {
-        final AlertDialog dialogBuilder = new AlertDialog.Builder(this).create();
-        LayoutInflater inflater = this.getLayoutInflater();
-        View dialogView = inflater.inflate(R.layout.select_cobined_shape_diolog, null);
-        dialogBuilder.setView(dialogView);
-
-        Spinner sp_shape = dialogView.findViewById(R.id.sp_color);
-        sp_shape.setAdapter(new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, sketchViewModel.getCombinedShapeTitles()));
-
-        Button btn_confirm = dialogView.findViewById(R.id.btn_confirm);
-
-        dialogBuilder.show();
-
-        btn_confirm.setOnClickListener(view -> {
-            setSelected((CombinedShape) sp_shape.getSelectedItem());
-
-            dialogBuilder.dismiss();
-        });
-    }
-
 
     private void setViewElements() {
         setContentView(R.layout.activity_sketch_editor);
@@ -332,8 +294,16 @@ public class SketchEditActivity extends AppCompatActivity {
             sketchViewModel.removeDrawableObject();
         });
 
-        fabNewComShape.setOnClickListener(view -> createDialogForCombinedShapeTitle());
-        fabSelectComShape.setOnClickListener(view -> createDialogForCombinedShapes());
+        fabNewComShape.setOnClickListener(view -> {
+            DialogForCombinedShapeTitle dialog = new DialogForCombinedShapeTitle(this, getLayoutInflater(), sketchViewModel);
+            dialog.create();
+        });
+
+        fabSelectComShape.setOnClickListener(view -> {
+            DialogForSelectCombinedShape dialog =
+                    new DialogForSelectCombinedShape(this, getLayoutInflater(), sketchViewModel);
+            dialog.create();
+        });
     }
 
     private void animateButton(FloatingActionButton fab) {

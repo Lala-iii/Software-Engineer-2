@@ -47,7 +47,7 @@ public abstract class DialogTemplate {
     }
 
     public void setSubmitButton() {
-        buttonSubmit = dialogView.findViewById(R.id.buttonSubmit); // todo rename for all
+        buttonSubmit = dialogView.findViewById(R.id.buttonSubmit);
     }
 
     public void setCancelButton() {
