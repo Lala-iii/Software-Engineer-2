@@ -4,7 +4,6 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
-
 import java.util.ArrayList;
 import java.util.Objects;
 
@@ -16,7 +15,6 @@ import at.ac.univie.sketchup.model.drawable.DrawableObject;
 import at.ac.univie.sketchup.model.Sketch;
 import at.ac.univie.sketchup.model.drawable.textbox.TextBox;
 import at.ac.univie.sketchup.repository.SketchRepository;
-import at.ac.univie.sketchup.view.SketchEditActivity;
 import at.ac.univie.sketchup.view.service.DrawService;
 import at.ac.univie.sketchup.view.service.drawstrategy.DrawStrategy;
 
@@ -58,8 +56,6 @@ public class SketchEditActivityViewModel extends ViewModel {
         Objects.requireNonNull(currentSketch).addDrawableObject(this.drawStrategy);
         sketch.postValue(currentSketch);
         this.drawStrategy = null;
-
-        // todo write in storage(?)
     }
 
     public void setTemplate(DrawableObject t) {
@@ -129,7 +125,6 @@ public class SketchEditActivityViewModel extends ViewModel {
         this.drawStrategy.restore();
         this.drawStrategy.getDrawableObject().setSelected(false);
         this.mode.setValue(SketchEditActivityViewModel.SELECTION);
-
     }
 
     public void storeDrawableObjectCoordinates() {
