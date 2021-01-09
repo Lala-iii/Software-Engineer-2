@@ -78,7 +78,15 @@ public class SketchEditActivity extends AppCompatActivity {
             showHideAction();
             buttonsLister();
         });
-        
+
+        Context context = getApplicationContext();
+        CharSequence text = "Long hold the buttons for the explanation";
+        int duration = Toast.LENGTH_LONG;
+
+        Toast toast = Toast.makeText(context, text, duration);
+        toast.setGravity(Gravity.CENTER_HORIZONTAL, 0, 0);
+        toast.show();
+
     }
 
     private void createDialogForText() {
