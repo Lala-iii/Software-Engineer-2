@@ -32,17 +32,17 @@ public class SketchEditActivityViewModel extends ViewModel {
 
 
     private SketchRepository sketchRepository;
-    private List<DrawStrategy> selecteDrawStrategies;
+    private List<DrawStrategy> selectedDrawStrategies;
 
     public void init(int id) {
         this.sketchRepository = SketchRepository.getInstance();
         this.sketch = new MutableLiveData<>();
         this.sketch.setValue(sketchRepository.findOneById(id));
+        //todo add exception in case item do not exist
 
-        this.selecteDrawStrategies = new ArrayList<>();
+        this.selectedDrawStrategies = new ArrayList<>();
         this.mode = new MutableLiveData<>();
         this.drawService = new DrawService();
-        //todo add exception in case item do not exist
     }
 
     public LiveData<Sketch> getSketch() {
@@ -54,13 +54,13 @@ public class SketchEditActivityViewModel extends ViewModel {
     }
 
     public void addSelectedToSketch() {
-        if (template == null || this.selecteDrawStrategies.size() == 0) return;
+        if (template == null || this.selectedDrawStrategies.size() == 0) return;
 
         // Add obj to sketch and thought event for observer
         Sketch currentSketch = this.sketch.getValue();
-        Objects.requireNonNull(currentSketch).addDrawableObject(this.selecteDrawStrategies.get(0));
+        Objects.requireNonNull(currentSketch).addDrawableObject(this.selectedDrawStrategies.get(0));
         this.sketch.postValue(currentSketch);
-        this.selecteDrawStrategies.clear();
+        this.selectedDrawStrategies.clear();
     }
 
     public void setTemplate(DrawableObject t) {
@@ -78,8 +78,8 @@ public class SketchEditActivityViewModel extends ViewModel {
     public void setSizeForSelected(int s) throws IncorrectAttributesException {
         if (this.template != null) {
             this.template.setInputSize(s);
-            if (this.selecteDrawStrategies.size() > 0)
-                this.selecteDrawStrategies.forEach(d -> d.getDrawableObject().setInputSize(s));
+            if (this.selectedDrawStrategies.size() > 0)
+                this.selectedDrawStrategies.forEach(d -> d.getDrawableObject().setInputSize(s));
         } else {
             // Custom ExceptionClass Usage
             throw new IncorrectAttributesException("Select the element first to which size changes should be applied!");
@@ -89,8 +89,8 @@ public class SketchEditActivityViewModel extends ViewModel {
     public void setColorForSelected(Color c) throws IncorrectAttributesException {
         if (this.template != null) {
             this.template.setColor(c);
-            if (this.selecteDrawStrategies.size() > 0)
-                this.selecteDrawStrategies.forEach(d -> d.getDrawableObject().setColor(c));
+            if (this.selectedDrawStrategies.size() > 0)
+                this.selectedDrawStrategies.forEach(d -> d.getDrawableObject().setColor(c));
         } else {
             //Custom ExceptionClass Usage
             throw new IncorrectAttributesException("Select the element first to which color changes should be applied!");
@@ -100,8 +100,8 @@ public class SketchEditActivityViewModel extends ViewModel {
     public void cloneFromTemplate() {
         if (this.template == null) return;
         try {
-            this.selecteDrawStrategies.clear();
-            this.selecteDrawStrategies.add(this.drawService.determineDrawableObject((this.template)));
+            this.selectedDrawStrategies.clear();
+            this.selectedDrawStrategies.add(this.drawService.determineDrawableObject((this.template)));
 
             // May be an issue with cloning Color. Monitor and make deep clone in case
         } catch (CloneNotSupportedException e) {
@@ -119,7 +119,7 @@ public class SketchEditActivityViewModel extends ViewModel {
 
     public void restoreDrawableObjectCoordinates() {
 
-        this.selecteDrawStrategies.forEach(d -> {
+        this.selectedDrawStrategies.forEach(d -> {
             d.restore();
             d.getDrawableObject().setSelected(false);
         });
@@ -139,9 +139,9 @@ public class SketchEditActivityViewModel extends ViewModel {
 
         this.mode.setValue(SketchEditActivityViewModel.SELECTION);
         Sketch currentSketch = this.sketch.getValue();
-        this.selecteDrawStrategies.forEach(d -> Objects.requireNonNull(currentSketch).removeObject(d));
+        this.selectedDrawStrategies.forEach(d -> Objects.requireNonNull(currentSketch).removeObject(d));
         this.sketch.postValue(currentSketch);
-        this.selecteDrawStrategies.clear();
+        this.selectedDrawStrategies.clear();
     }
 
     public void storeNewCombinedShape(String title) {
@@ -173,15 +173,15 @@ public class SketchEditActivityViewModel extends ViewModel {
     }
 
     public void deleteSelectedDrawStrategies() {
-        this.selecteDrawStrategies.clear();
+        this.selectedDrawStrategies.clear();
     }
 
     public void addSelectedDrawStrategy(DrawStrategy d) {
         d.getDrawableObject().setSelected(true);
-        this.selecteDrawStrategies.add(d);
+        this.selectedDrawStrategies.add(d);
     }
 
     public List<DrawStrategy> getSelectedDrawStrategies() {
-        return this.selecteDrawStrategies;
+        return this.selectedDrawStrategies;
     }
 }
