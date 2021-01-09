@@ -14,7 +14,6 @@ import at.ac.univie.sketchup.view.service.drawstrategy.DrawStrategy;
 public class DrawLine implements DrawStrategy, Serializable {
     private Line line;
     private Coordinate begin;
-    private Coordinate end;
     private Coordinate originalAnchorCoordinate;
     private Coordinate originalEndCoordinate;
 
@@ -75,16 +74,17 @@ public class DrawLine implements DrawStrategy, Serializable {
 
     @Override
     public void onEditDown(float x, float y) {
-        this.begin = this.line.getAnchorCoordinate();
-        this.end = this.line.getEndCoordinate();
+        this.begin = new Coordinate(x, y);
     }
 
     @Override
     public void onEditMove(float x, float y) {
         float diffX = (begin.getX() - x) * (-1);
         float diffY = (begin.getY() - y) * (-1);
-        this.line.setAnchorCoordinate(new Coordinate(x, y));
-        this.line.setEndCoordinate(new Coordinate(end.getX() + diffX, end.getY() + diffY));
+        this.line.setAnchorCoordinate(new Coordinate(this.line.getAnchorCoordinate().getX() + diffX, this.line.getAnchorCoordinate().getY() + diffY));
+        this.line.setEndCoordinate(new Coordinate(this.line.getEndCoordinate().getX() + diffX, this.line.getEndCoordinate().getY() + diffY));
+
+        this.begin = new Coordinate(x, y);
     }
 
     @Override

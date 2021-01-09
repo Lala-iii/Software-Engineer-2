@@ -244,6 +244,7 @@ public class SketchEditActivity extends AppCompatActivity {
                 fabDelete.animate().translationX(0);
                 if (mode.equals(SketchEditActivityViewModel.SELECTION))
                     fabSelector.animate().translationY(-50);
+                else fabSelector.animate().translationY(0);
             }
             paintView.postInvalidate();
         });

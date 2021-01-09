@@ -13,12 +13,8 @@ import at.ac.univie.sketchup.view.service.drawstrategy.DrawStrategy;
 
 public class DrawCircle implements DrawStrategy, Serializable {
     private final Circle circle;
-    private Coordinate origin;
-    private float width;
-    private float height;
     private Coordinate originalEndCoordinate;
     private Coordinate originalAnchorCoordinate;
-    private Coordinate end;
     private Coordinate begin;
 
     public DrawCircle(DrawableObject drawableObject) throws CloneNotSupportedException {
@@ -76,16 +72,17 @@ public class DrawCircle implements DrawStrategy, Serializable {
 
     @Override
     public void onEditDown(float x, float y) {
-        this.begin = this.circle.getAnchorCoordinate();
-        this.end = this.circle.getEndCoordinate();
+        this.begin = new Coordinate(x, y);
     }
 
     @Override
     public void onEditMove(float x, float y) {
         float diffX = (begin.getX() - x) * (-1);
         float diffY = (begin.getY() - y) * (-1);
-        this.circle.setAnchorCoordinate(new Coordinate(x, y));
-        this.circle.setEndCoordinate(new Coordinate(end.getX() + diffX, end.getY() + diffY));
+        this.circle.setAnchorCoordinate(new Coordinate(this.circle.getAnchorCoordinate().getX() + diffX, this.circle.getAnchorCoordinate().getY() + diffY));
+        this.circle.setEndCoordinate(new Coordinate(this.circle.getEndCoordinate().getX() + diffX, this.circle.getEndCoordinate().getY() + diffY));
+
+        this.begin = new Coordinate(x, y);
     }
 
     @Override

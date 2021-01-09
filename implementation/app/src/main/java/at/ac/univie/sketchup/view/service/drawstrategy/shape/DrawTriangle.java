@@ -18,7 +18,6 @@ public class DrawTriangle implements DrawStrategy, Serializable {
     private Coordinate originalAnchorCoordinate;
     private Coordinate originalEndCoordinate;
     private Coordinate begin;
-    private Coordinate end;
 
     public DrawTriangle(DrawableObject drawableObject) throws CloneNotSupportedException {
         this.triangle = (Triangle) drawableObject.clone();
@@ -80,16 +79,17 @@ public class DrawTriangle implements DrawStrategy, Serializable {
 
     @Override
     public void onEditDown(float x, float y) {
-        this.begin = this.triangle.getAnchorCoordinate();
-        this.end = this.triangle.getEndCoordinate();
+        this.begin = new Coordinate(x, y);
     }
 
     @Override
     public void onEditMove(float x, float y) {
         float diffX = (begin.getX() - x) * (-1);
         float diffY = (begin.getY() - y) * (-1);
-        this.triangle.setAnchorCoordinate(new Coordinate(x, y));
-        this.triangle.setEndCoordinate(new Coordinate(end.getX() + diffX, end.getY() + diffY));
+        this.triangle.setAnchorCoordinate(new Coordinate(this.triangle.getAnchorCoordinate().getX() + diffX, this.triangle.getAnchorCoordinate().getY() + diffY));
+        this.triangle.setEndCoordinate(new Coordinate(this.triangle.getEndCoordinate().getX() + diffX, this.triangle.getEndCoordinate().getY() + diffY));
+
+        this.begin = new Coordinate(x, y);
     }
 
     @Override

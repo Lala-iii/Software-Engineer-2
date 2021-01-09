@@ -14,6 +14,7 @@ import at.ac.univie.sketchup.model.drawable.textbox.TextBox;
 public class DrawTextBox implements DrawStrategy, Serializable {
     private final TextBox textBox;
     private Coordinate originalAnchorCoordinate;
+    private Coordinate begin;
 
     public DrawTextBox(DrawableObject drawableObject) throws CloneNotSupportedException {
         this.textBox = (TextBox) drawableObject.clone();
@@ -70,12 +71,16 @@ public class DrawTextBox implements DrawStrategy, Serializable {
 
     @Override
     public void onEditDown(float x, float y) {
-        this.textBox.setAnchorCoordinate(new Coordinate(x, y));
+        this.begin = new Coordinate(x, y);
     }
 
     @Override
     public void onEditMove(float x, float y) {
-        this.textBox.setAnchorCoordinate(new Coordinate(x, y));
+        float diffX = (begin.getX() - x) * (-1);
+        float diffY = (begin.getY() - y) * (-1);
+        this.textBox.setAnchorCoordinate(new Coordinate(this.textBox.getAnchorCoordinate().getX() + diffX, this.textBox.getAnchorCoordinate().getY() + diffY));
+
+        this.begin = new Coordinate(x, y);
     }
 
     @Override
