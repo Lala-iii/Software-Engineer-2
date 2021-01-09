@@ -1,8 +1,11 @@
 package at.ac.univie.sketchup.view;
 
 import android.annotation.SuppressLint;
+import android.content.Context;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -13,6 +16,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
@@ -74,7 +78,7 @@ public class SketchEditActivity extends AppCompatActivity {
             showHideAction();
             buttonsLister();
         });
-
+        
     }
 
     private void createDialogForText() {
@@ -200,6 +204,26 @@ public class SketchEditActivity extends AppCompatActivity {
 
         fabSelectComShape = findViewById(R.id.fabCombinedShape);
         fabNewComShape = findViewById(R.id.fabAddCombinedShape);
+
+        if(Build.VERSION.SDK_INT > 25) {
+            fabText.setTooltipText("Add text");
+            fabPlus.setTooltipText("Start painting");
+            fabCircle.setTooltipText("Add circle");
+            fabTriangle.setTooltipText("Add triangle");
+            fabQuadrangle.setTooltipText("Add quadrangle");
+            fabLine.setTooltipText("Add line");
+            fabPolygon.setTooltipText("Add handwriting");
+            fabParam.setTooltipText("Change color or width");
+
+            fabSelector.setTooltipText("Select a shape by snipping it");
+            fabConfirm.setTooltipText("Confirm the changes");;
+            fabCancel.setTooltipText("Cancel the changes");
+            fabDelete.setTooltipText("Delete the shape");
+
+            fabSelectComShape.setTooltipText("Select the custom shape");
+            fabNewComShape.setTooltipText("Add the custom shape");;
+
+        }
     }
 
     private void setViewModel() {
