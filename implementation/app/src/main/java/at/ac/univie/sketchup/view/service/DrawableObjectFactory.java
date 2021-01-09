@@ -8,7 +8,7 @@ import at.ac.univie.sketchup.model.drawable.shape.Quadrangle;
 import at.ac.univie.sketchup.model.drawable.shape.Triangle;
 import at.ac.univie.sketchup.model.drawable.textbox.TextBox;
 
-public class DrawableObjectFactory {
+public class DrawableObjectFactory extends DrawableObjectAbstractFactory{
     public DrawableObject getDrawableObject(Class c) {
         if (c == Line.class) return new Line();
         else if (c == Circle.class) return new Circle();

@@ -35,6 +35,7 @@ import at.ac.univie.sketchup.model.drawable.shape.Polygon;
 import at.ac.univie.sketchup.model.drawable.shape.Quadrangle;
 import at.ac.univie.sketchup.model.drawable.shape.Triangle;
 import at.ac.univie.sketchup.model.drawable.textbox.TextBox;
+import at.ac.univie.sketchup.view.service.DrawableObjectAbstractFactory;
 import at.ac.univie.sketchup.view.service.DrawableObjectFactory;
 import at.ac.univie.sketchup.viewmodel.SketchEditActivityViewModel;
 
@@ -48,7 +49,7 @@ public class SketchEditActivity extends AppCompatActivity {
     private boolean isButtonsHide = true;
     private SketchEditActivityViewModel  sketchViewModel;
     private Intent intent;
-    private DrawableObjectFactory drawableObjectFactory;
+    private DrawableObjectAbstractFactory drawableObjectFactory;
 
     private boolean isChecked = true;
 
