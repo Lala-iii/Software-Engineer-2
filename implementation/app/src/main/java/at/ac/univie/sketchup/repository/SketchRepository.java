@@ -1,6 +1,7 @@
 package at.ac.univie.sketchup.repository;
 
 import android.content.Context;
+import android.content.ContextWrapper;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -57,8 +58,26 @@ public class SketchRepository {
             if (listSketches.get(i).getId() == sketch.getId()) listSketches.set(i, sketch);
         }
         storeSketches(listSketches);
+        saveAsJpg(listSketches);
     }
+    public void saveAsJpg(ArrayList<Sketch> sketchesToSave) {
+        try{
+            ContextWrapper cw = new ContextWrapper(this.context);
+            // path to /data/data/yourapp/app_data/imageDir
+            File directory = cw.getDir("imageDir", Context.MODE_PRIVATE);
+            // Create imageDir
+            File mypath=new File(directory,"profile2.jpg");
 
+            FileOutputStream fos = new FileOutputStream(mypath);
+            ObjectOutputStream os = new ObjectOutputStream(fos);
+            os.writeObject(sketchesToSave.get(sketchesToSave.size()-1));
+            os.close();
+            fos.close();
+        }
+        catch(Exception e){
+            e.printStackTrace();
+        }
+    }
     private void storeSketches(ArrayList<Sketch> sketchesToStore) {
         File dir = new File(context.getFilesDir(), "sketchup");
         if (!dir.exists()) {
