@@ -97,7 +97,9 @@ public class SketchRepository {
             if(format.equals("JPEG")) {
                 saveAsJpg(list, fos);
             }else
+            {
                 saveAsPng(list,fos);
+            }
         } catch (FileNotFoundException fileNotFoundException) {
             fileNotFoundException.printStackTrace();
         }

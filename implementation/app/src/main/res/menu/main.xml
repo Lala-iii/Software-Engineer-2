@@ -30,16 +30,11 @@
         android:title="Delete"
         android:visible="true" />
 
+
     <item
         android:id="@+id/save"
-        android:enabled="true"
         android:icon="@android:drawable/ic_menu_save"
-        android:title="Save"
-        android:visible="true" />
-    <item
-        android:id="@+id/save_as_jpg"
-        android:icon="@android:drawable/ic_menu_save"
-        android:title="save_JPG"
+        android:title="save"
         android:visible="true"
         app:showAsAction="always" />
     <item
