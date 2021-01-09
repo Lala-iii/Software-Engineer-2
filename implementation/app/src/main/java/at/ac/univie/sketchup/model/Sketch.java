@@ -40,6 +40,11 @@ public class Sketch implements Serializable,Container {
         return drawableObjects;
     }
 
+    public void removeObject(DrawStrategy drawStrategy) {
+        for (Layer l : layersList)
+            l.getDrawableObjects().removeIf(ds -> ds == drawStrategy);
+    }
+
     public void clearLayers() {
         layersList = new ArrayList<>();
         create3Layers();

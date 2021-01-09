@@ -5,14 +5,15 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 import at.ac.univie.sketchup.exception.IncorrectAttributesException;
 import at.ac.univie.sketchup.model.Layer;
-import at.ac.univie.sketchup.model.drawable.CombinedShape;
-import at.ac.univie.sketchup.model.drawable.parameters.Color;
-import at.ac.univie.sketchup.model.drawable.DrawableObject;
 import at.ac.univie.sketchup.model.Sketch;
+import at.ac.univie.sketchup.model.drawable.CombinedShape;
+import at.ac.univie.sketchup.model.drawable.DrawableObject;
+import at.ac.univie.sketchup.model.drawable.parameters.Color;
 import at.ac.univie.sketchup.model.drawable.textbox.TextBox;
 import at.ac.univie.sketchup.repository.SketchRepository;
 import at.ac.univie.sketchup.view.service.DrawService;
@@ -25,37 +26,41 @@ public class SketchEditActivityViewModel extends ViewModel {
 
     private MutableLiveData<Sketch> sketch;
     private DrawableObject template;
-    private DrawStrategy drawStrategy;
+    //private DrawStrategy drawStrategy;
     private MutableLiveData<Integer> mode;
+    private DrawService drawService;
 
 
     private SketchRepository sketchRepository;
+    private List<DrawStrategy> selectedDrawStrategies;
 
-    public void init(int id){
-        sketchRepository = SketchRepository.getInstance();
-        sketch = new MutableLiveData<>();
-        sketch.setValue(sketchRepository.findOneById(id));
-
-                    mode = new MutableLiveData<>();
+    public void init(int id) {
+        this.sketchRepository = SketchRepository.getInstance();
+        this.sketch = new MutableLiveData<>();
+        this.sketch.setValue(sketchRepository.findOneById(id));
         //todo add exception in case item do not exist
+
+        this.selectedDrawStrategies = new ArrayList<>();
+        this.mode = new MutableLiveData<>();
+        this.drawService = new DrawService();
     }
 
     public LiveData<Sketch> getSketch() {
-        return sketch;
+        return this.sketch;
     }
 
-    public ArrayList<DrawStrategy> getObjectsToDraw() {
-        return Objects.requireNonNull(sketch.getValue()).getDrawableObjects();
+    public ArrayList<DrawStrategy> getDrawStrategies() {
+        return Objects.requireNonNull(this.sketch.getValue()).getDrawableObjects();
     }
 
     public void addSelectedToSketch() {
-        if (template == null || this.drawStrategy == null) return;
+        if (template == null || this.selectedDrawStrategies.size() == 0) return;
 
         // Add obj to sketch and thought event for observer
-        Sketch currentSketch = sketch.getValue();
-        Objects.requireNonNull(currentSketch).addDrawableObject(this.drawStrategy);
-        sketch.postValue(currentSketch);
-        this.drawStrategy = null;
+        Sketch currentSketch = this.sketch.getValue();
+        Objects.requireNonNull(currentSketch).addDrawableObject(this.selectedDrawStrategies.get(0));
+        this.sketch.postValue(currentSketch);
+        this.selectedDrawStrategies.clear();
     }
 
     public void setTemplate(DrawableObject t) {
@@ -73,8 +78,8 @@ public class SketchEditActivityViewModel extends ViewModel {
     public void setSizeForSelected(int s) throws IncorrectAttributesException {
         if (this.template != null) {
             this.template.setInputSize(s);
-            if (this.drawStrategy != null)
-                this.drawStrategy.getDrawableObject().setInputSize(s);
+            if (this.selectedDrawStrategies.size() > 0)
+                this.selectedDrawStrategies.forEach(d -> d.getDrawableObject().setInputSize(s));
         } else {
             // Custom ExceptionClass Usage
             throw new IncorrectAttributesException("Select the element first to which size changes should be applied!");
@@ -84,32 +89,24 @@ public class SketchEditActivityViewModel extends ViewModel {
     public void setColorForSelected(Color c) throws IncorrectAttributesException {
         if (this.template != null) {
             this.template.setColor(c);
-            if (this.drawStrategy != null)
-                this.drawStrategy.getDrawableObject().setColor(c);
+            if (this.selectedDrawStrategies.size() > 0)
+                this.selectedDrawStrategies.forEach(d -> d.getDrawableObject().setColor(c));
         } else {
             //Custom ExceptionClass Usage
             throw new IncorrectAttributesException("Select the element first to which color changes should be applied!");
         }
     }
 
-    public void cloneToNew() {
+    public void cloneFromTemplate() {
         if (this.template == null) return;
         try {
-
-            this.drawStrategy = new DrawService().determineDrawableObject((this.template));
+            this.selectedDrawStrategies.clear();
+            this.selectedDrawStrategies.add(this.drawService.determineDrawableObject((this.template)));
 
             // May be an issue with cloning Color. Monitor and make deep clone in case
         } catch (CloneNotSupportedException e) {
             e.printStackTrace();
         }
-    }
-
-    public DrawStrategy getDrawStrategy() {
-        return this.drawStrategy;
-    }
-
-    public void setDrawStrategy(DrawStrategy drawStrategy) {
-        this.drawStrategy = drawStrategy;
     }
 
     public void setMode(Integer mode) {
@@ -121,52 +118,70 @@ public class SketchEditActivityViewModel extends ViewModel {
     }
 
     public void restoreDrawableObjectCoordinates() {
-        if (this.drawStrategy == null) return;
-        this.drawStrategy.restore();
-        this.drawStrategy.getDrawableObject().setSelected(false);
+
+        this.selectedDrawStrategies.forEach(d -> {
+            d.restore();
+            d.getDrawableObject().setSelected(false);
+        });
         this.mode.setValue(SketchEditActivityViewModel.SELECTION);
     }
 
     public void storeDrawableObjectCoordinates() {
-        this.drawStrategy.store();
-        this.drawStrategy.getDrawableObject().setSelected(false);
+        this.getSelectedDrawStrategies().forEach(d -> {
+            d.store();
+            d.getDrawableObject().setSelected(false);
+        });
         this.mode.setValue(SketchEditActivityViewModel.SELECTION);
     }
 
     public void removeDrawableObject() {
-        if (this.drawStrategy == null) return;
         if (this.sketch.getValue().getDrawableObjects() == null) return;
 
         this.mode.setValue(SketchEditActivityViewModel.SELECTION);
-        this.sketch.getValue().getDrawableObjects().remove(this.drawStrategy);
-        this.drawStrategy = null;
+        Sketch currentSketch = this.sketch.getValue();
+        this.selectedDrawStrategies.forEach(d -> Objects.requireNonNull(currentSketch).removeObject(d));
+        this.sketch.postValue(currentSketch);
+        this.selectedDrawStrategies.clear();
     }
 
     public void storeNewCombinedShape(String title) {
-        CombinedShape cs = new CombinedShape(sketch.getValue().getDrawableObjects());
+        CombinedShape cs = new CombinedShape(this.sketch.getValue().getDrawableObjects());
         cs.setTitle(title);
         sketch.getValue().addCombinedShape(cs);
     }
 
     public CombinedShape getCombinedShapeById(int id) {
-        return sketch.getValue().getCreatedCombinedShapes().get(id);
+        return this.sketch.getValue().getCreatedCombinedShapes().get(id);
     }
 
-    public ArrayList getCombinedShapeTitles() {
-        return sketch.getValue().getCreatedCombinedShapes();
+    public List<CombinedShape> getCombinedShapeTitles() {
+        return this.sketch.getValue().getCreatedCombinedShapes();
     }
 
     public Layer getByLayerId(int id) {
-        return sketch.getValue().getLayersList().get(id);
+        return this.sketch.getValue().getLayersList().get(id);
     }
 
     public void storeSketchChanges() {
-        sketchRepository.update(sketch.getValue());
+        this.sketchRepository.update(this.sketch.getValue());
     }
 
     public void deleteAllDrawObj() {
-        Sketch s = sketch.getValue();
+        Sketch s = this.sketch.getValue();
         s.clearLayers();
-        sketch.postValue(s);
+        this.sketch.postValue(s);
+    }
+
+    public void deleteSelectedDrawStrategies() {
+        this.selectedDrawStrategies.clear();
+    }
+
+    public void addSelectedDrawStrategy(DrawStrategy d) {
+        d.getDrawableObject().setSelected(true);
+        this.selectedDrawStrategies.add(d);
+    }
+
+    public List<DrawStrategy> getSelectedDrawStrategies() {
+        return this.selectedDrawStrategies;
     }
 }

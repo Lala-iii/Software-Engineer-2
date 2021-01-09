@@ -18,7 +18,6 @@ public class DrawQuadrangle implements DrawStrategy, Serializable {
     private Coordinate originalAnchorCoordinate;
     private Coordinate originalEndCoordinate;
     private Coordinate begin;
-    private Coordinate end;
 
     public DrawQuadrangle(DrawableObject drawableObject) throws CloneNotSupportedException {
         quadrangle = (Quadrangle) drawableObject.clone();
@@ -79,16 +78,17 @@ public class DrawQuadrangle implements DrawStrategy, Serializable {
 
     @Override
     public void onEditDown(float x, float y) {
-        this.begin = this.quadrangle.getAnchorCoordinate();
-        this.end = this.quadrangle.getEndCoordinate();
+        this.begin = new Coordinate(x, y);
     }
 
     @Override
     public void onEditMove(float x, float y) {
         float diffX = (begin.getX() - x) * (-1);
         float diffY = (begin.getY() - y) * (-1);
-        this.quadrangle.setAnchorCoordinate(new Coordinate(x, y));
-        this.quadrangle.setEndCoordinate(new Coordinate(end.getX() + diffX, end.getY() + diffY));
+        this.quadrangle.setAnchorCoordinate(new Coordinate(this.quadrangle.getAnchorCoordinate().getX() + diffX, this.quadrangle.getAnchorCoordinate().getY() + diffY));
+        this.quadrangle.setEndCoordinate(new Coordinate(this.quadrangle.getEndCoordinate().getX() + diffX, this.quadrangle.getEndCoordinate().getY() + diffY));
+
+        this.begin = new Coordinate(x, y);
     }
 
     @Override
