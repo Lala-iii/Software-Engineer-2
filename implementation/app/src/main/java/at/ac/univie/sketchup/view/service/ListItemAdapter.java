@@ -1,4 +1,4 @@
-package at.ac.univie.sketchup.view;
+package at.ac.univie.sketchup.view.service;
 
 
 import android.content.Context;
@@ -17,6 +17,7 @@ import java.util.List;
 
 import at.ac.univie.sketchup.R;
 import at.ac.univie.sketchup.model.Sketch;
+import at.ac.univie.sketchup.view.SketchEditActivity;
 import at.ac.univie.sketchup.viewmodel.MainActivityViewModel;
 
 public class ListItemAdapter extends BaseAdapter {
