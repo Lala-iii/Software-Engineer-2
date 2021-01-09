@@ -61,8 +61,6 @@ public class SketchEditActivityViewModel extends ViewModel {
         Objects.requireNonNull(currentSketch).addDrawableObject(this.selecteDrawStrategies.get(0));
         this.sketch.postValue(currentSketch);
         this.selecteDrawStrategies.clear();
-
-        // todo write in storage(?)
     }
 
     public void setTemplate(DrawableObject t) {
@@ -111,10 +109,6 @@ public class SketchEditActivityViewModel extends ViewModel {
         }
     }
 
-    /*public DrawStrategy getDrawStrategy() {
-        return this.drawStrategy;
-    }*/
-
     public void setMode(Integer mode) {
         this.mode.setValue(mode);
     }
@@ -124,15 +118,12 @@ public class SketchEditActivityViewModel extends ViewModel {
     }
 
     public void restoreDrawableObjectCoordinates() {
-        //if (this.drawStrategy == null) return;
-       // this.drawStrategy.restore();
-        //this.drawStrategy.getDrawableObject().setSelected(false);
+
         this.selecteDrawStrategies.forEach(d -> {
             d.restore();
             d.getDrawableObject().setSelected(false);
         });
         this.mode.setValue(SketchEditActivityViewModel.SELECTION);
-
     }
 
     public void storeDrawableObjectCoordinates() {
@@ -144,15 +135,12 @@ public class SketchEditActivityViewModel extends ViewModel {
     }
 
     public void removeDrawableObject() {
-        //if (this.drawStrategy == null) return;
         if (this.sketch.getValue().getDrawableObjects() == null) return;
-
 
         this.mode.setValue(SketchEditActivityViewModel.SELECTION);
         Sketch currentSketch = this.sketch.getValue();
         this.selecteDrawStrategies.forEach(d -> Objects.requireNonNull(currentSketch).removeObject(d));
         this.sketch.postValue(currentSketch);
-        //this.drawStrategy = null;
         this.selecteDrawStrategies.clear();
     }
 
