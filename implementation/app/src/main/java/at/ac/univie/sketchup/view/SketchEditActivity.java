@@ -36,6 +36,7 @@ import at.ac.univie.sketchup.model.drawable.shape.Quadrangle;
 import at.ac.univie.sketchup.model.drawable.shape.Triangle;
 import at.ac.univie.sketchup.model.drawable.textbox.TextBox;
 import at.ac.univie.sketchup.view.service.DrawableObjectFactory;
+import at.ac.univie.sketchup.view.service.dialog.DialogForText;
 import at.ac.univie.sketchup.viewmodel.SketchEditActivityViewModel;
 
 public class SketchEditActivity extends AppCompatActivity {
@@ -75,26 +76,7 @@ public class SketchEditActivity extends AppCompatActivity {
         });
 
     }
-
-    private void createDialogForText() {
-        final AlertDialog dialogBuilder = new AlertDialog.Builder(this).create();
-        LayoutInflater inflater = this.getLayoutInflater();
-        View dialogView = inflater.inflate(R.layout.type_text_alert_dialog, null);
-        dialogBuilder.setView(dialogView);
-
-        final EditText editText = dialogView.findViewById(R.id.edt_comment);
-        Button buttonSubmit = dialogView.findViewById(R.id.buttonSubmit);
-
-        buttonSubmit.setOnClickListener(view -> {
-            sketchViewModel.setTextForSelected(editText.getText().toString());
-            dialogBuilder.dismiss();
-        });
-
-        //todo button Cancel
-
-        dialogBuilder.show();
-    }
-
+    
     private void createDialogForCombinedShapeTitle() {
         final AlertDialog dialogBuilder = new AlertDialog.Builder(this).create();
         LayoutInflater inflater = this.getLayoutInflater();
@@ -300,7 +282,8 @@ public class SketchEditActivity extends AppCompatActivity {
         fabText.setOnClickListener(view -> {
             setSelected(drawableObjectFactory.getDrawableObject(TextBox.class));
             animateButton((FloatingActionButton) view);
-            createDialogForText();
+            DialogForText dialog = new DialogForText(this, getLayoutInflater(), sketchViewModel);
+            dialog.create();
         });
 
         fabCircle.setOnClickListener(view -> {

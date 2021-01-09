@@ -11,6 +11,7 @@ import android.widget.ListView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import at.ac.univie.sketchup.R;
+import at.ac.univie.sketchup.view.service.ListItemAdapter;
 import at.ac.univie.sketchup.viewmodel.MainActivityViewModel;
 
 public class MainActivity extends AppCompatActivity {
