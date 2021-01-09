@@ -37,6 +37,7 @@ import at.ac.univie.sketchup.model.drawable.shape.Triangle;
 import at.ac.univie.sketchup.model.drawable.textbox.TextBox;
 import at.ac.univie.sketchup.view.service.DrawableObjectFactory;
 import at.ac.univie.sketchup.view.service.dialog.DialogForCombinedShapeTitle;
+import at.ac.univie.sketchup.view.service.dialog.DialogForParam;
 import at.ac.univie.sketchup.view.service.dialog.DialogForSelectCombinedShape;
 import at.ac.univie.sketchup.view.service.dialog.DialogForText;
 import at.ac.univie.sketchup.viewmodel.SketchEditActivityViewModel;
@@ -75,50 +76,6 @@ public class SketchEditActivity extends AppCompatActivity {
         fabPlus.setOnClickListener(view -> {
             showHideAction();
             buttonsLister();
-        });
-
-    }
-
-    private void createDialogForParam() {
-        final AlertDialog dialogBuilder = new AlertDialog.Builder(this).create();
-        LayoutInflater inflater = this.getLayoutInflater();
-        View dialogView = inflater.inflate(R.layout.input_dialog, null);
-        dialogBuilder.setView(dialogView);
-
-        Spinner sp_color = dialogView.findViewById(R.id.sp_color);
-        sp_color.setAdapter(new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, Color.values()));
-
-        final EditText et_strokeWidth = dialogView.findViewById(R.id.et_strokeWidth);
-
-        Button btn_confirm = dialogView.findViewById(R.id.btn_confirm);
-
-        dialogBuilder.show();
-
-        btn_confirm.setOnClickListener(view -> {
-
-            try {
-                if (et_strokeWidth.getText().toString().matches("^[0-9]+$"))
-                    sketchViewModel.setSizeForSelected(Integer.parseInt(et_strokeWidth.getText().toString()));
-                sketchViewModel.setColorForSelected(((Color) sp_color.getSelectedItem()));
-            } catch (IncorrectAttributesException e) {
-                final AlertDialog dialogBuilder2 = new AlertDialog.Builder(this).create();
-                LayoutInflater inflater2 = this.getLayoutInflater();
-                View dialogView2 = inflater2.inflate(R.layout.error_alert_dialog, null);
-                dialogBuilder2.setView(dialogView2);
-
-                TextView error_txt = dialogView2.findViewById(R.id.error_message);
-
-                error_txt.setText(e.getMessage());
-
-                dialogBuilder2.show();
-
-                Button btn_close = dialogView2.findViewById(R.id.btn_close);
-
-                btn_close.setOnClickListener(v -> dialogBuilder2.dismiss());
-
-                e.printStackTrace();
-            }
-            dialogBuilder.dismiss();
         });
 
     }
@@ -279,7 +236,10 @@ public class SketchEditActivity extends AppCompatActivity {
             animateButton((FloatingActionButton) view);
         });
 
-        fabParam.setOnClickListener(view -> createDialogForParam());
+        fabParam.setOnClickListener(view -> {
+            DialogForParam dialog = new DialogForParam(this, getLayoutInflater(), sketchViewModel);
+            dialog.create();
+        });
 
         fabConfirm.setOnClickListener(view -> {
             sketchViewModel.storeDrawableObjectCoordinates();
