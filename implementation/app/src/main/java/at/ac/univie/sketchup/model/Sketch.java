@@ -4,15 +4,15 @@ package at.ac.univie.sketchup.model;
 import java.io.Serializable;
 
 import java.util.ArrayList;
-
+import at.ac.univie.sketchup.model.Iterator;
 import at.ac.univie.sketchup.model.drawable.CombinedShape;
 import at.ac.univie.sketchup.view.service.drawstrategy.DrawStrategy;
 
-public class Sketch implements Serializable {
+public class Sketch implements Serializable,Container {
 
     private int id;
     private String title;
-
+    private int index;
     private ArrayList<Layer> layersList = new ArrayList<>();
     private ArrayList<CombinedShape> createdCombinedShapes = new ArrayList<>();
 
@@ -79,11 +79,18 @@ public class Sketch implements Serializable {
     public void addDrawableObject(DrawStrategy object) {
         Layer lastVisible = null;
         Layer layerZero = new Layer(true);
+         LayerIterator layerIterator = (LayerIterator) getIterator();
+        while(layerIterator.hasNext()){
+            Layer l= (Layer) layerIterator.next();
+            if( l.getVisibility()) {
 
-        for (Layer l : layersList) {
+                lastVisible=l;
+            }
+        }
+       /* for (Layer l : layersList) {
             if (l.getVisibility()) lastVisible = l;
         }
-
+*/
         if(lastVisible != null)
             lastVisible.addDrawableObject(object);
         else
@@ -103,5 +110,14 @@ public class Sketch implements Serializable {
         layersList.add(l1);
         layersList.add(l2);
         layersList.add(l3);
+    }
+
+
+
+
+
+    @Override
+    public Iterator getIterator() {
+        return new LayerIterator(layersList);
     }
 }
