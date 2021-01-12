@@ -1,11 +1,24 @@
 package at.ac.univie.sketchup.view;
 
+import android.annotation.SuppressLint;
+import android.content.Context;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
+import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.Spinner;
+import android.widget.TextView;
+import android.widget.Toast;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
 
@@ -23,6 +36,7 @@ import at.ac.univie.sketchup.model.drawable.shape.Polygon;
 import at.ac.univie.sketchup.model.drawable.shape.Quadrangle;
 import at.ac.univie.sketchup.model.drawable.shape.Triangle;
 import at.ac.univie.sketchup.model.drawable.textbox.TextBox;
+import at.ac.univie.sketchup.view.service.DrawableObjectAbstractFactory;
 import at.ac.univie.sketchup.view.service.DrawableObjectFactory;
 import at.ac.univie.sketchup.view.service.dialog.DialogForCombinedShapeTitle;
 import at.ac.univie.sketchup.view.service.dialog.DialogForParam;
@@ -40,7 +54,7 @@ public class SketchEditActivity extends AppCompatActivity {
     private boolean isButtonsHide = true;
     private SketchEditActivityViewModel sketchViewModel;
     private Intent intent;
-    private DrawableObjectFactory drawableObjectFactory;
+    private DrawableObjectAbstractFactory drawableObjectFactory;
 
     private boolean isChecked = true;
 
@@ -68,6 +82,14 @@ public class SketchEditActivity extends AppCompatActivity {
             buttonsLister();
         });
 
+        Context context = getApplicationContext();
+        CharSequence text = "Long hold the buttons for the explanation";
+        int duration = Toast.LENGTH_LONG;
+
+        Toast toast = Toast.makeText(context, text, duration);
+        toast.setGravity(Gravity.CENTER_HORIZONTAL, 0, 0);
+        toast.show();
+
     }
 
     private void setViewElements() {
@@ -91,6 +113,26 @@ public class SketchEditActivity extends AppCompatActivity {
 
         fabSelectComShape = findViewById(R.id.fabCombinedShape);
         fabNewComShape = findViewById(R.id.fabAddCombinedShape);
+
+        if(Build.VERSION.SDK_INT > 25) {
+            fabText.setTooltipText("Add text");
+            fabPlus.setTooltipText("Start painting");
+            fabCircle.setTooltipText("Add circle");
+            fabTriangle.setTooltipText("Add triangle");
+            fabQuadrangle.setTooltipText("Add quadrangle");
+            fabLine.setTooltipText("Add line");
+            fabPolygon.setTooltipText("Add handwriting");
+            fabParam.setTooltipText("Change color or width");
+
+            fabSelector.setTooltipText("Select a shape by snipping it");
+            fabConfirm.setTooltipText("Confirm the changes");;
+            fabCancel.setTooltipText("Cancel the changes");
+            fabDelete.setTooltipText("Delete the shape");
+
+            fabSelectComShape.setTooltipText("Select the custom shape");
+            fabNewComShape.setTooltipText("Add the custom shape");;
+
+        }
     }
 
     private void setViewModel() {
@@ -307,6 +349,12 @@ public class SketchEditActivity extends AppCompatActivity {
                 sketchViewModel.deleteAllDrawObj(); //clear Sketch
             case R.id.save:
                 sketchViewModel.storeSketchChanges(); //save all new changes on Sketch
+            //case R.id.save_as_jpg:
+               // sketchViewModel.saveSketchAs(sketchViewModel.getObjectsToDraw(),"jpg");
+            case R.id.saveJPEG:
+                sketchViewModel.saveSketchAs(sketchViewModel.getObjectsToDraw(),"JPEG");
+            case R.id.savePNG:
+                sketchViewModel.saveSketchAs(sketchViewModel.getObjectsToDraw(),"PNG");
             default:
                 return false;
         }

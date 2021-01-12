@@ -193,4 +193,7 @@ public class SketchEditActivityViewModel extends ViewModel {
     public ArrayList<DrawStrategy> getSelectedDrawStrategies() {
         return this.selectedDrawStrategies;
     }
+    public void saveSketchAs(ArrayList<DrawStrategy> list,String format){
+        sketchRepository.saveCanvas(list,format);
+    }
 }

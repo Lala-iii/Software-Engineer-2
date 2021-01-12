@@ -30,12 +30,19 @@
         android:title="Delete"
         android:visible="true" />
 
+
     <item
         android:id="@+id/save"
-        android:enabled="true"
         android:icon="@android:drawable/ic_menu_save"
-        android:title="Save"
-        android:visible="true" />
+        android:title="save"
+        android:visible="true"
+        app:showAsAction="always" />
+    <item
+        android:id="@+id/savePNG"
+        android:title="Save as PNG" />
+    <item
+        android:id="@+id/saveJPEG"
+        android:title="Save as JPEG" />
 
 
 </menu>
