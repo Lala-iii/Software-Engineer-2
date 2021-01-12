@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.ContextWrapper;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.view.View;
 import android.widget.LinearLayout;
 
@@ -69,8 +70,10 @@ public class SketchRepository {
     }
     private void saveAsJpg(ArrayList<DrawStrategy> list,FileOutputStream fos){
         Bitmap bitmap = Bitmap.createBitmap(1080,1920,Bitmap.Config.ARGB_8888);
+
         Canvas canvas = new Canvas(bitmap);
         View view = new View(context);
+        canvas.drawColor(Color.WHITE);
         list.forEach(d->d.drawObject(canvas));
         view.draw(canvas);
         bitmap.compress(Bitmap.CompressFormat.JPEG,100,fos);
@@ -92,7 +95,8 @@ public class SketchRepository {
             dir.mkdir();
         }
         try{
-            File file= new File(dir,"SketchUp."+format);
+            String filename = "Sketch" + System.currentTimeMillis();
+            File file= new File(dir,filename+"."+format);
             FileOutputStream fos= new FileOutputStream(file);
             if(format.equals("JPEG")) {
                 saveAsJpg(list, fos);
