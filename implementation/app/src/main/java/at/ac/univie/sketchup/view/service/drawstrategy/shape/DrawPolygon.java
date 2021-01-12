@@ -20,12 +20,9 @@ public class DrawPolygon implements DrawStrategy, Serializable {
     private List<Coordinate> originalCoordinates;
 
     private Coordinate begin;
-    //private List<Coordinate> coordinates;
 
     public DrawPolygon(DrawableObject drawableObject) throws CloneNotSupportedException {
         this.polygon = (Polygon) drawableObject.clone();
-        this.originalCoordinates = new ArrayList<>();
-        //this.coordinates = new ArrayList<>();
         this.originalCoordinates = new ArrayList<>();
     }
 
@@ -35,7 +32,6 @@ public class DrawPolygon implements DrawStrategy, Serializable {
         path.moveTo(this.polygon.getAnchorCoordinate().getX(), this.polygon.getAnchorCoordinate().getY());
         for (Coordinate c : this.polygon.getCoordinates())
             path.lineTo(c.getX(), c.getY());
-        //path.close();
 
         canvas.drawPath(path, setPaint());
         return true;
@@ -78,7 +74,7 @@ public class DrawPolygon implements DrawStrategy, Serializable {
     public void onTouchDown(float x, float y) {
         this.polygon.initializeList();
         this.polygon.setAnchorCoordinate(new Coordinate(x, y));
-        this.originalAnchorCoordinate = this.polygon.getAnchorCoordinate();
+        this.originalAnchorCoordinate = new Coordinate(x, y);
     }
 
     @Override
@@ -90,7 +86,6 @@ public class DrawPolygon implements DrawStrategy, Serializable {
     @Override
     public void onEditDown(float x, float y) {
         this.begin = new Coordinate(x, y);
-        //this.coordinates = this.polygon.getCoordinates();
     }
 
     @Override
@@ -98,11 +93,9 @@ public class DrawPolygon implements DrawStrategy, Serializable {
         float diffX = (begin.getX() - x) *(-1);
         float diffY = (begin.getY() - y) *(-1);
         this.polygon.setAnchorCoordinate(new Coordinate(this.polygon.getAnchorCoordinate().getX() + diffX, this.polygon.getAnchorCoordinate().getY() + diffY));
-        //int i = 0;
         for (Coordinate c : this.polygon.getCoordinates()) {
-            c.setX(c.getX() + diffX);//this.coordinates.get(i).getX() + diffX);
-            c.setY(c.getY() + diffY);//this.coordinates.get(i).getY() + diffY);
-            //i++;
+            c.setX(c.getX() + diffX);
+            c.setY(c.getY() + diffY);
         };
 
         this.begin = new Coordinate(x, y);
@@ -115,13 +108,14 @@ public class DrawPolygon implements DrawStrategy, Serializable {
 
     @Override
     public void restore() {
-        this.polygon.setAnchorCoordinate(this.originalAnchorCoordinate);
+        this.polygon.setAnchorCoordinate(new Coordinate(this.originalAnchorCoordinate.getX(), this.originalAnchorCoordinate.getY()));
         this.polygon.setCoordinates(this.originalCoordinates);
     }
 
     @Override
     public void store() {
-        this.originalAnchorCoordinate = this.polygon.getAnchorCoordinate();
-        this.originalCoordinates = this.polygon.getCoordinates();
+        this.originalAnchorCoordinate = new Coordinate(this.polygon.getAnchorCoordinate().getX(), this.polygon.getAnchorCoordinate().getY());
+        this.originalCoordinates = new ArrayList<>();
+        this.polygon.getCoordinates().forEach(c -> this.originalCoordinates.add(new Coordinate(c.getX(), c.getY())));
     }
 }

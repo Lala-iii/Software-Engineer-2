@@ -1,5 +1,7 @@
 package at.ac.univie.sketchup.viewmodel;
 
+import android.graphics.Canvas;
+
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
@@ -32,7 +34,7 @@ public class SketchEditActivityViewModel extends ViewModel {
 
 
     private SketchRepository sketchRepository;
-    private List<DrawStrategy> selectedDrawStrategies;
+    private ArrayList<DrawStrategy> selectedDrawStrategies;
 
     public void init(int id) {
         this.sketchRepository = SketchRepository.getInstance();
@@ -42,6 +44,7 @@ public class SketchEditActivityViewModel extends ViewModel {
 
         this.selectedDrawStrategies = new ArrayList<>();
         this.mode = new MutableLiveData<>();
+        this.mode.setValue(0);
         this.drawService = new DrawService();
     }
 
@@ -144,11 +147,17 @@ public class SketchEditActivityViewModel extends ViewModel {
         this.selectedDrawStrategies.clear();
     }
 
-    public void storeNewCombinedShape(String title) {
-        CombinedShape cs = new CombinedShape(this.sketch.getValue().getDrawableObjects());
-        cs.setTitle(title);
-        sketch.getValue().addCombinedShape(cs);
-    }
+    public void storeNewCombinedShape(String title) throws IncorrectAttributesException {
+        if (this.mode.getValue().equals(SketchEditActivityViewModel.EDIT) && this.selectedDrawStrategies.size() > 0) {
+            this.selectedDrawStrategies.forEach(d -> d.getDrawableObject().setSelected(false));
+            CombinedShape cs = new CombinedShape(this.selectedDrawStrategies);
+            cs.setTitle(title);
+            sketch.getValue().addCombinedShape(cs);
+            this.selectedDrawStrategies.clear();
+            this.mode.setValue(SketchEditActivityViewModel.CREATE);
+        } else
+            throw new IncorrectAttributesException("Select at least two elements you want to combine as a new shape!");
+}
 
     public CombinedShape getCombinedShapeById(int id) {
         return this.sketch.getValue().getCreatedCombinedShapes().get(id);
@@ -181,7 +190,7 @@ public class SketchEditActivityViewModel extends ViewModel {
         this.selectedDrawStrategies.add(d);
     }
 
-    public List<DrawStrategy> getSelectedDrawStrategies() {
+    public ArrayList<DrawStrategy> getSelectedDrawStrategies() {
         return this.selectedDrawStrategies;
     }
 }

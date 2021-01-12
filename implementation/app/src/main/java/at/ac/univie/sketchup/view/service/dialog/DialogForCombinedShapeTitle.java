@@ -2,9 +2,13 @@ package at.ac.univie.sketchup.view.service.dialog;
 
 import android.content.Context;
 import android.view.LayoutInflater;
+import android.view.View;
 import android.widget.EditText;
 
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+
 import at.ac.univie.sketchup.R;
+import at.ac.univie.sketchup.exception.IncorrectAttributesException;
 import at.ac.univie.sketchup.viewmodel.SketchEditActivityViewModel;
 
 public class DialogForCombinedShapeTitle extends DialogTemplate {
@@ -25,7 +29,12 @@ public class DialogForCombinedShapeTitle extends DialogTemplate {
     @Override
     void submitButtonListener() {
         buttonSubmit.setOnClickListener(view -> {
-            sketchEditActivityViewModel.storeNewCombinedShape(editText.getText().toString());
+            try {
+                sketchEditActivityViewModel.storeNewCombinedShape(editText.getText().toString());
+            } catch (IncorrectAttributesException e) {
+                DialogForError errorDialog = new DialogForError(context, inflater, "Wrong input", e.getMessage());
+                errorDialog.create();
+            }
             dialogBuilder.dismiss();
         });
     }
