@@ -360,6 +360,12 @@ public class SketchEditActivity extends AppCompatActivity {
                 sketchViewModel.deleteAllDrawObj(); //clear Sketch
             case R.id.save:
                 sketchViewModel.storeSketchChanges(); //save all new changes on Sketch
+            //case R.id.save_as_jpg:
+               // sketchViewModel.saveSketchAs(sketchViewModel.getObjectsToDraw(),"jpg");
+            case R.id.saveJPEG:
+                sketchViewModel.saveSketchAs(sketchViewModel.getObjectsToDraw(),"JPEG");
+            case R.id.savePNG:
+                sketchViewModel.saveSketchAs(sketchViewModel.getObjectsToDraw(),"PNG");
             default:
                 return false;
         }
