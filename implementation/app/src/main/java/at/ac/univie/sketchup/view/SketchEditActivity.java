@@ -352,9 +352,9 @@ public class SketchEditActivity extends AppCompatActivity {
             //case R.id.save_as_jpg:
                // sketchViewModel.saveSketchAs(sketchViewModel.getObjectsToDraw(),"jpg");
             case R.id.saveJPEG:
-                sketchViewModel.saveSketchAs(sketchViewModel.getObjectsToDraw(),"JPEG");
+                sketchViewModel.saveSketchAs(sketchViewModel.getDrawStrategies(),"JPEG");
             case R.id.savePNG:
-                sketchViewModel.saveSketchAs(sketchViewModel.getObjectsToDraw(),"PNG");
+                sketchViewModel.saveSketchAs(sketchViewModel.getDrawStrategies(),"PNG");
             default:
                 return false;
         }
