@@ -30,7 +30,15 @@ public class DrawCombinedShape implements DrawStrategy, Serializable {
 
     @Override
     public boolean inSelectedArea(Coordinate begin, Coordinate end) {
-        return false;
+        float beginCombinedShapeX =  this.combinedShape.getAnchorCoordinate().getX();
+        float beginCombinedShapeY =  this.combinedShape.getAnchorCoordinate().getY();
+        float beginX = Math.min(end.getX(), begin.getX());
+        float beginY = Math.min(end.getY(), begin.getY());
+        float endX = Math.max(end.getX(), begin.getX());
+        float endY = Math.max(end.getY(), begin.getY());
+
+        return (beginCombinedShapeX > beginX && beginCombinedShapeY > beginY &&
+                beginCombinedShapeX < endX && beginCombinedShapeY < endY);
     }
 
     @Override
@@ -41,6 +49,7 @@ public class DrawCombinedShape implements DrawStrategy, Serializable {
 
     @Override
     public void onTouchMove(float x, float y) {
+        this.combinedShape.setAnchorCoordinate(new Coordinate(x, y));
         Coordinate diff = getDiffForNewCoordinate(x, y);
 
         this.combinedShape.getDrawableObjects().forEach(obj -> setNewCoordinate(obj, diff));
@@ -85,12 +94,13 @@ public class DrawCombinedShape implements DrawStrategy, Serializable {
 
     @Override
     public void onEditDown(float x, float y) {
-
+        this.combinedShape.getDrawableObjects().forEach(obj -> obj.onEditDown(x, y));
     }
 
     @Override
     public void onEditMove(float x, float y) {
-
+        this.combinedShape.setAnchorCoordinate(new Coordinate(x, y));
+        this.combinedShape.getDrawableObjects().forEach(obj -> obj.onEditMove(x, y));
     }
 
     @Override

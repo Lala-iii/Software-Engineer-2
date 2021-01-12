@@ -29,10 +29,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import at.ac.univie.sketchup.R;
-import at.ac.univie.sketchup.exception.IncorrectAttributesException;
-import at.ac.univie.sketchup.model.drawable.CombinedShape;
 import at.ac.univie.sketchup.model.drawable.DrawableObject;
-import at.ac.univie.sketchup.model.drawable.parameters.Color;
 import at.ac.univie.sketchup.model.drawable.shape.Circle;
 import at.ac.univie.sketchup.model.drawable.shape.Line;
 import at.ac.univie.sketchup.model.drawable.shape.Polygon;
@@ -55,7 +52,7 @@ public class SketchEditActivity extends AppCompatActivity {
 
     private PaintView paintView;
     private boolean isButtonsHide = true;
-    private SketchEditActivityViewModel  sketchViewModel;
+    private SketchEditActivityViewModel sketchViewModel;
     private Intent intent;
     private DrawableObjectAbstractFactory drawableObjectFactory;
 
@@ -67,6 +64,8 @@ public class SketchEditActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
 
         setViewElements();
+
+
 
         intent = getIntent();
         drawableObjectFactory = new DrawableObjectFactory();
@@ -95,6 +94,7 @@ public class SketchEditActivity extends AppCompatActivity {
 
     private void setViewElements() {
         setContentView(R.layout.activity_sketch_editor);
+
         paintView = findViewById(R.id.paintView);
 
         fabText = findViewById(R.id.fabText);
@@ -147,7 +147,6 @@ public class SketchEditActivity extends AppCompatActivity {
     }
 
     // Observer through an event to redraw all object if sketch was changed.
-    @SuppressLint("ResourceAsColor")
     private void setObserver() {
         sketchViewModel.getSketch().observe(this, sketch -> paintView.postInvalidate());
         sketchViewModel.getMode().observe(this, mode -> {
@@ -233,36 +232,22 @@ public class SketchEditActivity extends AppCompatActivity {
 
     private void buttonsLister() {
         fabText.setOnClickListener(view -> {
-            setSelected(drawableObjectFactory.getDrawableObject(TextBox.class));
-            animateButton((FloatingActionButton) view);
+            selectTemplate(TextBox.class, (FloatingActionButton) view);
             DialogForText dialog = new DialogForText(this, getLayoutInflater(), sketchViewModel);
             dialog.create();
         });
 
-        fabCircle.setOnClickListener(view -> {
-            setSelected(drawableObjectFactory.getDrawableObject(Circle.class));
-            animateButton((FloatingActionButton) view);
-        });
+        fabCircle.setOnClickListener(view -> selectTemplate(Circle.class, (FloatingActionButton) view));
 
-        fabTriangle.setOnClickListener(view -> {
-            setSelected(drawableObjectFactory.getDrawableObject(Triangle.class));
-            animateButton((FloatingActionButton) view);
-        });
+        fabTriangle.setOnClickListener(view -> selectTemplate(Triangle.class, (FloatingActionButton) view));
 
-        fabQuadrangle.setOnClickListener(view -> {
-            setSelected(drawableObjectFactory.getDrawableObject(Quadrangle.class));
-            animateButton((FloatingActionButton) view);
-        });
 
-        fabLine.setOnClickListener(view -> {
-            setSelected(drawableObjectFactory.getDrawableObject(Line.class));
-            animateButton((FloatingActionButton) view);
-        });
+        fabQuadrangle.setOnClickListener(view -> selectTemplate(Quadrangle.class, (FloatingActionButton) view));
 
-        fabPolygon.setOnClickListener(view -> {
-            setSelected(drawableObjectFactory.getDrawableObject(Polygon.class));
-            animateButton((FloatingActionButton) view);
-        });
+        fabLine.setOnClickListener(view -> selectTemplate(Line.class, (FloatingActionButton) view));
+
+
+        fabPolygon.setOnClickListener(view -> selectTemplate(Polygon.class, (FloatingActionButton) view));
 
         fabSelector.setOnClickListener(view -> {
             sketchViewModel.setMode(SketchEditActivityViewModel.SELECTION);
@@ -300,6 +285,11 @@ public class SketchEditActivity extends AppCompatActivity {
         });
     }
 
+    private void selectTemplate(Class c, FloatingActionButton fab) {
+        setSelected(drawableObjectFactory.getDrawableObject(c));
+        animateButton(fab);
+    }
+
     private void animateButton(FloatingActionButton fab) {
         List<FloatingActionButton> fabButtons = new ArrayList<>(Arrays.asList(fabText, fabCircle, fabTriangle,
                 fabQuadrangle, fabLine, fabPolygon));
@@ -308,7 +298,7 @@ public class SketchEditActivity extends AppCompatActivity {
         }
         fabSelector.animate().translationY(0);
 
-        if (sketchViewModel.getMode().getValue() == SketchEditActivityViewModel.SELECTION) {
+        if (sketchViewModel.getMode().getValue().equals(SketchEditActivityViewModel.SELECTION)) {
             if (fab == fabSelector) fab.animate().translationY(-50);
         } else fab.animate().translationX(-50);
 
@@ -332,7 +322,6 @@ public class SketchEditActivity extends AppCompatActivity {
         checkable3.setChecked(sketchViewModel.getByLayerId(2).getVisibility());
 
         return super.onCreateOptionsMenu(menu);
-
     }
 
     @Override

@@ -61,4 +61,10 @@ public class CombinedShape extends DrawableObject {
     public String toString() {
         return title;
     }
+
+    @Override
+    public void setSelected(boolean selected) {
+        super.setSelected(selected);
+        this.drawableObjects.forEach(d -> d.getDrawableObject().setSelected(selected));
+    }
 }
