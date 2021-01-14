@@ -4,10 +4,12 @@ import java.util.ArrayList;
 
 public class LayerIterator implements Iterator {
     int index=0;
-   ArrayList<Layer> layers= new ArrayList<>();
+    ArrayList<Layer> layers= new ArrayList<>();
+
   public LayerIterator(ArrayList<Layer> layers) {
       this.layers=layers;
   }
+
     @Override
     public boolean hasNext() {
 

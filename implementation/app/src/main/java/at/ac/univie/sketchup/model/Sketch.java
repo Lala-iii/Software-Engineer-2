@@ -92,10 +92,6 @@ public class Sketch implements Serializable,Container {
                 lastVisible=l;
             }
         }
-       /* for (Layer l : layersList) {
-            if (l.getVisibility()) lastVisible = l;
-        }
-*/
         if(lastVisible != null)
             lastVisible.addDrawableObject(object);
         else
