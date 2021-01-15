@@ -13,8 +13,6 @@ public abstract class DrawableObject implements Cloneable, Serializable {
     private Coordinate anchorCoordinate;
     private int inputSize;   // Brush, Text or Stroke size
 
-
-
     private boolean selected;
 
     public DrawableObject(Color c, int size) {

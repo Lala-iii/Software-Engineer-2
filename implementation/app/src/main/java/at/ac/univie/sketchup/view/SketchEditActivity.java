@@ -82,6 +82,9 @@ public class SketchEditActivity extends AppCompatActivity {
             buttonsLister();
         });
 
+        /**
+         * Initiating the sketch toast with the hint
+         */
         Context context = getApplicationContext();
         CharSequence text = "Long hold the buttons for the explanation";
         int duration = Toast.LENGTH_LONG;
