@@ -36,6 +36,7 @@ import at.ac.univie.sketchup.model.drawable.shape.Polygon;
 import at.ac.univie.sketchup.model.drawable.shape.Quadrangle;
 import at.ac.univie.sketchup.model.drawable.shape.Triangle;
 import at.ac.univie.sketchup.model.drawable.textbox.TextBox;
+import at.ac.univie.sketchup.repository.ExportFormat;
 import at.ac.univie.sketchup.view.service.DrawableObjectAbstractFactory;
 import at.ac.univie.sketchup.view.service.DrawableObjectFactory;
 import at.ac.univie.sketchup.view.service.dialog.DialogForCombinedShapeTitle;
@@ -357,10 +358,10 @@ public class SketchEditActivity extends AppCompatActivity {
             //case R.id.save_as_jpg:
                // sketchViewModel.saveSketchAs(sketchViewModel.getObjectsToDraw(),"jpg");
             case R.id.saveJPEG:
-                sketchViewModel.saveSketchAs(sketchViewModel.getDrawStrategies(),"JPEG");
+                sketchViewModel.saveSketchAs(ExportFormat.JPG);
                 return true;
             case R.id.savePNG:
-                sketchViewModel.saveSketchAs(sketchViewModel.getDrawStrategies(),"PNG");
+                sketchViewModel.saveSketchAs(ExportFormat.PNG);
                 return true;
             default:
                 return false;

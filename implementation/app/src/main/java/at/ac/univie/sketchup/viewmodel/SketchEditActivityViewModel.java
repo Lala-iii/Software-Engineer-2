@@ -17,6 +17,7 @@ import at.ac.univie.sketchup.model.drawable.CombinedShape;
 import at.ac.univie.sketchup.model.drawable.DrawableObject;
 import at.ac.univie.sketchup.model.drawable.parameters.Color;
 import at.ac.univie.sketchup.model.drawable.textbox.TextBox;
+import at.ac.univie.sketchup.repository.ExportFormat;
 import at.ac.univie.sketchup.repository.SketchRepository;
 import at.ac.univie.sketchup.view.service.DrawService;
 import at.ac.univie.sketchup.view.service.drawstrategy.DrawStrategy;
@@ -193,7 +194,7 @@ public class SketchEditActivityViewModel extends ViewModel {
     public ArrayList<DrawStrategy> getSelectedDrawStrategies() {
         return this.selectedDrawStrategies;
     }
-    public void saveSketchAs(ArrayList<DrawStrategy> list,String format){
-        sketchRepository.saveCanvas(list,format);
+    public void saveSketchAs(ExportFormat format){
+        sketchRepository.saveCanvas(getDrawStrategies(), format);
     }
 }
