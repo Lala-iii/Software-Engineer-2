@@ -102,7 +102,7 @@ public class SketchEditActivityViewModel extends ViewModel {
         if (this.template == null) return;
         try {
             this.selectedDrawStrategies.clear();
-            this.selectedDrawStrategies.add(this.drawService.determineDrawableObject((this.template)));
+            this.selectedDrawStrategies.add(this.drawService.determineDrawStrategy((this.template)));
 
             // May be an issue with cloning Color. Monitor and make deep clone in case
         } catch (CloneNotSupportedException e) {

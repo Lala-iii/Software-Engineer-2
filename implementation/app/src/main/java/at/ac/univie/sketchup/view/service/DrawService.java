@@ -20,12 +20,18 @@ import at.ac.univie.sketchup.view.service.drawstrategy.shape.DrawTriangle;
 
 public class DrawService {
 
-    public DrawStrategy determineDrawableObject(DrawableObject drawableObject) throws CloneNotSupportedException {
+    /**
+     * Determines the DrawStrategy of the DrawableObject
+     * @param drawableObject A DrawableObject, which generates its DrawStrategy
+     * @return Returns a DrawStrategy that matches the DrawableObject
+     * @throws CloneNotSupportedException The determination fails, CloneNotSupportedException will be thrown
+     */
+    public DrawStrategy determineDrawStrategy(DrawableObject drawableObject) throws CloneNotSupportedException {
         DrawStrategy result = null;
         if (drawableObject instanceof TextBox)
             result = new DrawTextBox(drawableObject);
         else if (drawableObject instanceof Shape)
-            result = determineShape(drawableObject);
+            result = determineFromShape(drawableObject);
         else if (drawableObject instanceof CombinedShape)
             result = new DrawCombinedShape(drawableObject);
 
@@ -33,7 +39,13 @@ public class DrawService {
         return result;
     }
 
-    private DrawStrategy determineShape(DrawableObject drawableObject) throws CloneNotSupportedException {
+    /**
+     * Determines the DrawStrategy from a Shape
+     * @param drawableObject The Shape, which generates its DrawStrategy
+     * @return Returns a DrawStrategy that matches the DrawableObject
+     * @throws CloneNotSupportedException The determination fails, CloneNotSupportedException will be thrown
+     */
+    private DrawStrategy determineFromShape(DrawableObject drawableObject) throws CloneNotSupportedException {
         if (drawableObject instanceof Circle)
             return new DrawCircle(drawableObject);
         else if (drawableObject instanceof Line)
