@@ -7,8 +7,10 @@ import java.util.ArrayList;
 import at.ac.univie.sketchup.model.drawable.parameters.Color;
 import at.ac.univie.sketchup.model.drawable.parameters.Coordinate;
 import at.ac.univie.sketchup.model.drawable.shape.Polygon;
+import at.ac.univie.sketchup.model.drawable.textbox.TextBox;
 import at.ac.univie.sketchup.view.service.DrawService;
 import at.ac.univie.sketchup.view.service.drawstrategy.DrawStrategy;
+import at.ac.univie.sketchup.view.service.drawstrategy.DrawTextBox;
 
 public class CombinedShape extends DrawableObject {
 

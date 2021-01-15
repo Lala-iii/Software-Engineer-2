@@ -1,12 +1,7 @@
 package at.ac.univie.sketchup.view.service;
 
-import android.graphics.Canvas;
-
-import java.util.ArrayList;
-
 import at.ac.univie.sketchup.model.drawable.CombinedShape;
 import at.ac.univie.sketchup.model.drawable.DrawableObject;
-import at.ac.univie.sketchup.model.drawable.parameters.Coordinate;
 import at.ac.univie.sketchup.model.drawable.shape.Circle;
 import at.ac.univie.sketchup.model.drawable.shape.Line;
 import at.ac.univie.sketchup.model.drawable.shape.Polygon;

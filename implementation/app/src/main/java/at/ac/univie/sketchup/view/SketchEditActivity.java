@@ -1,24 +1,15 @@
 package at.ac.univie.sketchup.view;
 
-import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.Gravity;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.ArrayAdapter;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.Spinner;
-import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
 
@@ -36,6 +27,7 @@ import at.ac.univie.sketchup.model.drawable.shape.Polygon;
 import at.ac.univie.sketchup.model.drawable.shape.Quadrangle;
 import at.ac.univie.sketchup.model.drawable.shape.Triangle;
 import at.ac.univie.sketchup.model.drawable.textbox.TextBox;
+import at.ac.univie.sketchup.repository.ExportFormat;
 import at.ac.univie.sketchup.view.service.DrawableObjectAbstractFactory;
 import at.ac.univie.sketchup.view.service.DrawableObjectFactory;
 import at.ac.univie.sketchup.view.service.dialog.DialogForCombinedShapeTitle;
@@ -45,7 +37,6 @@ import at.ac.univie.sketchup.view.service.dialog.DialogForText;
 import at.ac.univie.sketchup.viewmodel.SketchEditActivityViewModel;
 
 public class SketchEditActivity extends AppCompatActivity {
-
 
     private FloatingActionButton fabParam, fabText, fabCircle, fabTriangle, fabQuadrangle, fabLine, fabPlus, fabPolygon,
             fabNewComShape, fabSelectComShape, fabSelector, fabConfirm, fabCancel, fabDelete;
@@ -64,8 +55,6 @@ public class SketchEditActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
 
         setViewElements();
-
-
 
         intent = getIntent();
         drawableObjectFactory = new DrawableObjectFactory();
@@ -134,7 +123,6 @@ public class SketchEditActivity extends AppCompatActivity {
 
             fabSelectComShape.setTooltipText("Select the custom shape");
             fabNewComShape.setTooltipText("Add the custom shape");;
-
         }
     }
 
@@ -304,9 +292,6 @@ public class SketchEditActivity extends AppCompatActivity {
         if (sketchViewModel.getMode().getValue().equals(SketchEditActivityViewModel.SELECTION)) {
             if (fab == fabSelector) fab.animate().translationY(-50);
         } else fab.animate().translationX(-50);
-
-        // TODO animation to focus on last selected shape or selector:
-        //  after we select a shape and cancel it, it should focus back the selector and not creation
     }
 
 
@@ -354,13 +339,12 @@ public class SketchEditActivity extends AppCompatActivity {
             case R.id.save:
                 sketchViewModel.storeSketchChanges(); //save all new changes on Sketch
                 return true;
-            //case R.id.save_as_jpg:
-               // sketchViewModel.saveSketchAs(sketchViewModel.getObjectsToDraw(),"jpg");
+
             case R.id.saveJPEG:
-                sketchViewModel.saveSketchAs(sketchViewModel.getDrawStrategies(),"JPEG");
+                sketchViewModel.saveSketchAs(ExportFormat.JPG);
                 return true;
             case R.id.savePNG:
-                sketchViewModel.saveSketchAs(sketchViewModel.getDrawStrategies(),"PNG");
+                sketchViewModel.saveSketchAs(ExportFormat.PNG);
                 return true;
             default:
                 return false;
