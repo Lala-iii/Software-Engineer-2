@@ -16,6 +16,6 @@ public class DrawableObjectFactory extends DrawableObjectAbstractFactory{
         else if (c == Triangle.class) return new Triangle();
         else if (c == Polygon.class) return new Polygon();
         else if (c == TextBox.class) return new TextBox();
-        return null;
+        return new TextBox();
     }
 }

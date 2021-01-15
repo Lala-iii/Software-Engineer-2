@@ -27,7 +27,6 @@ public class SketchEditActivityViewModel extends ViewModel {
 
     private MutableLiveData<Sketch> sketch;
     private DrawableObject template;
-    //private DrawStrategy drawStrategy;
     private MutableLiveData<Integer> mode;
     private DrawService drawService;
 
