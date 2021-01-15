@@ -37,8 +37,10 @@ public class DrawCombinedShape implements DrawStrategy, Serializable {
         float endX = Math.max(end.getX(), begin.getX());
         float endY = Math.max(end.getY(), begin.getY());
 
-        return (beginCombinedShapeX > beginX && beginCombinedShapeY > beginY &&
-                beginCombinedShapeX < endX && beginCombinedShapeY < endY);
+        return this.combinedShape.getDrawableObjects().stream().anyMatch(d -> d.inSelectedArea(begin, end));
+
+        //return (beginCombinedShapeX > beginX && beginCombinedShapeY > beginY &&
+                //beginCombinedShapeX < endX && beginCombinedShapeY < endY);
     }
 
     @Override
@@ -110,12 +112,12 @@ public class DrawCombinedShape implements DrawStrategy, Serializable {
 
     @Override
     public void restore() {
-
+        this.combinedShape.getDrawableObjects().forEach(DrawStrategy::restore);
     }
 
     @Override
     public void store() {
-
+        this.combinedShape.getDrawableObjects().forEach(DrawStrategy::store);
     }
 
     @Override
