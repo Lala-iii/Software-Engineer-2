@@ -137,7 +137,9 @@ public class SketchEditActivity extends AppCompatActivity {
         sketchViewModel.setTemplate(selected);
     }
 
-    // Observer through an event to redraw all object if sketch was changed.
+    /**
+     * Observer through an event to redraw all object if sketch was changed
+     */
     private void setObserver() {
         sketchViewModel.getSketch().observe(this, sketch -> paintView.postInvalidate());
         sketchViewModel.getMode().observe(this, mode -> {
@@ -195,13 +197,13 @@ public class SketchEditActivity extends AppCompatActivity {
         List<FloatingActionButton> fabButtons = new ArrayList<>(Arrays.asList(fabParam, fabText, fabCircle, fabTriangle, fabQuadrangle, fabLine, fabPolygon, fabSelector, fabNewComShape, fabSelectComShape));
         fabButtons.forEach(FloatingActionButton::show);
 
-        // vertical
+        /** vertical*/
         fabSelector.animate().translationX(-(fabSelector.getCustomSize() + 5 + fabSelectComShape.getCustomSize() + 5 + fabNewComShape.getCustomSize() + 5 + fabParam.getCustomSize() + 50));
         fabSelectComShape.animate().translationX(-(fabSelectComShape.getCustomSize() + 5 + fabNewComShape.getCustomSize() + 5 + fabParam.getCustomSize() + 50));
         fabNewComShape.animate().translationX(-(fabNewComShape.getCustomSize() + 5 + fabParam.getCustomSize() + 50));
         fabParam.animate().translationX(-(fabParam.getCustomSize() + 50));
 
-        // horizontal
+        /**horizontal*/
         fabText.animate().translationY(-(fabPolygon.getCustomSize() + 5 + fabText.getCustomSize() + 5 + fabCircle.getCustomSize() + 5 + fabTriangle.getCustomSize() + 5 + fabQuadrangle.getCustomSize() + 5 + fabLine.getCustomSize() + 50));
         fabCircle.animate().translationY(-(fabPolygon.getCustomSize() + 5 + fabCircle.getCustomSize() + 5 + fabTriangle.getCustomSize() + 5 + fabQuadrangle.getCustomSize() + 5 + fabLine.getCustomSize() + 50));
         fabTriangle.animate().translationY(-(fabPolygon.getCustomSize() + 5 + fabTriangle.getCustomSize() + 5 + fabQuadrangle.getCustomSize() + 5 + fabLine.getCustomSize() + 50));
