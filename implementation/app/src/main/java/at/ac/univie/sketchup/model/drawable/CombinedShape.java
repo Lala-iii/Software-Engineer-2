@@ -7,10 +7,8 @@ import java.util.ArrayList;
 import at.ac.univie.sketchup.model.drawable.parameters.Color;
 import at.ac.univie.sketchup.model.drawable.parameters.Coordinate;
 import at.ac.univie.sketchup.model.drawable.shape.Polygon;
-import at.ac.univie.sketchup.model.drawable.textbox.TextBox;
 import at.ac.univie.sketchup.view.service.DrawService;
 import at.ac.univie.sketchup.view.service.drawstrategy.DrawStrategy;
-import at.ac.univie.sketchup.view.service.drawstrategy.DrawTextBox;
 
 public class CombinedShape extends DrawableObject {
 
@@ -36,7 +34,7 @@ public class CombinedShape extends DrawableObject {
 
     private DrawStrategy cloneSelected(DrawStrategy selectedShape) {
         try {
-            DrawStrategy clonedObj = new DrawService().determineDrawableObject(selectedShape.getDrawableObject());
+            DrawStrategy clonedObj = new DrawService().determineDrawStrategy(selectedShape.getDrawableObject());
 
             if (clonedObj.getDrawableObject() instanceof Polygon) {
                 ArrayList<Coordinate> coordinates = new ArrayList<>();
