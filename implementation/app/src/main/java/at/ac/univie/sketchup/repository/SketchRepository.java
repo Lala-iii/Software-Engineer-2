@@ -98,7 +98,7 @@ public class SketchRepository {
             String filename = "Sketch" + System.currentTimeMillis();
             File file= new File(dir,filename+"."+format);
             FileOutputStream fos= new FileOutputStream(file);
-            if(format.equals("JPEG")) {
+            if(format == "JPEG") {
                 saveAsJpg(list, fos);
             }else
             {

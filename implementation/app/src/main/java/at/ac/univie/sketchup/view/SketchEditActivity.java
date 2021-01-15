@@ -350,14 +350,18 @@ public class SketchEditActivity extends AppCompatActivity {
                 return true;
             case R.id.delete:
                 sketchViewModel.deleteAllDrawObj(); //clear Sketch
+                return true;
             case R.id.save:
                 sketchViewModel.storeSketchChanges(); //save all new changes on Sketch
+                return true;
             //case R.id.save_as_jpg:
                // sketchViewModel.saveSketchAs(sketchViewModel.getObjectsToDraw(),"jpg");
             case R.id.saveJPEG:
                 sketchViewModel.saveSketchAs(sketchViewModel.getDrawStrategies(),"JPEG");
+                return true;
             case R.id.savePNG:
                 sketchViewModel.saveSketchAs(sketchViewModel.getDrawStrategies(),"PNG");
+                return true;
             default:
                 return false;
         }
