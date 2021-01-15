@@ -9,6 +9,12 @@ import at.ac.univie.sketchup.model.drawable.shape.Triangle;
 import at.ac.univie.sketchup.model.drawable.textbox.TextBox;
 
 public class DrawableObjectFactory extends DrawableObjectAbstractFactory{
+
+    /**
+     * Determines the DrawableObject of a class
+     * @param c The type of the Class itself
+     * @return Returns a DrawableObject
+     */
     public DrawableObject getDrawableObject(Class c) {
         if (c == Line.class) return new Line();
         else if (c == Circle.class) return new Circle();

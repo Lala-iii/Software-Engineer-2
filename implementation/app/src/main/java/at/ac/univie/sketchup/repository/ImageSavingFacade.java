@@ -15,8 +15,14 @@ import at.ac.univie.sketchup.view.service.drawstrategy.DrawStrategy;
 
 public class ImageSavingFacade {
 
+    /**
+     * Exports DrawStrategies as a image according to its format
+     * @param list the list of DrawStrategies
+     * @param format The format of the image i.e. ExportFormat.PNG
+     * @param dir The root directory where the image file should be saved
+     * @param context The ApplicationContext
+     */
     public void saveImage(ArrayList<DrawStrategy> list, ExportFormat format, File dir, Context context) {
-
         try{
             String filename = "Sketch" + System.currentTimeMillis();
             File file= new File(dir,filename+"."+format);
@@ -31,6 +37,12 @@ public class ImageSavingFacade {
         }
     }
 
+    /**
+     * Exports the DrawStrategies as a JPEG image
+     * @param list The list of DrawStrategies
+     * @param fos The FileOutputStream for the exporting progress
+     * @param context The ApplicationContext
+     */
     private void saveAsJpg(ArrayList<DrawStrategy> list, FileOutputStream fos, Context context) {
         Bitmap bitmap = Bitmap.createBitmap(1080,1920,Bitmap.Config.ARGB_8888);
         Canvas canvas = new Canvas(bitmap);
@@ -42,6 +54,12 @@ public class ImageSavingFacade {
 
     }
 
+    /**
+     * Exports the DrawStrategies as a PNG image
+     * @param list The list of DrawStrategies
+     * @param fos The FileOutputStream for the exporting progress
+     * @param context The ApplicationContext
+     */
     private void saveAsPng(ArrayList<DrawStrategy> list, FileOutputStream fos, Context context) {
         Bitmap bitmap = Bitmap.createBitmap(1080, 1920, Bitmap.Config.ARGB_8888);
         Canvas canvas = new Canvas(bitmap);
