@@ -18,7 +18,7 @@ public class CombinedShape extends DrawableObject {
     private String title;
 
     public CombinedShape(ArrayList<DrawStrategy> shapes) {
-        super(Color.BLACK, 70);
+        super(Color.BLACK, 5);
         shapes.forEach(selected -> drawableObjects.add(cloneSelected(selected)));
     }
 

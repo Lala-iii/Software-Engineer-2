@@ -1,6 +1,7 @@
 package at.ac.univie.sketchup.view.service.drawstrategy;
 
 import android.graphics.Canvas;
+import android.graphics.DashPathEffect;
 import android.graphics.Paint;
 
 import java.io.Serializable;
@@ -23,6 +24,8 @@ public class DrawCombinedShape implements DrawStrategy, Serializable {
     public boolean drawObject(Canvas canvas) {
         if (!(this.combinedShape instanceof CombinedShape)) return false;
         for (DrawStrategy object : this.combinedShape.getDrawableObjects()) {
+            object.getDrawableObject().setColor(this.combinedShape.getColor());
+            object.getDrawableObject().setInputSize(this.combinedShape.getInputSize());
             object.drawObject(canvas);
         }
         return true;
@@ -122,6 +125,13 @@ public class DrawCombinedShape implements DrawStrategy, Serializable {
 
     @Override
     public Paint setPaint() {
-        return null;
+        Paint paint = new Paint();
+        paint.setColor(this.combinedShape.getColor().getAndroidColor());
+        paint.setAntiAlias(true);
+        paint.setStyle(Paint.Style.STROKE);
+        paint.setStrokeWidth(this.combinedShape.getInputSize());
+        //if (this.combinedShape.isSelected())
+        //    paint.setPathEffect(new DashPathEffect(new float[]{2, 4},50));
+        return paint;
     }
 }
