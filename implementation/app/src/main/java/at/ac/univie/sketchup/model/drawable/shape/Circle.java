@@ -12,4 +12,5 @@ public class Circle extends RadiusBasedShape implements Serializable {
     public Circle() {
         this(Color.BLACK, 5);
     }
+
 }
