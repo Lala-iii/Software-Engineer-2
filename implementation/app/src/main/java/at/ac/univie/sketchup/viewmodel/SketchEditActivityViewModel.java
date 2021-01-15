@@ -1,7 +1,5 @@
 package at.ac.univie.sketchup.viewmodel;
 
-import android.graphics.Canvas;
-
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;

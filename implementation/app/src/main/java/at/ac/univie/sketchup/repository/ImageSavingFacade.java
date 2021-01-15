@@ -23,8 +23,7 @@ public class ImageSavingFacade {
             FileOutputStream fos= new FileOutputStream(file);
             if(format == ExportFormat.JPG) {
                 saveAsJpg(list, fos, context);
-            }else
-            {
+            } else {
                 saveAsPng(list, fos, context);
             }
         } catch (FileNotFoundException fileNotFoundException) {
