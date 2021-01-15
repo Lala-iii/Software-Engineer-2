@@ -33,17 +33,7 @@ public class DrawCombinedShape implements DrawStrategy, Serializable {
 
     @Override
     public boolean inSelectedArea(Coordinate begin, Coordinate end) {
-        float beginCombinedShapeX =  this.combinedShape.getAnchorCoordinate().getX();
-        float beginCombinedShapeY =  this.combinedShape.getAnchorCoordinate().getY();
-        float beginX = Math.min(end.getX(), begin.getX());
-        float beginY = Math.min(end.getY(), begin.getY());
-        float endX = Math.max(end.getX(), begin.getX());
-        float endY = Math.max(end.getY(), begin.getY());
-
         return this.combinedShape.getDrawableObjects().stream().anyMatch(d -> d.inSelectedArea(begin, end));
-
-        //return (beginCombinedShapeX > beginX && beginCombinedShapeY > beginY &&
-                //beginCombinedShapeX < endX && beginCombinedShapeY < endY);
     }
 
     @Override
